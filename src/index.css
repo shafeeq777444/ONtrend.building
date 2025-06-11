@@ -1,1 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
+
+
+@theme  {
+  /* color -----------------*/
+  --color-background:#ffffff;
+  --color-onRed:#ff3131;
+
+
+  /* myFonts ----------------*/
+  --font-on: "DM Sans", sans-serif;
+  --font-dmsans: "DM Sans", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+}
+
+
+
+body {
+  color: var(--color-foreground);
+  background: var(--color-background);
+    font-family: var(--font-dmsans); 
+}
+
+
+
+
+
+
+
+/* :root {
+  --background: #fefffe;
+  --foreground: #001c54;
+} */
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+

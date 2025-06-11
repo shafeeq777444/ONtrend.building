@@ -4,82 +4,33 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight, FiClock, FiShoppingBag } from "react-icons/fi";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import SkeletonTopGroceries from "../../components/skeleton/SkeletonTopGroceries";
 import FavoriteButton from "../../components/common/FavouriteButton";
 
-// Sample Data
-// const groceries = [
-//     {
-//         id: 1,
-//         name: "Fresh Mart",
-//         image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmljeWNsZXxlbnwwfHwwfHx8MA%3D%3D",
-//     },
-//     {
-//         id: 2,
-//         name: "Green Basket",
-//         image: "/service/flats.png",
-//     },
-//     {
-//         id: 3,
-//         name: "Daily Needs",
-//         image: "/images/grocery3.jpg",
-//     },
-//     {
-//         id: 4,
-//         name: "Healthy Hub",
-//         image: "/images/grocery4.jpg",
-//     },
-//     {
-//         id: 1,
-//         name: "Fresh Mart",
-//         image: "/images/grocery1.jpg",
-//     },
-//     {
-//         id: 2,
-//         name: "Green Basket",
-//         image: "/images/grocery2.jpg",
-//     },
-//     {
-//         id: 3,
-//         name: "Daily Needs",
-//         image: "/images/grocery3.jpg",
-//     },
-//     {
-//         id: 4,
-//         name: "Healthy Hub",
-//         image: "/images/grocery4.jpg",
-//     },
-// ];
-
 const TopGroceries = () => {
     const { data: vendors, isLoading, error } = useGetAllTopVendors();
-    const topGroceries = vendors?.filter((vendor) => vendor.vendorType == "Grocery") || [];
-    console.log(topGroceries, "--topGroceries");
+    const topGroceries = vendors?.filter((vendor) => vendor.vendorType === "Grocery") || [];
+    console.log(topGroceries, "--top grocerises");
 
-    if (isLoading) {
-        return <SkeletonTopGroceries />;
-    }
-    if (error) {
+    if (isLoading) return <SkeletonTopGroceries />;
+    if (error)
         return (
             <div className="px-4 py-6 text-center">
                 <p className="text-red-600 font-semibold">Failed to load top groceries. Please try again later.</p>
             </div>
         );
-    }
 
     return (
-        <div className="px-4 py-6 relative ">
-            <h2 className="text-xl font-bold mb-4 ">Top Groceries</h2>
+        <div className="px-4  relative">
+            <h2 className="text-xl font-bold mb-4">Top Groceries</h2>
 
-            {/* Custom Prev Button */}
-            <button className="swiper-button-prev-grocery custom-nav absolute top-0 right-14 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
+            {/* Navigation Buttons */}
+            <button className="swiper-button-prev-grocery absolute top-0 right-14 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
                 <FiChevronLeft size={20} />
             </button>
-
-            {/* Custom Next Button */}
-            <button className="swiper-button-next-grocery custom-nav absolute top-0 right-4 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
+            <button className="swiper-button-next-grocery absolute top-0 right-4 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
                 <FiChevronRight size={20} />
             </button>
 
@@ -109,31 +60,41 @@ const TopGroceries = () => {
                 {topGroceries.map((item) => (
                     <SwiperSlide key={item.id}>
                         <div className="p-2">
-                            <div className="bg-white rounded-xl shadow hover:shadow-md transition p-3 flex flex-col items-center text-center hover:scale-[1.02]  duration-200 ease-in-out">
-                                <div className="w-full h-32 relative rounded-lg overflow-hidden mb-3">
-                                    <FavoriteButton/>
+                            <div className="group relative rounded-xl shadow hover:shadow-md transition flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
+                                <div className="w-full h-42 rounded-lg overflow-hidden mb-3 relative">
+                                    <FavoriteButton />
                                     <img
                                         src={item.bannerImage[0]}
                                         alt={item.restaurantName}
                                         className="w-full h-full object-cover"
                                     />
+
+                                    {/* Shop Closed Overlay */}
                                     {!item.isOnline && (
                                         <div className="absolute inset-0 bg-black/30 bg-opacity-50 flex items-center cursor-default justify-center">
-                                            <span className="text-white text-sm font-semibold">Busy</span>
+                                            <div className="text-xs absolute text-gray-400 italic">Shop closed</div>
                                         </div>
                                     )}
+
+                                    {/* Hover Overlay with "Shop Now" */}
+                                    {item.isOnline && (
+                                        <div className="absolute inset-0 flex flex-col justify-end items-center pointer-events-none">
+                                            <div className="w-full bg-gradient-to-t from-black/70 via-black/30 to-transparent h-full p-2 flex justify-center pointer-events-auto transition-opacity duration-300 opacity-100 group-hover:opacity-0 absolute bottom-0">
+                                                <h3 className="text-sm font-semibold text-white absolute  bottom-4">
+                                                    {item.restaurantName}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    )}
+                                   
                                 </div>
-                                <h3 className="text-sm font-semibold mb-2">{item.name}</h3>
-                                <button
-                                    disabled={!item.isOnline}
-                                    className={`text-sm px-4 py-1 w-full rounded transition ${
-                                        item.isOnline
-                                            ? "bg-red-600 text-white hover:bg-green-700"
-                                            : "bg-gray-300 text-gray-500  opacity-70"
-                                    }`}
-                                >
-                                    {item.isOnline ? "Explore" : "Unavailable"}
-                                </button>
+                                 {item.isOnline ? (
+                                        <div className="flex items-center gap-1 p-2 text-sm font-medium  text-green-600">
+                                            <FiShoppingBag size={16} /> Shop Now
+                                        </div>
+                                    ) : (
+                                        <div className="text-xs text-gray-400 p-2 italic">Shop closed</div>
+                                    )}
                             </div>
                         </div>
                     </SwiperSlide>

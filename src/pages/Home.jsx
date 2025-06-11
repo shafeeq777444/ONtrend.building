@@ -13,7 +13,8 @@ import TopRestuarents from "../containers/Home/TopRestuarents";
 import TopGroceries from "../containers/Home/TopGroceries";
 import TopPharmacies from "../containers/Home/TopPharmacies";
 import Highlites from "../containers/Home/Highlites";
-// import AdsBanner from "../containers/Home/AdsBanner";
+import AdsBanner from "../containers/Home/AdsBanner";
+import ServiceGrid from "../components/home/ServiceGrid";
 
 const Home = () => {
     return (
@@ -28,7 +29,8 @@ const Home = () => {
             </div>
 
             <div className=" z-50">
-                <OurServices />
+                <ServiceGrid/>
+                {/* <OurServices /> */}
                 <LoginCard />
             </div>
             {/* <AdsBanner/> */}
