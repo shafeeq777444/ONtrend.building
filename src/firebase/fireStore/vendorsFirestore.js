@@ -16,7 +16,11 @@ export async function fetchAllTopVendors() {
       id: doc.id,
       ...doc.data(),
     }));
-    return vendors;
+    // Sort vendors by isOnline: true first
+    const sortedVendors = vendors.sort((a, b) => {
+      return (b.isOnline === true) - (a.isOnline === true);
+    });
+    return sortedVendors;
   } catch (error) {
     console.error("Error fetching top vendors:", error);
     return [];
