@@ -1,22 +1,38 @@
+import { FaGoogle, FaApple, FaFacebookF, FaPhone, FaEnvelope } from "react-icons/fa";
+
 const Login = () => {
-    return (
-        <div className="max-w-full  p-6 bg-white transition-all duration-300 flex flex-col items-center">
-            {/* Header */}
-            <div className="text-center mb-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Hey there!</h2>
-                <p className="text-gray-500">Log in for an awesome experience!</p>
-            </div>
+  const loginOptions = [
+    { icon: <FaGoogle />, label: "Google" },
+    { icon: <FaApple />, label: "Apple" },
+    { icon: <FaFacebookF />, label: "Facebook" },
+    { icon: <FaPhone />, label: "Phone" },
+    { icon: <FaEnvelope />, label: "Email" },
+  ];
 
-            {/* Main Login Button */}
-            <button className="w-full max-w-xs bg-[#fe3031] hover:bg-[#e02829] text-white font-medium py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] mb-6">
-                Login
-            </button>
+  return (
+    <div className="w-full max-w-full mx-auto p-6 bg-white rounded-2xl ">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">Hey there!</h2>
+        <p className="text-gray-500 text-base">
+          Log in to unlock a personalized and seamless experience tailored just for you.
+        </p>
+      </div>
 
-            {/* Divider */}
-            <div className="relative w-full max-w-xs mb-6">
-                <div className="absolute inset-0 flex items-center"></div>
-            </div>
-        </div>
-    );
+      {/* Horizontal Login Buttons */}
+      <div className="flex flex-wrap justify-center gap-4">
+        {loginOptions.map((option, index) => (
+          <button
+            key={index}
+            className="flex flex-col items-center justify-center p-3 w-20 h-20 rounded-xl bg-[#fe3031] hover:bg-[#e02829] text-white transition-all duration-200"
+          >
+            <div className="text-xl">{option.icon}</div>
+            <span className="text-xs mt-1 text-center">{option.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 };
+
 export default Login;

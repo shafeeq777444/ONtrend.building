@@ -1,13 +1,16 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FiMapPin, FiSearch } from "react-icons/fi";
-import {  FiChevronDown } from "react-icons/fi";
-import { FaTicketAlt } from "react-icons/fa";
+import { FiMapPin, FiSearch, FiChevronDown, FiUser, FiHeart } from "react-icons/fi";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import { PiGiftBold } from "react-icons/pi";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
-   const [placeholderIndex, setPlaceholderIndex] = useState(0);
-   const placeholders = [
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+
+  const placeholders = [
     "Search for food, groceries, beauty, hotels...",
     "Hungry? Find yummy food or your favorite spot",
     "Need a ride? Try car rentals nearby",
@@ -19,18 +22,35 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
-    }, 3000); // change every 3 seconds
-
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="fixed top-0 left-0 w-full z-50 h-20  px-4 py-2 flex items-center justify-between gap-2 md:gap-4">
+    <motion.div
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className={`fixed top-0 left-0 w-full z-50 h-20 px-4 py-2 flex items-center justify-between gap-2 md:gap-4 transition-all duration-300 rounded-b-xl ${
+  scrolled
+    ? "bg-[rgba(255,48,48,0.96)] backdrop-blur-md shadow-md"
+    : "backdrop-blur-xs"
+}`}
+    >
       {/* Location */}
-      <div className="flex items-center space-x-1 text-sm text-gray-700 font-medium">
-  <FiMapPin className="text-red-500" />
-  <span className="text-white">{place}</span>
-  <FiChevronDown className="text-white" />
-</div>
+      <div className="flex items-center space-x-1 text-sm font-medium text-white">
+        <FiMapPin className="text-red-200" />
+        <span>{place}</span>
+        <FiChevronDown />
+      </div>
 
       {/* Search */}
       <div className="flex-1 mx-2 bg-white rounded-md">
@@ -38,27 +58,65 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder={placeholders[placeholderIndex]}
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+            placeholder=""
           />
+          {/* Animated Placeholder Overlay */}
+          <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-none text-sm text-gray-400">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={placeholderIndex}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.4 }}
+              >
+                {placeholders[placeholderIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
 
-      {/* Reward & Cart */}
+      {/* Icons */}
       <div className="flex items-center space-x-4">
-        {/* Reward icon */}
-        <FaTicketAlt className="text-white text-lg cursor-pointer" title="Rewards" />
+        {[
+          { Icon: PiGiftBold, title: "Rewards" },
+          { Icon: FiHeart, title: "Wishlist" },
+        ].map(({ Icon, title }, idx) => (
+          <motion.div
+            key={idx}
+            whileHover={{ scale: 1.1 }}
+            className="text-white text-lg cursor-pointer"
+            title={title}
+          >
+            <Icon />
+          </motion.div>
+        ))}
 
-        {/* Cart with count */}
-        <div className="relative cursor-pointer">
-          <HiOutlineShoppingCart className="text-white text-xl" title="Cart" />
+        {/* Cart */}
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          className="relative cursor-pointer text-white"
+          title="Cart"
+        >
+          <HiOutlineShoppingCart className="text-xl" />
           {cartCount > 0 && (
             <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
               {cartCount}
             </span>
           )}
-        </div>
+        </motion.div>
+
+        {/* User */}
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          className="text-white text-lg cursor-pointer"
+          title="Profile"
+        >
+          <FiUser />
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -9,26 +9,33 @@ import OurServices from "../components/home/OurService";
 import LoginCard from "../components/home/Login";
 import Rewards from "../components/common/Rewards";
 import Cart from "../components/common/Cart";
-// import { useGetAllBanners } from '../hooks/queries/useBanner'
-// import TopRestuarents from '../containers/Home/TopRestuarents'
+import TopRestuarents from "../containers/Home/TopRestuarents";
+import TopGroceries from "../containers/Home/TopGroceries";
+import TopPharmacies from "../containers/Home/TopPharmacies";
+import Highlites from "../containers/Home/Highlites";
+// import AdsBanner from "../containers/Home/AdsBanner";
 
 const Home = () => {
-    // const {data:banners} =  useGetAllBanners()
-
     return (
         <div className="">
-            <div className="bg-blue-950 h-140 rounded-b-3xl fixed top-0 left-0 w-full  -z-10 ">
-                <TopBar />
+            <TopBar />
+            <div className="relative aspect-[3/1] rounded-b-3xl overflow-hidden w-full -z-10">
+                <img
+                    src="/demo/demoHero.jpg"
+                    className="absolute w-full h-full object-cover object-center"
+                    alt="Discount Background"
+                />
             </div>
 
-            <div className="mt-140 z-50">
+            <div className=" z-50">
                 <OurServices />
                 <LoginCard />
             </div>
-            {/* <TopRestuarents banners={banners}/> */}
-            {/* <HorizontalCarousel/> */}
-            {/* <TopGroceryStores/> */}
-            {/* <PharmacyUI/> */}
+            {/* <AdsBanner/> */}
+            <TopRestuarents />
+            <Highlites />
+            <TopGroceries />
+            <TopPharmacies />
         </div>
     );
 };

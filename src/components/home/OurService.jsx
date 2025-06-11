@@ -9,28 +9,36 @@ const services = [
 
 const OurServices = () => {
   return (
-    <section className="py-12 px-4 text-center bg-white ">
-      <h2 className="text-3xl md:text-4xl font-bold text-gray-800  mb-10">
-        Our Services
-      </h2>
-      <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-6 max-w-6xl mx-auto">
-        {services.map((service, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center transition-transform duration-200 hover:scale-105"
-          >
-            <div className="bg-gray-100  p-4 rounded-2xl shadow hover:shadow-lg">
-              <img
-                src={service.img}
-                alt={service.title}
-                className="w-20 h-20 object-contain rounded-xl"
-              />
+    <section className="py-16 px-4 bg-white">
+      <div className="max-w-6xl mx-auto text-center">
+        {/* Title */}
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">
+          Discover Our Services
+        </h2>
+        <p className="text-gray-500 text-sm md:text-base max-w-2xl mx-auto mb-10">
+          From everyday needs to travel comfort, we connect you to trusted services in your community.
+        </p>
+
+        {/* Service Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center hover:scale-[1.05] transition-transform duration-300"
+            >
+              <div className="bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-xl w-24 h-24 flex items-center justify-center">
+                <img
+                  src={service.img}
+                  alt={service.title}
+                  className="w-16 h-16 object-contain"
+                />
+              </div>
+              <p className="text-sm font-semibold text-gray-700 mt-3 text-center">
+                {service.title}
+              </p>
             </div>
-            <p className="text-sm md:text-base font-medium text-gray-700  mt-3">
-              {service.title}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
