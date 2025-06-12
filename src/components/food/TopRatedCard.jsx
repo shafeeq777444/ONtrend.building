@@ -14,13 +14,14 @@ const RatingStars = ({ rating }) => (
 );
 
 const TopRatedCards = ({ shop }) => (
-  <div className="rounded-2xl bg-white shadow-sm  p-4 w-full max-w-lg mx-auto">
+  <div className="rounded-md bg-white shadow-sm  p-4 w-full max-w-lg mx-auto">
     {/* Shop Food Banner */}
     {shop.foodImages?.length > 0 && (
       <img
+      loading="lazy"
         src={shop.foodImages[0]}
         alt="Food Item"
-        className="w-full h-36 object-cover rounded-xl mb-4"
+        className="w-full h-36 object-cover rounded-md mb-4"
       />
     )}
 
@@ -28,6 +29,7 @@ const TopRatedCards = ({ shop }) => (
       {/* Left: Logo and Info */}
       <div className="flex gap-3">
         <img
+        loading="lazy"
           src={shop.logo}
           alt={shop.shopName}
           className="w-12 h-12 rounded-full object-cover "

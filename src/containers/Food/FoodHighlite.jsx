@@ -4,20 +4,19 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/autoplay";
 import { Autoplay, FreeMode } from "swiper/modules";
+import { useGetAllBanners } from "../../hooks/queries/usePromotions";
+import SkeletonHomeHighlites from "../../components/skeleton/SkeletonHomeHighlites";
 
 // Example data
-const highlitesData = [
-  "/images/highlite1.jpg",
-  "/images/highlite2.jpg",
-  "/images/highlite3.jpg",
-  "/images/highlite4.jpg",
-   "/images/highlite1.jpg",
-  "/images/highlite2.jpg",
-  "/images/highlite3.jpg",
-  "/images/highlite4.jpg",
-];
 
 const FoodHighlites = () => {
+  const {data:allBanners,isLoading}=useGetAllBanners()
+ const foodBanners= allBanners?.filter(banner=>banner.vendorType=="Food/Restaurant") || []
+ const bannerImages=foodBanners?.map(banner=>banner.url) || []
+  const shuffledBannerImages = bannerImages.sort(() => 0.5 - Math.random()) || [];
+if(isLoading){
+  return(<SkeletonHomeHighlites/>)
+}
   return (
     <div className="px-4 py-6 bg-white">
       <Swiper
@@ -40,12 +39,12 @@ const FoodHighlites = () => {
         loop={true}
         modules={[Autoplay, FreeMode]}
       >
-        {highlitesData.map((imgSrc, index) => (
+        {shuffledBannerImages.map((imgSrc, index) => (
           <SwiperSlide key={index}>
             <img
               src={imgSrc}
               alt={`highlight-${index}`}
-              className="rounded-xl w-full h-[260px] object-cover shadow"
+              className="rounded-md w-full h-[260px] object-cover shadow"
             />
           </SwiperSlide>
         ))}

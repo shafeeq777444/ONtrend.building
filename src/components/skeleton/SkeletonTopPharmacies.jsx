@@ -24,7 +24,7 @@ const SkeletonTopPharmacies = () => {
       >
         {dummyArray.map((_, index) => (
           <SwiperSlide key={index}>
-            <div className="w-full h-44 rounded-2xl overflow-hidden shadow-lg animate-pulse relative bg-gray-100">
+            <div className="w-full h-44 rounded-md overflow-hidden shadow-lg animate-pulse relative bg-gray-100">
               <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-200">
                 <FiShoppingBag className="text-gray-400 text-4xl" />
               </div>

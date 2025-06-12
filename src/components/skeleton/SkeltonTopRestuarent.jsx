@@ -35,7 +35,7 @@ const SkeltonTopRestuarent = () => {
         {dummyArray.map((_, index) => (
           <SwiperSlide key={index} className="overflow-visible">
             <div className="p-1">
-              <div className="animate-pulse min-w-[220px] bg-white shadow-md rounded-xl overflow-hidden relative">
+              <div className="animate-pulse min-w-[220px] bg-white shadow-md rounded-md overflow-hidden relative">
                 {/* Banner Image Placeholder */}
                 <div className="relative w-full aspect-[4/4] bg-gray-200 flex items-center justify-center">
                   <FiShoppingBag className="text-gray-400 text-4xl" />
@@ -43,7 +43,7 @@ const SkeltonTopRestuarent = () => {
                 </div>
 
                 {/* Logo Placeholder */}
-                <div className="absolute bottom-6 left-3 w-14 h-14 rounded-xl bg-gray-300 shadow-md" />
+                <div className="absolute bottom-6 left-3 w-14 h-14 rounded-md bg-gray-300 shadow-md" />
               </div>
             </div>
           </SwiperSlide>

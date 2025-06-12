@@ -42,7 +42,7 @@ const TopGroceries = () => {
                     640: { slidesPerView: 2.5 },
                     768: { slidesPerView: 3.5 },
                     1024: { slidesPerView: 4.5 },
-                    1280: { slidesPerView: 5.6 },
+                    1280: { slidesPerView: 5.5 },
                     1536: { slidesPerView: 6.5 },
                 }}
                 navigation={{
@@ -60,8 +60,8 @@ const TopGroceries = () => {
                 {topGroceries.map((item) => (
                     <SwiperSlide key={item.id}>
                         <div className="p-2">
-                            <div className="group relative rounded-xl shadow hover:shadow-md transition flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
-                                <div className="w-full h-42 rounded-lg overflow-hidden mb-3 relative">
+                            <div className="group relative rounded-md shadow hover:shadow-md transition flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
+                                <div className="w-full h-42 rounded-md overflow-hidden mb-3 relative">
                                     <FavoriteButton />
                                     <img
                                         src={item.bannerImage[0]}
@@ -72,7 +72,7 @@ const TopGroceries = () => {
                                     {/* Shop Closed Overlay */}
                                     {!item.isOnline && (
                                         <div className="absolute inset-0 bg-black/30 bg-opacity-50 flex items-center cursor-default justify-center">
-                                            <div className="text-xs absolute text-gray-400 italic">Shop closed</div>
+                                            <div className="text-xs absolute text-gray-400 italic bg-black/20 backdrop-blur-xs rounded-full px-1 py-0.5">Shop closed</div>
                                         </div>
                                     )}
 
@@ -89,11 +89,11 @@ const TopGroceries = () => {
                                    
                                 </div>
                                  {item.isOnline ? (
-                                        <div className="flex items-center gap-1 p-2 text-sm font-medium  text-green-600">
+                                        <div className="flex items-center gap-1 p-2 text-sm font-medium  text-green-600 ">
                                             <FiShoppingBag size={16} /> Shop Now
                                         </div>
                                     ) : (
-                                        <div className="text-xs text-gray-400 p-2 italic">Shop closed</div>
+                                        <div className="text-xs text-gray-400 p-2 italic ">Shop closed</div>
                                     )}
                             </div>
                         </div>

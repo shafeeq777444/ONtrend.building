@@ -3,12 +3,12 @@ import { FiImage } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-const SkeletonHomeHighlites = () => {
+const SkeletonHomeHighlites = ({text=""}) => {
   const skeletonSlides = Array(5).fill(0);
 
   return (
     <div className="px-4 py-6 bg-white">
-      <h2 className="text-xl font-bold mb-4">Highlites</h2>
+      <h2 className="text-xl font-bold mb-4">{text}</h2>
       <Swiper
         spaceBetween={12}
         slidesPerView={1.2}
@@ -24,7 +24,7 @@ const SkeletonHomeHighlites = () => {
       >
         {skeletonSlides.map((_, index) => (
           <SwiperSlide key={index}>
-            <div className="w-full h-[260px] bg-gray-200 animate-pulse rounded-xl flex items-center justify-center shadow">
+            <div className="w-full h-[260px] bg-gray-200 animate-pulse rounded-md flex items-center justify-center shadow">
               <FiImage className="text-4xl text-gray-400" />
             </div>
           </SwiperSlide>

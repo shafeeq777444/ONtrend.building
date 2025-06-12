@@ -27,3 +27,26 @@ export async function fetchAllTopVendors() {
   }
 }
 
+// fetchAllFoodVendors
+export async function fetchAllFoodVendors(){try {
+    const usersRef = collection(db, "users");
+    const q = query(
+      usersRef,
+      where("role", "==", "Vendor"),
+      where("vendorType", "==", "Food/Restaurant"),
+    );
+    const querySnapshot = await getDocs(q);
+    const vendors = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    // Sort vendors by isOnline: true first
+    const sortedFoodVendors = vendors.sort((a, b) => {
+      return (b.isOnline === true) - (a.isOnline === true);
+    });
+    return sortedFoodVendors;
+  } catch (error) {
+    console.error("Error fetching top vendors:", error);
+    return [];
+  }
+}

@@ -45,7 +45,7 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
                 className={`fixed top-0 left-0 w-full z-50 md:h-18 px-4 py-2 flex flex-wrap items-center justify-between gap-3 md:gap-4 transition-all duration-300  ${
                     scrolled
                         ? "bg-[rgba(24,24,27,0.95)] backdrop-blur-md shadow-md"
-                        : "bg-[rgba(24,24,27,0.5)] backdrop-blur-sm"
+                        : "bg-[rgba(24,24,27,0.31)] backdrop-blur-sm"
                 }`}
             >
                 {/* Left Section */}
@@ -72,7 +72,7 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
                         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
-                            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                            className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
                             placeholder=""
                         />
                         {/* Animated Placeholder */}

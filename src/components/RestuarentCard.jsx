@@ -8,7 +8,7 @@ const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents 
         <div className="p-1">
             <div
                 onClick={() => navigate("/food/id")}
-                className={`relative rounded-xl overflow-hidden shadow-md min-w-[220px] group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10 `}
+                className={`relative rounded-md overflow-hidden shadow-md min-w-[220px] group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10 `}
             >
                 {/* Busy Overlay */}
                 {!restaurant.isOnline && topRestuarents && (
@@ -37,17 +37,20 @@ const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents 
                 {/* Logo */}
                 <div className="absolute bottom-4 left-3 flex items-start  space-x-3 z-20">
                     {/* Logo */}
-                    <div className="rounded-xl w-14 h-14 shadow-md overflow-hidden">
+                    <div className="rounded-md w-14 h-14 shadow-md overflow-hidden">
                         <img
+                            loading="lazy"
                             src={restaurant.image}
                             alt={`${restaurant.restaurantName} Logo`}
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover rounded-md"
                         />
                     </div>
 
                     {/* Name */}
                     <div className="text-white">
-                        <h3 className="text-sm font-semibold max-w-[130px] break-words mt-2">{restaurant.restaurantName}</h3>
+                        <h3 className="text-sm font-semibold max-w-[130px] break-words mt-2">
+                            {restaurant.restaurantName}
+                        </h3>
                     </div>
                 </div>
             </div>

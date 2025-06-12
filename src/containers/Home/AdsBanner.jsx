@@ -15,7 +15,6 @@ const INTERVAL = 3000; // Change image every 3 seconds
 const AdCardSlider = () => {
   const{data:offers}=useGetAllOffers()
   const offerIMages=offers?.map(offer=>offer.imageUrl) || []
-  console.log(offerIMages)
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const AdCardSlider = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[250px] overflow-hidden rounded-xl shadow">
+    <div className="relative w-full h-[250px] overflow-hidden rounded-md shadow">
       <AnimatePresence mode="wait">
         <motion.img
           key={offerIMages[index]}

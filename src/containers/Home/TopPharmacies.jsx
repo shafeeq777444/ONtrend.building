@@ -70,7 +70,7 @@ const TopPharmacies = () => {
 
             {/* Swiper */}
             <Swiper
-                spaceBetween={16}
+                spaceBetween={1}
                 slidesPerView={1.6}
                 breakpoints={{
                     480: { slidesPerView: 1.5 },

@@ -8,9 +8,9 @@ const SkeletonTopGroceries = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {[...Array(5)].map((_, index) => (
           <div key={index} className="p-2">
-            <div className="bg-white rounded-xl shadow p-3 flex flex-col items-center text-center animate-pulse">
+            <div className="bg-white rounded-md shadow p-3 flex flex-col items-center text-center animate-pulse">
               {/* Image Skeleton */}
-              <div className="w-full h-32 relative rounded-lg overflow-hidden mb-3 bg-gray-200 flex items-center justify-center">
+              <div className="w-full h-32 relative rounded-md overflow-hidden mb-3 bg-gray-200 flex items-center justify-center">
                  <FiShoppingBag className="text-gray-400 text-4xl" />
               </div>
               {/* Name Skeleton */}

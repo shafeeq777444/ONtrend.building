@@ -15,18 +15,22 @@ import TopPharmacies from "../containers/Home/TopPharmacies";
 import Highlites from "../containers/Home/Highlites";
 import AdsBanner from "../containers/Home/AdsBanner";
 import ServiceGrid from "../components/home/ServiceGrid";
+import HeroSection from "../components/home/HeroSection";
 
 const Home = () => {
     return (
         <div className="">
             <TopBar />
-            <div className="relative aspect-[3/1] rounded-b-3xl overflow-hidden w-full -z-10">
+            {/* <div className="relative h-[80vh]  overflow-hidden w-full -z-10">
                 <img
-                    src="/demo/demoHero.jpg"
+                    src="/demo/heroLarge.jpg"
                     className="absolute w-full h-full object-cover object-center"
                     alt="Discount Background"
+                    loading="lazy"
                 />
-            </div>
+                 <div className="absolute inset-0 bg-black/30  transition duration-300" />
+            </div> */}
+            <HeroSection/>
 
             <div className=" z-50">
                 <ServiceGrid/>

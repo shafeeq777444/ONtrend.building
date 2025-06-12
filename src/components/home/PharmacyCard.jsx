@@ -5,9 +5,9 @@ import FavoriteButton from "../common/FavouriteButton";
 const PharmacyCard = ({ name, images, isOnline }) => {
   return (
     <div className="p-2">
-      <div className="group relative rounded-xl shadow hover:shadow-md transition flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
+      <div className="group relative rounded-md shadow hover:shadow-md transition flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
         
-        <div className="w-full h-42 rounded-lg overflow-hidden mb-3 relative">
+        <div className="w-full h-42 rounded-md overflow-hidden mb-3 relative">
           {/* Favorite Button */}
           <FavoriteButton />
 
@@ -15,13 +15,14 @@ const PharmacyCard = ({ name, images, isOnline }) => {
           <img
             src={images?.[0]}
             alt={name}
+            loading="lazy"
             className="w-full h-full object-cover"
           />
 
           {/* Shop Closed Overlay */}
           {!isOnline && (
             <div className="absolute inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center cursor-default z-20">
-              <div className="text-xs text-gray-400 italic">Shop closed</div>
+              <div className="text-xs text-gray-400 italic bg-black/20 backdrop-blur-xs rounded-full px-1 py-0.5">Shop closed</div>
             </div>
           )}
 

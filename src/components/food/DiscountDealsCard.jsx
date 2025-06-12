@@ -1,10 +1,13 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { FiClock, FiMapPin } from "react-icons/fi";
+import { useGetAllFoodVendors } from "../../hooks/queries/useVendors";
 
 const DiscountDealsCard = ({ vendor }) => {
+  const{data}=useGetAllFoodVendors()
+  console.log(data,"--all food vendors")
   return (
-    <div className="relative bg-white rounded-2xl shadow-md overflow-hidden w-full max-w-xs hover:scale-[1.02] transition-transform duration-200">
+    <div className="relative bg-white rounded-md shadow-md overflow-hidden w-full max-w-xs hover:scale-[1.02] transition-transform duration-200">
       <div className="h-36 w-full">
         <img src={vendor.image} alt={vendor.name} className="w-full h-full object-cover" />
       </div>

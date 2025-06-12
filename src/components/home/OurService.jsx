@@ -26,7 +26,7 @@ const OurServices = () => {
               key={index}
               className="flex flex-col items-center hover:scale-[1.05] transition-transform duration-300"
             >
-              <div className="bg-gray-50 p-4 rounded-xl shadow-md hover:shadow-xl w-24 h-24 flex items-center justify-center">
+              <div className="bg-gray-50 p-4 rounded-md shadow-md hover:shadow-xl w-24 h-24 flex items-center justify-center">
                 <img
                   src={service.img}
                   alt={service.title}

@@ -10,9 +10,10 @@ import SkeletonHomeHighlites from "../../components/skeleton/SkeletonHomeHighlit
 const Highlites = () => {
     const { data, isLoading } = useGetAllBanners();
     const allBannersForHighlite = data?.map((x) => x?.url || "") || [];
+     const shuffledAllBannersForHighlites = allBannersForHighlite.sort(() => 0.5 - Math.random()) || [];
 
     if (isLoading) {
-        return <SkeletonHomeHighlites />;
+        return <SkeletonHomeHighlites text="Highlights" />;
     }
 
     return (
@@ -41,14 +42,16 @@ const Highlites = () => {
                     loop={true}
                     modules={[Autoplay, FreeMode]}
                 >
-                    {allBannersForHighlite.map((imgSrc, index) => (
+                    {shuffledAllBannersForHighlites.map((imgSrc, index) => (
                         <SwiperSlide key={index}>
                             <div className="py-2 ">
                                 <div className="relative group/card ">
                                     <img
+                                    
                                         src={imgSrc}
+                                        loading="lazy"
                                         alt={`highlight-${index}`}
-                                        className="rounded-xl w-full h-[260px]  object-cover shadow transition-all duration-300 ease-in-out group-hover:blur-xs group-hover/card:blur-none group-hover/card:scale-[1.02] group-hover/card:z-10"
+                                        className="rounded-md w-full h-[260px]  object-cover shadow transition-all duration-300 ease-in-out group-hover:blur-[1.5px] group-hover/card:blur-none group-hover/card:scale-[1.02] group-hover/card:z-10"
                                     />
                                 </div>
                             </div>
