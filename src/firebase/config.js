@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { GoogleAuthProvider, getAuth } from "firebase/auth";
+// import { getAnalytics } from "firebase/analytics";
+import {  getAuth } from "firebase/auth";
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -20,13 +20,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+// getAnalytics(app);
 
 
 // exports
 export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-
 // ── CORRECTED: embed cacheSizeBytes inside persistentLocalCache ──
 export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({

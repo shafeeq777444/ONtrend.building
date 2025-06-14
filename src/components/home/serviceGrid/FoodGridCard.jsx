@@ -7,7 +7,7 @@ const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/
 
 const FoodGridCard = () => {
     return (
-        <div className="w-full bg-[#FF4D30] h-full rounded-md p-6 relative text-white flex flex-col justify-between group overflow-hidden">
+        <div className="w-full  h-full rounded-md p-6 relative text-white flex flex-col justify-between group overflow-hidden">
             {/* Background Swiper Images with dark overlay */}
             <div className="absolute top-0 left-0 w-full h-full z-0">
                 <Swiper

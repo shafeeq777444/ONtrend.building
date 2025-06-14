@@ -55,8 +55,9 @@ const ServiceGrid = () => {
       {/* Download */}
       <div className="bg-red-700 rounded-md text-white flex items-center justify-center overflow-hidden md:col-span-3 lg:col-span-2">
         <a href="https://ontrend.live/socials" className="text-lg font-semibold hover:underline ">
-          Download
+        
         </a>
+          <img className="object-contain p-6 w-full h-full" loading="lazy"  alt="ONtrend Logo" src="/ONtrend-logo.png"></img>
       </div>
     </div>
   );

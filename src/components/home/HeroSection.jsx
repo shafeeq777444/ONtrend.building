@@ -7,7 +7,7 @@ const HeroSection = () => {
       {/* Background Image */}
       <img
         src="/demo/heroLarge.jpg"
-        className="absolute w-full h-full object-cover object-center"
+        className="absolute w-full rounded-b-m h-full object-cover object-center"
         alt="Discount Background"
         loading="lazy"
       />

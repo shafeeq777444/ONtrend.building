@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FiMapPin, FiSearch, FiChevronDown, FiUser, FiHeart, FiMenu, FiX } from "react-icons/fi";
+import { FiMapPin, FiSearch, FiChevronDown, FiUser, FiHeart, FiX } from "react-icons/fi";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { PiGiftBold } from "react-icons/pi";
 import { useEffect, useState } from "react";
@@ -42,7 +42,7 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
                 initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className={`fixed top-0 left-0 w-full z-50 md:h-18 px-4 py-2 flex flex-wrap items-center justify-between gap-3 md:gap-4 transition-all duration-300  ${
+                className={`fixed  top-0 left-0 w-full z-50 md:h-18 px-4 py-2 flex flex-wrap items-center justify-between gap-3 md:gap-4 transition-all duration-300 ${
                     scrolled
                         ? "bg-[rgba(24,24,27,0.95)] backdrop-blur-md shadow-md"
                         : "bg-[rgba(24,24,27,0.31)] backdrop-blur-sm"
@@ -92,8 +92,8 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
                     </div>
                 </div>
 
-                {/* Desktop Icons */}
-                <div className="hidden md:flex items-center space-x-4">
+                {/* Desktop Icons with Circle Backgrounds */}
+                <div className="hidden md:flex items-center space-x-3">
                     {[
                         { Icon: <PiGiftBold />, title: "Rewards" },
                         { Icon: <FiHeart />, title: "Wishlist" },
@@ -101,23 +101,31 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
                         <motion.div
                             key={idx}
                             whileHover={{ scale: 1.1 }}
-                            className="text-white text-lg cursor-pointer"
+                            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition text-white text-lg cursor-pointer"
                             title={title}
                         >
                             {Icon}
                         </motion.div>
                     ))}
 
-                    <motion.div whileHover={{ scale: 1.1 }} className="relative cursor-pointer text-white" title="Cart">
+                    <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="relative w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                        title="Cart"
+                    >
                         <HiOutlineShoppingCart className="text-xl" />
                         {cartCount > 0 && (
-                            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5">
                                 {cartCount}
                             </span>
                         )}
                     </motion.div>
 
-                    <motion.div whileHover={{ scale: 1.1 }} className="text-white text-lg cursor-pointer" title="Profile">
+                    <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                        title="Profile"
+                    >
                         <FiUser />
                     </motion.div>
                 </div>
@@ -144,7 +152,9 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
                                 className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
                                 onClick={() => setMenuOpen(false)}
                             >
-                                {Icon}
+                                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
+                                    {Icon}
+                                </div>
                                 <span>{label}</span>
                             </div>
                         ))}
