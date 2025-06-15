@@ -3,9 +3,11 @@ import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/
 import localforage from "localforage";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocation, setLocationName } from "../../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const DeliveryLocation = () => {
     const dispatch = useDispatch();
+    const navigate=useNavigate()
 
     const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const { location, locationName } = useSelector((state) => state.user);
@@ -124,7 +126,7 @@ const DeliveryLocation = () => {
                     </div>
                 </Autocomplete>
                 {console.log(location,"chek--locatio")}
-                <GoogleMap onLoad={googleMapOnLoad} mapContainerStyle={{ width: "100%", height: "100vh" }} zoom={15}>
+                <GoogleMap onLoad={googleMapOnLoad} mapContainerStyle={{ width: "100%", height: "70vh" }} zoom={15}>
                     <Marker
                         position={location}
                         options={{ styles: mapStyles, disableDefaultUI: true, zoomControl: true }}
@@ -135,7 +137,7 @@ const DeliveryLocation = () => {
                 {/* Confirm Button */}
                 <div style={{ padding: "12px", textAlign: "center" }}>
                     <button
-                        // onClick={handleConfirm}
+                        onClick={()=>{navigate('/')}}
                         style={{
                             padding: "10px 20px",
                             backgroundColor: "#4CAF50",
