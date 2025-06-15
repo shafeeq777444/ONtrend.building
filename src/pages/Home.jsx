@@ -19,7 +19,7 @@ import HeroSection from "../components/home/HeroSection";
 
 const Home = () => {
     return (
-        <div className="">
+        <div className="mt-18">
             {/* <TopBar /> */}
             {/* <div className="relative h-[80vh]  overflow-hidden w-full -z-10">
                 <img
@@ -30,7 +30,7 @@ const Home = () => {
                 />
                  <div className="absolute inset-0 bg-black/30  transition duration-300" />
             </div> */}
-            <HeroSection/>
+            {/* <HeroSection/> */}
 
             <div className=" z-50">
                 <ServiceGrid/>
