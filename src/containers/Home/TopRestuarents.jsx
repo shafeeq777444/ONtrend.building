@@ -5,9 +5,10 @@ import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
+
 import SkeltonTopRestuarent from "../../components/skeleton/SkeltonTopRestuarent";
 import RestuarentCard from "../../components/RestuarentCard";
+import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 
 
 const TopRestaurants = () => {

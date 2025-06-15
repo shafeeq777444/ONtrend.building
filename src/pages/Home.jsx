@@ -1,7 +1,7 @@
 // import React from 'react'
 
 import DeliveringTo from "../components/common/DeliveryLocation";
-import TopBar from "../components/common/TopBar";
+// import TopBar from "../components/common/TopBar";
 import OurServices from "../components/home/OurService";
 // import HorizontalCarousel from '../components/home/TopRestuarents'
 // import TopGroceryStores from '../components/home/TopGrocery'
@@ -20,7 +20,7 @@ import HeroSection from "../components/home/HeroSection";
 const Home = () => {
     return (
         <div className="">
-            <TopBar />
+            {/* <TopBar /> */}
             {/* <div className="relative h-[80vh]  overflow-hidden w-full -z-10">
                 <img
                     src="/demo/heroLarge.jpg"

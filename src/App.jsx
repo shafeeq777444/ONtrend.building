@@ -28,17 +28,23 @@ import Food from './pages/Food';
 import Auth from './pages/Auth';
 import SignUP from './pages/SignUP';
 import Location from './pages/Location';
+import MainLayout from './layouts/MainLayout';
 
 
 export default function App() {
   const routes = useRoutes([
-    { path: '/', element: <Home /> },
-    { path: '/auth', element: <Auth /> },
-    { path: '/location', element: <Location/> }, //remove and change into modal
-
-    { path: '/auth/signup', element: <SignUP/> },
-    { path: '/food', element: <Food/> },
-    { path: '/about', element: <About /> },
+    {
+      path: '/',
+      element: <MainLayout />, // Wrap all routes with Navbar
+      children: [
+        { index: true, element: <Home /> },
+        { path: 'auth', element: <Auth /> },
+        { path: 'auth/signup', element: <SignUP /> },
+        { path: 'food', element: <Food /> },
+        { path: 'about', element: <About /> },
+        { path: 'location', element: <Location /> }, // optional
+      ],
+    },
 
   ]);
   return routes; // `useRoutes` returns the matching route component

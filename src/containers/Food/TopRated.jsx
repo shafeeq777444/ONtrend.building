@@ -1,7 +1,7 @@
 import React from "react";
 
 import TopRatedCards from "../../components/food/TopRatedCard";
-import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
+import { useGetTopRatededFoodVendors } from "../../hooks/queries/useVendors";
 
 const mockData = [
     {
@@ -61,19 +61,18 @@ const mockData = [
 ];
 
 export default function TopRated() {
-    const { data: allTopVendors } = useGetAllTopVendors();
-    console.log(allTopVendors);
+    const { data: allTopVendors } = useGetTopRatededFoodVendors();
+    console.log(allTopVendors, "all tp");
     const foodTopVendors = allTopVendors?.filter((vendor) => vendor.vendorType == "Food/Restaurant") || [];
-console.log(foodTopVendors);
+    console.log(foodTopVendors);
     const shuffledVendors = [...foodTopVendors].sort(() => 0.5 - Math.random());
-    const randomFiveVendors = shuffledVendors.slice(0, 5);
+    const randomSixVendors = shuffledVendors.slice(0, 6);
+    console.log()
     // .
     // .
     // .
     // .
-    console.log(randomFiveVendors);
-
-    
+    // console.log(randomFiveVendors,"rendom fiven vendors");
 
     return (
         <section className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -85,9 +84,9 @@ console.log(foodTopVendors);
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {mockData.map((shop, index) => (
-                        <TopRatedCards key={index} shop={shop} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {randomSixVendors.map((vendor, index) => (
+                        <TopRatedCards key={index} vendor={vendor} />
                     ))}
                 </div>
             </div>

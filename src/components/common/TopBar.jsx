@@ -5,11 +5,19 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { PiGiftBold } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import localforage from "localforage";
+import { setLocation, setLocationName } from "../../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
+    const navigate = useNavigate();
+    const { location, locationName } = useSelector((state) => state.user);
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
+    const [isCheckingStorage, setIsCheckingStorage] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const dispatch = useDispatch();
 
     const placeholders = [
         "Search for food, groceries, beauty, hotels...",
@@ -19,7 +27,10 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
         "Book hotels or apartments for your stay",
         "Find daily needs & fresh groceries",
     ];
-
+useEffect(() => {
+  console.log(location, "chekk---");
+  console.log(locationName, "chekk---");
+}, [location, locationName]);
     useEffect(() => {
         const interval = setInterval(() => {
             setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
@@ -35,6 +46,34 @@ export default function TopBar({ place = "San Francisco", cartCount = 2 }) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+
+// location-----------------------------------------------------------------
+    //✅ location initially
+    useEffect(() => {
+        const fetchStoredLocation = async () => {
+            const savedLocation = await localforage.getItem("userLocation");
+            const savedAddress = await localforage.getItem("userAddress");
+
+            if (savedLocation) dispatch(setLocation(savedLocation));
+            if (savedAddress) dispatch(setLocationName(savedAddress));
+
+            setIsCheckingStorage(false); // done checking
+        };
+
+        fetchStoredLocation();
+    }, [dispatch]);
+
+    //✅ location not have in slice
+    useEffect(() => {
+        if (isCheckingStorage) return; // wait for storage check
+
+        const isLocationValid = location?.lat && location?.lng;
+        const isAddressValid = !!locationName;
+
+        if (!isLocationValid || !isAddressValid) {
+            navigate("/location");
+        }
+    }, [isCheckingStorage, location, locationName, navigate]);
     return (
         <>
             {/* TopBar */}

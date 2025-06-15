@@ -5,7 +5,7 @@ import FavoriteButton from "./common/FavouriteButton";
 const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents = false }) => {
     const navigate = useNavigate();
     return (
-        <div className="p-1">
+        <div className="px-1 pb-3">
             <div
                 onClick={() => navigate("/food/id")}
                 className={`relative rounded-md overflow-hidden shadow-md min-w-[220px] group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10 `}
@@ -24,7 +24,7 @@ const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents 
                 />
 
                 {/* Main Image */}
-                <div className="relative w-full aspect-[4/4]">
+                <div className="relative w-full aspect-[4/3]">
                     <img
                         loading="lazy"
                         src={restaurant.bannerImage?.[2]}
