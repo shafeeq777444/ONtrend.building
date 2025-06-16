@@ -9,6 +9,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import PharmacyCard from "../../components/home/PharmacyCard";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import SkeletonTopPharmacies from "../../components/skeleton/SkeletonTopPharmacies";
+import { useSelector } from "react-redux";
 
 // Sample Data
 // const pharmacies = [
@@ -47,7 +48,8 @@ import SkeletonTopPharmacies from "../../components/skeleton/SkeletonTopPharmaci
 // ];
 
 const TopPharmacies = () => {
-    const { data: vendors, isLoading } = useGetAllTopVendors();
+    const {location:{lat,lng}}=useSelector(state=>state.user)
+    const { data: vendors, isLoading } = useGetAllTopVendors(lat,lng);
     const topPharmacies = vendors?.filter((vendor) => vendor.vendorType == "Health & Beauty") || [];
     console.log(topPharmacies, "--pharmacies");
     if(isLoading){
@@ -99,7 +101,7 @@ const TopPharmacies = () => {
             >
                 {topPharmacies.map((pharmacy, idx) => (
                     <SwiperSlide key={idx}>
-                        <PharmacyCard name={pharmacy.restaurantName} images={pharmacy.bannerImage} isOnline={pharmacy.isOnline} />
+                        <PharmacyCard pharmacy={pharmacy} />
                     </SwiperSlide>
                 ))}
             </Swiper>

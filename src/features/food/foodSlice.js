@@ -1,25 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
-// const defaultCenter = {
-//             lat: 23.588,
-//             lng: 58.3829}
+
 
 const foodSlice = createSlice({
-  name: 'user',
+  name: 'food',
   initialState: {
-    location:{lat:"",lng:""},
-    locationName:""
-
+    foodType:"All",
+    categoryBar:"Nearby"
   },
   reducers: {
-    setLocation: (state,action) => {
-      state.location=action.payload
+    setFoodType: (state,action) => {
+      state.foodType=action.payload
       
     },
-    setLocationName: (state,action) => {
-      state.locationName=action.payload
+    setFoodCategory: (state,action) => {
+      state.categoryBar=action.payload
     },
   },
 });
 
-export const { setLocation,setLocationName } = foodSlice.actions;
+export const { setFoodType,setFoodCategory } = foodSlice.actions;
 export default foodSlice.reducer;

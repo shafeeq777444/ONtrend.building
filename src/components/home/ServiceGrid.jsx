@@ -3,9 +3,13 @@ import FoodGridCard from "./serviceGrid/FoodGridCard";
 import GroceryGridCard from "./serviceGrid/GroceryGridCard";
 import GridCard from "./serviceGrid/GridCard";
 
+import DownloadGridCard from "./serviceGrid/DownloadGridCard";
+
+
 const ServiceGrid = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 w-full auto-rows-[200px] sm:auto-rows-[250px] lg:auto-rows-[300px]">
+   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 w-full auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[220px]">
+
       {/* Food  */}
       <div className="lg:col-span-2 lg:row-span-3 bg-red-200 rounded-md flex items-center justify-center text-white overflow-hidden">
         <FoodGridCard />
@@ -44,21 +48,16 @@ const ServiceGrid = () => {
       </div>
 
       {/* Rent a Car */}
-      <div className="bg-yellow-300 rounded-md text-white flex items-center justify-center overflow-hidden">
+      <div className="bg-white rounded-md text-white flex items-center justify-center overflow-hidden">
         <GridCard
           title="Rent a Car"
           description="Book your ride with ease — from hatchbacks to premium sedans and SUVs."
-          image="/gird/car1.jpg"
+          image="/gird/car2.png"
         />
       </div>
 
       {/* Download */}
-      <div className="bg-red-700 rounded-md text-white flex items-center justify-center overflow-hidden md:col-span-3 lg:col-span-2">
-        <a href="https://ontrend.live/socials" className="text-lg font-semibold hover:underline ">
-        
-        </a>
-          <img className="object-contain p-6 w-full h-full" loading="lazy"  alt="ONtrend Logo" src="/ONtrend-logo.png"></img>
-      </div>
+      <DownloadGridCard/>
     </div>
   );
 };

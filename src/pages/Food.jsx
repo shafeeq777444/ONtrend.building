@@ -1,22 +1,49 @@
 
-import CategoryBar from "../components/food/CategoryBar"
-import FoodDiscountDeals from "../containers/Food/FoodDiscountDeals"
-import FoodHighlites from "../containers/Food/FoodHighlite"
-import FoodOffers from "../containers/Food/FoodOffers"
-import TopPicks from "../containers/Food/TopPicks"
-import TopRated from "../containers/Food/TopRated"
-import TypeOfFoods from "../containers/Food/TypeOfFoods"
+import { useSelector } from "react-redux"
+import CategoryBar from "../components/foodHome/CategoryBar"
+import FoodDiscountDeals from "../containers/FoodHome/FoodDiscountDeals"
+import FoodOffers from "../containers/FoodHome/FoodOffers"
+import TopRated from "../containers/FoodHome/TopRated"
+import NearByFood from "../containers/FoodHome/Category/NearByFoodVendors"
+import NewVendors from "../containers/FoodHome/Category/NewVendors"
+import TopPicks from "../containers/FoodHome/Category/TopPicks"
 
+const RenderCategorySection = () => {
+  const {categoryBar}=useSelector(state=>state.food)
+    switch (categoryBar) {
+      case "Nearby":
+        return <NearByFood />;
+      // case "Promotion":
+      //   return <FoodDiscountDeals />;
+      case "New OnTrend":
+        return <NewVendors />;
+      case "Best Sellers":
+        return <TopPicks />;
+      // case "Top Rated":
+      //   return <TopRated />;
+      // case "New Dishes":
+      //   return <TypeOfFoods />;
+      default:
+        return (
+          <>
+            <NearByFood />
+          </>
+        );
+    }
+  };
 
 const Food = () => {
+  
+ 
   return (
     <div className="mt-18">
      {/* <FoodHighlites/> */}
      <FoodOffers/>
-     <TypeOfFoods/>
+     {/* <TypeOfFoods/> */}
      <TopRated/>
      <CategoryBar/>
-     <TopPicks/>
+     <RenderCategorySection/>
+     {/* <TopPicks/> */}
      <FoodDiscountDeals/>
     </div>
   )

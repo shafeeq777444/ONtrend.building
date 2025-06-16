@@ -9,6 +9,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import SkeltonTopRestuarent from "../../components/skeleton/SkeltonTopRestuarent";
 import RestuarentCard from "../../components/RestuarentCard";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
+import { useSelector } from "react-redux";
 
 
 const TopRestaurants = () => {
@@ -22,8 +23,8 @@ const TopRestaurants = () => {
         : [...prev, id]
     );
   };
-
-  const { data: vendors, isLoading } = useGetAllTopVendors();
+ const {location:{lat,lng}}=useSelector(state=>state.user)
+  const { data: vendors, isLoading } = useGetAllTopVendors(lat,lng);
   const topRestaurants =
     vendors?.filter((vendor) => vendor.vendorType === "Food/Restaurant") || [];
     if(isLoading){

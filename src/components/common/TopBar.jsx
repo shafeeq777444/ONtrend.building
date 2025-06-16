@@ -84,7 +84,7 @@ useEffect(() => {
                 className={`fixed  top-0 left-0 w-full z-50 md:h-18 px-4 py-2 flex flex-wrap items-center justify-between gap-3 md:gap-4 transition-all duration-300 ${
                     scrolled
                         ? "bg-[rgba(24,24,27,0.95)] backdrop-blur-md shadow-md"
-                        : "bg-[rgba(24,24,27,0.31)] backdrop-blur-sm"
+                        : "bg-[rgba(24,24,27,0.95)] backdrop-blur-sm"
                 }`}
             >
                 {/* Left Section */}

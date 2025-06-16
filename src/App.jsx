@@ -29,6 +29,7 @@ import Auth from './pages/Auth';
 import SignUP from './pages/SignUP';
 import Location from './pages/Location';
 import MainLayout from './layouts/MainLayout';
+import FoodVender from './pages/FoodVender';
 
 
 export default function App() {
@@ -41,6 +42,7 @@ export default function App() {
         { path: 'auth', element: <Auth /> },
         { path: 'auth/signup', element: <SignUP /> },
         { path: 'food', element: <Food /> },
+        { path: 'food/:vendorId', element: <FoodVender /> },
         { path: 'about', element: <About /> },
         { path: 'location', element: <Location /> }, // optional
       ],
