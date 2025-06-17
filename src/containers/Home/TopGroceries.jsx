@@ -84,10 +84,10 @@ const TopGroceries = () => {
           return (
             <SwiperSlide key={item.id}>
               <div className="p-2">
-                <div className="group relative rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
+                <div className="group relative rounded-lg shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
                   
                   {/* Image Block */}
-                  <div className="w-full h-44 rounded-xl overflow-hidden mb-3 relative">
+                  <div className="w-full h-44 rounded-lg overflow-hidden mb-3 relative">
                     {/* Favorite Button */}
                     <FavoriteButton />
 
@@ -120,18 +120,11 @@ const TopGroceries = () => {
                     )}
 
                     {/* Title Overlay */}
-                    {item.isOnline && (
-                      <div className="absolute inset-0 flex flex-col justify-end items-center pointer-events-none">
-                        <div className="w-full bg-gradient-to-t from-black/70 via-black/30 to-transparent h-full p-2 flex justify-center pointer-events-auto transition-opacity duration-300 opacity-100 group-hover:opacity-0 absolute bottom-0">
-                          <h3 className="text-sm font-semibold text-white absolute bottom-4">
-                            {item.restaurantName}
-                          </h3>
-                        </div>
-                      </div>
-                    )}
+                   
 
                     {/* Bottom-left: Ratings, Time, Distance */}
                     <div className="absolute bottom-2 left-2 z-20 flex flex-col items-start gap-1 text-white text-xs">
+                      
                       {averageRating > 0 && (
                         <div className="flex items-center gap-1 bg-black/20 px-2 py-1 rounded-full">
                           <RatingStars rating={averageRating} />

@@ -37,8 +37,8 @@ const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents 
   return (
     <div className="px-1 pb-3">
       <div
-        onClick={() => navigate("/food/id")}
-        className="relative rounded-xl overflow-hidden shadow-md min-w-[220px] bg-white group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10"
+        onClick={() => navigate(`/food/${restaurant?.id}`)}
+        className="relative rounded-lg overflow-hidden shadow-md min-w-[220px] bg-white group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10"
       >
         {/* Busy Overlay */}
         {!restaurant.isOnline && topRestuarents && (

@@ -25,14 +25,14 @@ export default function PhoneLoginForm({ onBack,  }) {
           <input
             type="tel"
             placeholder="Enter mobile number"
-            className="w-full p-3 rounded-xl bg-white text-black"
+            className="w-full p-3 rounded-lg bg-white text-black"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
           />
           <button
             onClick={handleSendOtpClick}
-            className="w-full py-3 rounded-xl bg-white text-black font-semibold"
+            className="w-full py-3 rounded-lg bg-white text-black font-semibold"
           >
             Send OTP
           </button>
@@ -42,14 +42,14 @@ export default function PhoneLoginForm({ onBack,  }) {
           <input
             type="text"
             placeholder="Enter OTP"
-            className="w-full p-3 rounded-xl bg-white text-black"
+            className="w-full p-3 rounded-lg bg-white text-black"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             required
           />
           <button
             onClick={handleVerifyClick}
-            className="w-full py-3 rounded-xl bg-white text-black font-semibold"
+            className="w-full py-3 rounded-lg bg-white text-black font-semibold"
           >
             Verify OTP
           </button>

@@ -39,7 +39,7 @@ export default function LoginScreen() {
     }, []);
 
     const buttonClass =
-        "w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-transform duration-200 ease-in-out hover:shadow-lg";
+        "w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-transform duration-200 ease-in-out hover:shadow-lg";
 
     const renderForm = () => {
         switch (mode) {

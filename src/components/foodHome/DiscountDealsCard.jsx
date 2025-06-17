@@ -39,7 +39,7 @@ const DiscountDealsCard = ({ vendor, favorites, toggleFavorite }) => {
 
   return (
     <div
-      className="relative rounded-xl overflow-hidden shadow-md min-w-[220px] bg-white group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10"
+      className="relative rounded-lg overflow-hidden shadow-md min-w-[220px] bg-white group transition-transform hover:scale-[1.02] duration-300 ease-in-out hover:z-10"
       onClick={() => navigate(`/food/${vendor.id}`)}
     >
       {/* Discount Badge */}

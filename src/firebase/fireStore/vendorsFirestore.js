@@ -7,7 +7,7 @@ import localforage from "localforage";
 // Constants
 const AVERAGE_SPEED_KMPH = 35; // average city driving speed
 const MAX_DISTANCE_KM = 15;
-// fetchAllTopVendors --(Top)-----------------------------(added:distance,estimate time)
+// fetchAllTopVendors --(Top)-----------------------------(added:distance,estimate time)(food,grocery,pharmacy)
 export async function fetchAllTopVendors() {
     try {
         const usersRef = collection(db, "users");
@@ -185,3 +185,6 @@ export async function fetchAllFoodVendors() {
 //         return [];
 //     }
 // }
+
+
+

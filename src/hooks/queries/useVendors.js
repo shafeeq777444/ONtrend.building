@@ -1,12 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery,  } from "@tanstack/react-query";
 import {
     fetchAllFoodVendors,
     fetchAllTopVendors,
     // getNearbyDiscountOfferVendors,
 } from "../../firebase/fireStore/vendorsFirestore";
-import { useEffect } from "react";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../../firebase/config";
+// import { useEffect } from "react";
+// import { collection, onSnapshot, query, where } from "firebase/firestore";
+// import { db } from "../../firebase/config";
 
 //getAllVendors(food,pharmcy,grocery,...)
 
@@ -72,30 +72,30 @@ export function useGetAllFoodVendors(lat, lng) {
 //     });
 // }
 
-export function useGetNewVendors() {
-    const queryClient = useQueryClient();
+// export function useGetNewVendors() {
+//     const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const q = query(collection(db, "users"), where("role", "==", "Vendor"), where("isApproved", "==", true));
+//     useEffect(() => {
+//         const q = query(collection(db, "users"), where("role", "==", "Vendor"), where("isApproved", "==", true));
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const data = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            const sorted = data.sort((a, b) => (b.isOnline === true) - (a.isOnline === true));
+//         const unsubscribe = onSnapshot(q, (snapshot) => {
+//             const data = snapshot.docs.map((doc) => ({
+//                 id: doc.id,
+//                 ...doc.data(),
+//             }));
+//             const sorted = data.sort((a, b) => (b.isOnline === true) - (a.isOnline === true));
 
-            // Update React Query cache manually
-            queryClient.setQueryData(["topVendors"], sorted);
-        });
+//             // Update React Query cache manually
+//             queryClient.setQueryData(["topVendors"], sorted);
+//         });
 
-        return () => unsubscribe();
-    }, [queryClient]);
+//         return () => unsubscribe();
+//     }, [queryClient]);
 
-    // Get data from cache (and optionally use a fallback fetch function)
-    return useQuery({
-        queryKey: ["topVendors"],
-        queryFn: fetchAllTopVendors, // fallback for SSR/initial
-        enabled: false, // disable automatic fetch
-    });
-}
+//     // Get data from cache (and optionally use a fallback fetch function)
+//     return useQuery({
+//         queryKey: ["topVendors"],
+//         queryFn: fetchAllTopVendors, // fallback for SSR/initial
+//         enabled: false, // disable automatic fetch
+//     });
+// }

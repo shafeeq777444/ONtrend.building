@@ -95,10 +95,10 @@ const PharmacyCard = ({ pharmacy }) => {
           </div>
 
           {/* Action */}
-          {isOnline ? (
-            <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
+          {isOnline ? ( 
+            <div className="flex items-center gap-2 justify-center  text-green-600 text-sm font-medium">
               <FiShoppingBag size={16} />
-              <span>Shop Now</span>
+              <span className="text-center">Shop Now</span>
             </div>
           ) : (
             <div className="text-xs text-center text-gray-400 italic">Shop Closed</div>

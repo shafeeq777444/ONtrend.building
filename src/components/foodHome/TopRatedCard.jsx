@@ -1,7 +1,9 @@
 import { Star, Heart, Clock, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // RatingStars Component
 const RatingStars = ({ rating }) => {
+
   return (
     <div className="flex items-center space-x-0.5">
       {[...Array(5)].map((_, i) => {
@@ -31,13 +33,14 @@ const RatingStars = ({ rating }) => {
 };
 
 const TopRatedCards = ({ vendor }) => {
+    const navigate=useNavigate()
   const averageRating =
     vendor.Ratings && vendor.totalRatings
       ? vendor.Ratings / vendor.totalRatings
       : 0;
 
   return (
-    <div className="rounded-md bg-white shadow-sm relative w-full max-w-lg mx-auto group overflow-hidden">
+    <div onClick={()=>navigate(`/food/${vendor?.id}`)} className="rounded-md bg-white shadow-sm relative w-full max-w-lg mx-auto group overflow-hidden">
       {/* Banner Image */}
       {vendor.bannerImage?.length > 0 && (
         <img

@@ -17,7 +17,7 @@ export default function SignupForm({ onBack }) {
             <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-3 rounded-xl bg-white text-black"
+                className="w-full p-3 rounded-lg bg-white text-black"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -25,12 +25,12 @@ export default function SignupForm({ onBack }) {
             <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-3 rounded-xl bg-white text-black"
+                className="w-full p-3 rounded-lg bg-white text-black"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
             />
-            <button type="submit" className="w-full py-3 rounded-xl bg-white text-black font-semibold">
+            <button type="submit" className="w-full py-3 rounded-lg bg-white text-black font-semibold">
                 Sign Up
             </button>
             <button type="button" onClick={onBack} className="w-full text-sm underline text-center text-gray-400">

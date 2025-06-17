@@ -7,7 +7,7 @@ const DownloadGridCard = () => {
   return (
 
         <a target='_blank' href='https://ontrend.live/socials'
-         className="bg-red-700 rounded-xl text-white flex items-center justify-evenly p-4 w-full md:col-span-3 lg:col-span-2 shadow-md cursor-pointer">
+         className="bg-red-700 rounded-lg text-white flex items-center justify-evenly p-4 w-full md:col-span-3 lg:col-span-2 shadow-md cursor-pointer">
           <div className="flex justify-center items-center flex-col text-center">
         
             <img
