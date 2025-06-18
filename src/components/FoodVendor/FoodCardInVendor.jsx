@@ -62,7 +62,7 @@ const FoodCardInVendor = ({ item, venderLogo, onClick}) => {
 
     {/* Add Button */}
     <div className="absolute bottom-0 right-0">
-      <button className="bg-onRed text-white px-3 py-1 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
+      <button className="bg-onRed text-white px-2 py-1 md:px-5 md:py-2 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
         <MdOutlineShoppingBag className="text-base" />
         Add
       </button>

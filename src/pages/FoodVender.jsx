@@ -49,7 +49,7 @@ const FoodVender = () => {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6  px-4 lg:px-10 mt-24">
+        <div className="flex flex-col lg:flex-row gap-6   lg:px-10 mt-24">
             {/* Left side (Main Content) */}
             <div className="w-full md:[80vw] lg:w-[calc(100%-360px)] space-y-6">
                 <FoodVendorHeader currentVendor={currentVendor} />
