@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingBag } from "react-icons/md";
+import { DrawerTrigger,} from "@/components/ui/drawer"
+import FoodVendorDrawer from './FoodVendorDrawer';
 
-const FoodCardInVendor = ({ item, venderLogo }) => {
+
+const FoodCardInVendor = ({ item, venderLogo, onClick}) => {
   const [isImageError, setIsImageError] = useState(false);
+
+
 
   const description = item.description ||
     `A delicious ${item.category?.toLowerCase() || "dish"} prepared with care at ${item.restaurantName || "our restaurant"}.`;
@@ -11,11 +16,13 @@ const FoodCardInVendor = ({ item, venderLogo }) => {
   const shortDesc =
     description.length > 30 ? description.slice(0, 30) + '... more' : description;
 
-  return (
-    <div className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg bg-white group">
+  return (<>
+   
+      <DrawerTrigger>
+    <div onClick={onClick} className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg bg-white group">
       
       {/* Food Image */}
-      <div className="relative">
+      <div  className="relative">
         <img
           src={isImageError ? venderLogo : item.imageUrl}
           alt={item.name}
@@ -78,6 +85,8 @@ const FoodCardInVendor = ({ item, venderLogo }) => {
         </button>
       </div>
     </div>
+      </DrawerTrigger>
+   </>
   );
 };
 

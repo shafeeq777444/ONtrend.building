@@ -1,160 +1,189 @@
 import React, { useCallback, useRef, useState } from "react";
-import { GoogleMap, LoadScript, Marker, Autocomplete } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  Autocomplete,
+} from "@react-google-maps/api";
+import { X } from "lucide-react";
 import localforage from "localforage";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocation, setLocationName } from "../../features/user/userSlice";
-import { useNavigate } from "react-router-dom";
 
-const DeliveryLocation = () => {
-    const dispatch = useDispatch();
-    const navigate=useNavigate()
+const DeliveryLocation = ({ closeModal }) => {
+  const dispatch = useDispatch();
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-    const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-    const { location, locationName } = useSelector((state) => state.user);
-    console.log(locationName,"--location name");
-    const defaultCenter = {
-        lat: 23.588,
-        lng: 58.3829,
-    };
-    const mapStyles = [
-        {
-            featureType: "all",
-            elementType: "labels.text.fill",
-            stylers: [{ color: "#ffffff" }],
-        },
-        {
-            featureType: "all",
-            elementType: "labels.text.stroke",
-            stylers: [{ color: "#000000" }],
-        },
-    ];
-    const autocompleteRef = useRef(null);
-    const [map, setMap] = useState(null);
+  const { location, locationName } = useSelector((state) => state.user);
 
-    const googleMapOnLoad = useCallback(
-        (mapInstance) => {
-            mapInstance.panTo(defaultCenter);
-            setMap(mapInstance);
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
-    );
+  const defaultCenter = { lat: 23.588, lng: 58.3829 };
+  const autocompleteRef = useRef(null);
+  const [map, setMap] = useState(null);
 
-    // when input typing
-    const onPlaceChanged = async () => {
-        const place = autocompleteRef.current.getPlace();
-            // lon,lan
-        if (place?.geometry?.location) {
-            const lat = place.geometry.location.lat();
-            const lng = place.geometry.location.lng();
-            const newLocation = { lat, lng };
-            await localforage.setItem("userLocation", newLocation);
-            dispatch(setLocation(newLocation));
-            // address
-            const address = place.formatted_address || place.name;
-            dispatch(setLocationName(address))
-            await localforage.setItem("userAddress", address);
+  const handleMapLoad = useCallback((mapInstance) => {
+    mapInstance.panTo(defaultCenter);
+    setMap(mapInstance);
+  }, []);
 
-            if (place.geometry.viewport) {
-                // Smooth zoom & center based on Google's suggested viewport
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                // Fallback if viewport not available
-                map.panTo(newLocation);
-                map.setZoom(13);
-                setTimeout(() => {
-                    map.setZoom(15);
-                }, 400);
-            }
+  const handlePlaceChanged = async () => {
+    const place = autocompleteRef.current?.getPlace();
+    if (!place?.geometry?.location) return;
+
+    const lat = place.geometry.location.lat();
+    const lng = place.geometry.location.lng();
+    const newLocation = { lat, lng };
+
+    await localforage.setItem("userLocation", newLocation);
+    dispatch(setLocation(newLocation));
+
+    const address = place.formatted_address || place.name || "";
+    dispatch(setLocationName(address));
+    await localforage.setItem("userAddress", address);
+
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
+      map.panTo(newLocation);
+      map.setZoom(13);
+      setTimeout(() => map.setZoom(15), 400);
+    }
+  };
+
+  const useCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const currentLocation = { lat, lng };
+
+        await localforage.setItem("userLocation", currentLocation);
+        dispatch(setLocation(currentLocation));
+
+        if (map) {
+          map.panTo(currentLocation);
+          map.setZoom(15);
         }
-    };
 
-    // when map icon dragging
-    const dragging = async (e) => {
-        // lon,lan
-        const lat = e.latLng.lat();
-        const lng = e.latLng.lng();
-        const newLocation = { lat, lng };
-        await localforage.setItem("userLocation", newLocation);
-        dispatch(setLocation(newLocation));
-        map.panTo({ lat, lng });
-
-        // ✅ Get address using Geocoder
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-        if (status === "OK" && results[0]) {
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ location: currentLocation }, (results, status) => {
+          if (status === "OK" && results[0]) {
             const address = results[0].formatted_address;
-            dispatch(setLocationName(address))
-               localforage.setItem("userAddress", address);
-            // You can save or display this address
-        } else {
-            console.error("Geocoder failed: " + status);
-        }
+            dispatch(setLocationName(address));
+            localforage.setItem("userAddress", address);
+          } else {
+            console.error("Geocoder failed due to:", status);
+          }
+        });
+      },
+      (error) => {
+        console.error("Error getting current location:", error);
+        alert("Unable to retrieve your location.");
+      }
+    );
+  };
+
+  const handleMarkerDragEnd = async (e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    const draggedLocation = { lat, lng };
+
+    await localforage.setItem("userLocation", draggedLocation);
+    dispatch(setLocation(draggedLocation));
+    map.panTo(draggedLocation);
+
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ location: draggedLocation }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const address = results[0].formatted_address;
+        dispatch(setLocationName(address));
+        localforage.setItem("userAddress", address);
+      } else {
+        console.error("Geocoder failed:", status);
+      }
     });
+  };
 
-    };
-
-    return (
-        <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-            {locationName && (
-          <div
-            style={{
-              padding: "10px",
-              background: "#f9f9f9",
-              fontSize: "16px",
-              textAlign: "center",
-              borderBottom: "1px solid #ddd",
-              fontStyle: "italic",
-            }}
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-zinc-900 rounded-2xl shadow-xl w-full max-w-3xl mx-4 overflow-hidden relative border border-zinc-700">
+        {/* Close Button */}
+        {location && locationName && (
+          <button
+            onClick={closeModal}
+            className="absolute top-4 right-4 p-2 rounded-full bg-zinc-800 text-gray-300 hover:text-red-500 border border-zinc-700 hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-110 active:scale-95"
+            aria-label="Close modal"
           >
-            📍 Selected Address: <strong>{locationName}</strong>
+            <X size={20} />
+          </button>
+        )}
+
+        {/* Address Info */}
+        {locationName && (
+          <div className="p-3 bg-zinc-800 text-center text-sm font-medium italic text-zinc-300 border-b border-zinc-700">
+            📍 Selected Address:{" "}
+            <span className="font-semibold text-white">{locationName}</span>
           </div>
         )}
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
-                <Autocomplete
-                    onPlaceChanged={onPlaceChanged}
-                    onLoad={(autocomplete) => {
-                        autocompleteRef.current = autocomplete;
-                    }}
-                >
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Search delivery address"
-                            style={{ width: "100%", padding: "8px", fontSize: "16px" }}
-                        />
-                    </div>
-                </Autocomplete>
-                {console.log(location,"chek--locatio")}
-                <GoogleMap onLoad={googleMapOnLoad} mapContainerStyle={{ width: "100%", height: "70vh" }} zoom={15}>
-                    <Marker
-                        position={location}
-                        options={{ styles: mapStyles, disableDefaultUI: true, zoomControl: true }}
-                        draggable={true}
-                        onDragEnd={dragging}
-                    />
-                </GoogleMap>
-                {/* Confirm Button */}
-                <div style={{ padding: "12px", textAlign: "center" }}>
-                    <button
-                        onClick={()=>{navigate('/')}}
-                        style={{
-                            padding: "10px 20px",
-                            backgroundColor: "#4CAF50",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "6px",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                            boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                        }}
-                    >
-                        Confirm Location
-                    </button>
-                </div>
-            </LoadScript>
-        </div>
-    );
+
+        <LoadScript
+          googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+          libraries={["places"]}
+        >
+          {/* Heading */}
+          <h2 className="text-xl font-bold text-white px-4 pt-4 text-center pb-2 tracking-wide">
+            Where Should We Deliver?
+          </h2>
+
+          {/* Autocomplete Input */}
+          <Autocomplete
+            onLoad={(autocomplete) => {
+              autocompleteRef.current = autocomplete;
+            }}
+            onPlaceChanged={handlePlaceChanged}
+          >
+            <div className="p-4 border-b border-zinc-700 bg-transparent">
+              <input
+                type="text"
+                placeholder="Search delivery address"
+                className="w-full px-4 py-2 border bg-zinc-800 text-white placeholder-gray-400 border-zinc-700 rounded-md focus:outline-none focus:ring-0 text-sm"
+              />
+            </div>
+          </Autocomplete>
+
+          {/* Google Map */}
+          <div className="w-full h-[60vh] bg-zinc-800 border-t border-zinc-700">
+            <GoogleMap
+              onLoad={handleMapLoad}
+              mapContainerStyle={{ width: "100%", height: "100%" }}
+              zoom={15}
+              center={location}
+            >
+              <Marker
+                position={location}
+                draggable={true}
+                onDragEnd={handleMarkerDragEnd}
+              />
+            </GoogleMap>
+          </div>
+
+          {/* Bottom Buttons */}
+          <div className="p-4 flex justify-end items-center border-t border-zinc-700 bg-zinc-800">
+            <button
+              onClick={useCurrentLocation}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
+            >
+              Use Current Location
+            </button>
+          </div>
+        </LoadScript>
+      </div>
+    </div>
+  );
 };
 
 export default DeliveryLocation;

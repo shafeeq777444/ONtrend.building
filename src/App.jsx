@@ -27,7 +27,7 @@ import About from './pages/About';
 import Food from './pages/Food';
 import Auth from './pages/Auth';
 import SignUP from './pages/SignUP';
-import Location from './pages/Location';
+
 import MainLayout from './layouts/MainLayout';
 import FoodVender from './pages/FoodVender';
 
@@ -44,7 +44,6 @@ export default function App() {
         { path: 'food', element: <Food /> },
         { path: 'food/:vendorId', element: <FoodVender /> },
         { path: 'about', element: <About /> },
-        { path: 'location', element: <Location /> }, // optional
       ],
     },
 
