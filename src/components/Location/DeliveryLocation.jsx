@@ -1,14 +1,17 @@
 import React, { useCallback, useRef, useState } from "react";
 import {
   GoogleMap,
-  LoadScript,
   Marker,
   Autocomplete,
+  useJsApiLoader,
 } from "@react-google-maps/api";
 import { X } from "lucide-react";
 import localforage from "localforage";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocation, setLocationName } from "../../features/user/userSlice";
+
+// ✅ Move libraries array outside to avoid re-creating on every render
+const libraries = ["places"];
 
 const DeliveryLocation = ({ closeModal }) => {
   const dispatch = useDispatch();
@@ -19,6 +22,12 @@ const DeliveryLocation = ({ closeModal }) => {
   const defaultCenter = { lat: 23.588, lng: 58.3829 };
   const autocompleteRef = useRef(null);
   const [map, setMap] = useState(null);
+
+  // ✅ Use useJsApiLoader to safely load the API
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
   const handleMapLoad = useCallback((mapInstance) => {
     mapInstance.panTo(defaultCenter);
@@ -108,6 +117,10 @@ const DeliveryLocation = ({ closeModal }) => {
     });
   };
 
+  // ✅ Show loading or error if map isn't ready
+  if (loadError) return <div>Error loading maps</div>;
+  if (!isLoaded) return <div>Loading...</div>;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-zinc-900 rounded-2xl shadow-xl w-full max-w-3xl mx-4 overflow-hidden relative border border-zinc-700">
@@ -125,62 +138,57 @@ const DeliveryLocation = ({ closeModal }) => {
         {/* Address Info */}
         {locationName && (
           <div className="p-3 bg-zinc-800 text-center text-sm font-medium italic text-zinc-300 border-b border-zinc-700">
-            📍 Selected Address:{" "}
+           Selected Address:{" "}
             <span className="font-semibold text-white">{locationName}</span>
           </div>
         )}
 
-        <LoadScript
-          googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-          libraries={["places"]}
+        {/* Heading */}
+        <h2 className="text-xl font-bold text-white px-4 pt-4 text-center pb-2 tracking-wide">
+          Where Should We Deliver?
+        </h2>
+
+        {/* Autocomplete Input */}
+        <Autocomplete
+          onLoad={(autocomplete) => {
+            autocompleteRef.current = autocomplete;
+          }}
+          onPlaceChanged={handlePlaceChanged}
         >
-          {/* Heading */}
-          <h2 className="text-xl font-bold text-white px-4 pt-4 text-center pb-2 tracking-wide">
-            Where Should We Deliver?
-          </h2>
+          <div className="p-4 border-b border-zinc-700 bg-transparent">
+            <input
+              type="text"
+              placeholder="Search delivery address"
+              className="w-full px-4 py-2 border bg-zinc-800 text-white placeholder-gray-400 border-zinc-700 rounded-md focus:outline-none focus:ring-0 text-sm"
+            />
+          </div>
+        </Autocomplete>
 
-          {/* Autocomplete Input */}
-          <Autocomplete
-            onLoad={(autocomplete) => {
-              autocompleteRef.current = autocomplete;
-            }}
-            onPlaceChanged={handlePlaceChanged}
+        {/* Google Map */}
+        <div className="w-full h-[60vh] bg-zinc-800 border-t border-zinc-700">
+          <GoogleMap
+            onLoad={handleMapLoad}
+            mapContainerStyle={{ width: "100%", height: "100%" }}
+            zoom={15}
+            center={location}
           >
-            <div className="p-4 border-b border-zinc-700 bg-transparent">
-              <input
-                type="text"
-                placeholder="Search delivery address"
-                className="w-full px-4 py-2 border bg-zinc-800 text-white placeholder-gray-400 border-zinc-700 rounded-md focus:outline-none focus:ring-0 text-sm"
-              />
-            </div>
-          </Autocomplete>
+            <Marker
+              position={location}
+              draggable={true}
+              onDragEnd={handleMarkerDragEnd}
+            />
+          </GoogleMap>
+        </div>
 
-          {/* Google Map */}
-          <div className="w-full h-[60vh] bg-zinc-800 border-t border-zinc-700">
-            <GoogleMap
-              onLoad={handleMapLoad}
-              mapContainerStyle={{ width: "100%", height: "100%" }}
-              zoom={15}
-              center={location}
-            >
-              <Marker
-                position={location}
-                draggable={true}
-                onDragEnd={handleMarkerDragEnd}
-              />
-            </GoogleMap>
-          </div>
-
-          {/* Bottom Buttons */}
-          <div className="p-4 flex justify-end items-center border-t border-zinc-700 bg-zinc-800">
-            <button
-              onClick={useCurrentLocation}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
-            >
-              Use Current Location
-            </button>
-          </div>
-        </LoadScript>
+        {/* Bottom Buttons */}
+        <div className="p-4 flex justify-end items-center border-t border-zinc-700 bg-zinc-800">
+          <button
+            onClick={useCurrentLocation}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
+          >
+            Use Current Location
+          </button>
+        </div>
       </div>
     </div>
   );

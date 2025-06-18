@@ -17,9 +17,7 @@ const FoodVendorMealCategory = ({categories,selectedCategory}) => {
   return (
     <div className="p-4 bg-gray-50 rounded-lg shadow-md relative">
       <div className="flex justify-between items-center mb-4">
-
-
-        {/* Filter Icon */}
+        {/* search */}
          <Input
         type="text"
         placeholder="Search "
@@ -38,18 +36,21 @@ const FoodVendorMealCategory = ({categories,selectedCategory}) => {
      
 
       {/* Category Buttons */}
-      <div className="flex flex-wrap gap-3">
-        {categories?.map((category, index) => (
-          <button
-            key={category + index}
-            onClick={() => dispatch(setVendorMealCategory(category))}
-            className={`px-4 py-2 rounded-full text-sm font-medium shadow 
-              ${selectedCategory === category ? 'bg-black text-white' : 'bg-white text-black border'}`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+   <div className="flex sm:flex-wrap flex-nowrap gap-3 overflow-x-auto sm:overflow-x-visible scrollbar-hide">
+  {categories?.map((category, index) => (
+    <button
+      key={category + index}
+      onClick={() => dispatch(setVendorMealCategory(category))}
+      className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium shadow 
+        ${selectedCategory === category ? 'bg-black text-white' : 'bg-white text-black border'}`}
+    >
+      {category}
+    </button>
+  ))}
+</div>
+
+
+
 
       {/* Filter Dropdown Panel */}
      {showFilter && (

@@ -24,7 +24,7 @@ const CategoryBar = () => {
   const { categoryBar } = useSelector((state) => state.food);
 
   return (
-    <div className="flex overflow-x-auto sticky top-18 z-50 bg-white px-6 sm:px-10 mt-6 py-3 space-x-4 sm:space-x-6 w-full no-scrollbar">
+    <div className="flex overflow-x-auto sticky top-14 z-50 bg-white px-6 sm:px-10 mt-6 py-3 space-x-4 sm:space-x-6 w-full no-scrollbar">
       {categories.map((cat, idx) => {
         const isActive = cat.label === categoryBar;
         return (

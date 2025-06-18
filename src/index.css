@@ -22,6 +22,14 @@ body {
     font-family: var(--font-dmsans); 
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 /* .swiper-wrapper {
   transition-timing-function: linear !important;
 } */

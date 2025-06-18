@@ -60,11 +60,11 @@ const FoodVendorHeader = ({ currentVendor }) => {
                 <div className="flex items-center gap-3">
                     <img
                         src={currentVendor?.image}
-                        alt={currentVendor?.name}
+                        alt={currentVendor?.restaurantName}
                         className="w-16 h-16 rounded-lg object-cover border-2 border-white"
                     />
                     <div>
-                        <h2 className="text-white text-lg font-semibold">{currentVendor?.name}</h2>
+                        <h2 className="text-white text-lg font-semibold">{currentVendor?.restaurantName}</h2>
                         <div className="flex items-center text-sm text-gray-200">
                             <MapPin className="w-4 h-4 mr-1" />
                             <span className="line-clamp-1">{currentVendor?.businessAddress}</span>
