@@ -18,74 +18,58 @@ const FoodCardInVendor = ({ item, venderLogo, onClick}) => {
 
   return (<>
    
-      <DrawerTrigger>
-    <div onClick={onClick} className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg bg-white group">
-      
-      {/* Food Image */}
-      <div  className="relative">
-        <img
-          src={isImageError ? venderLogo : item.imageUrl}
-          alt={item.name}
-          loading="lazy"
-          className={`w-full h-52 ${isImageError ? "object-contain p-4" : "object-cover"}`}
-          onError={() => setIsImageError(true)}
-        />
+     <DrawerTrigger>
+  <div onClick={onClick} className="relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01]">
+    
+    {/* Image */}
+    <div className="relative">
+      <img
+        src={isImageError ? venderLogo : item.imageUrl}
+        alt={item.name}
+        loading="lazy"
+        className={`w-full h-40 sm:h-48 ${isImageError ? "object-contain p-4" : "object-cover"}`}
+        onError={() => setIsImageError(true)}
+      />
 
-        {/* Black overlay on hover */}
-        {/* <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" /> */}
-
-        {/* Vendor Logo top-left */}
-        <div className="absolute top-2 left-2 z-10 w-10 h-10  rounded-full overflow-hidden shadow">
-          {/* <img
-            src={venderLogo}
-            alt="Vendor Logo"
-            className="object-cover w-full h-full"
-          /> */}
-          <button className="bg-white/30 p-2 rounded-full shadow-md hover:bg-gray-100 transition">
-            <FaHeart className="text-red-500 text-lg" />
-          </button>
-        </div>
-
-        {/* Gradient & lowerCaseName at bottom (hide on hover) */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 group-hover:opacity-0 transition-opacity duration-300">
-          <div className="bg-gradient-to-t from-black/90 to-transparent px-3 py-3
-
-           ">
-            <p className="text-white text-end text-sm font-semibold">
-              {item?.localName}
-            </p>
-            <p className="text-white text-end text-sm font-semibold">
-              {item?.localTag}
-            </p>
-          </div>
-        </div>
-
-        {/* Wishlist Icon */}
-        <div className="absolute top-2 right-2 z-10">
-          
-        </div>
+      {/* Gradient + Local Name */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-2 group-hover:opacity-0 transition-opacity duration-300">
+        <p className="text-white text-end text-xs sm:text-sm font-semibold">
+          {item?.localName}
+        </p>
+        <p className="text-white text-end text-xs sm:text-sm font-semibold">
+          {item?.localTag}
+        </p>
       </div>
 
-      {/* Content */}
-      <div className="p-3 pb-14">
-        <h3 className="text-lg font-semibold truncate">{item.name}</h3>
-        <p className="text-sm text-gray-500 mt-1">{shortDesc}</p>
-      </div>
-
-      {/* Price bottom-left */}
-      <div className="absolute bottom-0 left-0 p-3">
-        <span className="text-lg font-bold text-gray-800">OMR {item.itemPrice}</span>
-      </div>
-
-      {/* Order button bottom-right */}
-      <div className="absolute bottom-0 right-0">
-        <button className="cursor-pointer bg-onRed text-white px-4 py-2 rounded-tl-xl rounded-br-xl w-30 flex justify-center items-center gap-1 hover:bg-green-600 transition">
-          <MdOutlineShoppingBag className="text-lg" />
-          Add
+      {/* Heart Icon */}
+      <div className="absolute top-2 left-2 z-10">
+        <button className="bg-white/30 p-2 rounded-full shadow-md hover:bg-white/80 transition">
+          <FaHeart className="text-red-500 text-sm" />
         </button>
       </div>
     </div>
-      </DrawerTrigger>
+
+    {/* Card Content */}
+    <div className="p-2 pb-14">
+      <h3 className="text-sm font-semibold truncate">{item.name}</h3>
+      <p className="text-xs text-gray-500 mt-1 truncate">{shortDesc}</p>
+    </div>
+
+    {/* Price */}
+    <div className="absolute bottom-0 left-0 p-2">
+      <span className="text-sm font-bold text-gray-800">OMR {item.itemPrice}</span>
+    </div>
+
+    {/* Add Button */}
+    <div className="absolute bottom-0 right-0">
+      <button className="bg-onRed text-white px-3 py-1 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
+        <MdOutlineShoppingBag className="text-base" />
+        Add
+      </button>
+    </div>
+  </div>
+</DrawerTrigger>
+
    </>
   );
 };
