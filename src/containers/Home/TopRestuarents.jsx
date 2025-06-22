@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -10,19 +10,13 @@ import SkeltonTopRestuarent from "../../components/skeleton/SkeltonTopRestuarent
 import RestuarentCard from "../../components/RestuarentCard";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import { useSelector } from "react-redux";
+import { useWishlist } from "@/hooksDemo/userMutation";
 
 
 const TopRestaurants = () => {
+  const { data: wishlist = [] } = useWishlist('user12')
+  const wishlistIds = useMemo(() => new Set(wishlist.map(item => item.id)), [wishlist]);
 
-  const [favorites, setFavorites] = React.useState([]);
-
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id)
-        ? prev.filter((favId) => favId !== id)
-        : [...prev, id]
-    );
-  };
  const {location:{lat,lng}}=useSelector(state=>state.user)
   const { data: vendors, isLoading } = useGetAllTopVendors(lat,lng);
   const topRestaurants =
@@ -30,6 +24,7 @@ const TopRestaurants = () => {
     if(isLoading){
       return(<SkeltonTopRestuarent/>)
     }
+
 
   return (
     <div className="px-4 py-6 relative w-full">  
@@ -68,7 +63,7 @@ const TopRestaurants = () => {
           >
             {topRestaurants.map((restaurant) => (
               <SwiperSlide key={restaurant.id} className="overflow-visible">
-               <RestuarentCard favorites={favorites} restaurant={restaurant} toggleFavorite={toggleFavorite} topRestuarents={true}/>
+               <RestuarentCard restaurant={restaurant}  topRestuarents={true} isLiked={wishlistIds.has(restaurant.id)}/>
               </SwiperSlide>
             ))}
           </Swiper>

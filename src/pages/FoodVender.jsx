@@ -1,74 +1,148 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import FoodVendorHeader from "../components/FoodVendor/FoodVendorHeader";
-import FoodVendorDetails from "../components/FoodVendor/FoodVendorDetails";
-import FoodOrderComputerOrder from "../components/FoodVendor/FoodOrderComputerOrder";
 import FoodVendorMealCategory from "../components/FoodVendor/FoodVendorMealCategory";
+import FoodOrderComputerOrder from "../components/FoodVendor/FoodOrderComputerOrder";
 import FoodVendorProducts from "@/containers/FoodVendor/FoodVendorProducts";
 import { useGetAllFoodVendors } from "@/hooks/queries/useVendors";
-import { useSelector } from "react-redux";
-import { useGetVendorFoodsAndCategories } from "@/hooks/queries/useFoodVendor";
+import { useGetVendorFoodsAndCategories, useVendorFoodCategories } from "@/hooks/queries/useFoodVendor";
 
 const FoodVender = () => {
-    const { vendorId } = useParams();
-    const {
-        location: { lat, lng },
-    } = useSelector((state) => state.user);
-    const { selectedVendorMealCategory, searchTerm, sortOption } = useSelector((state) => state.food);
+  const { vendorId } = useParams();
+  const {
+    location: { lat, lng },
+  } = useSelector((state) => state.user);
+  const {
+    selectedVendorMealCategory,
+    searchTerm,
+    sortOption,
+  } = useSelector((state) => state.food);
 
-    const { data: allFoodVendors } = useGetAllFoodVendors(lat, lng);
-    const currentVendor = allFoodVendors?.find((vendor) => vendor.id === vendorId);
-    const { data } = useGetVendorFoodsAndCategories(currentVendor?.id);
+  const { data: allFoodVendors } = useGetAllFoodVendors(lat, lng);
+  const currentVendor = allFoodVendors?.find((vendor) => vendor.id === vendorId);
 
-    // Get all foods
-    let categoryWiseFoods = data?.foods || [];
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-    // Filter by category
-    if (selectedVendorMealCategory && selectedVendorMealCategory !== "All") {
-        categoryWiseFoods = categoryWiseFoods.filter((food) => food?.category === selectedVendorMealCategory);
-    }
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetVendorFoodsAndCategories(currentVendor?.id, selectedVendorMealCategory);
+ const {data:vendorCategories}=useVendorFoodCategories(currentVendor?.id)
 
-    // Filter by search
-    if (searchTerm?.trim()) {
-        const lowerSearch = searchTerm.toLowerCase();
-        categoryWiseFoods = categoryWiseFoods.filter(
-            (food) =>
-                food?.name?.toLowerCase().includes(lowerSearch) ||
-                food?.description?.toLowerCase().includes(lowerSearch) ||
-                food?.category?.toLowerCase().includes(lowerSearch)
-        );
-    }
+  // Ref to scroll
+  const productsRef = useRef(null);
 
-    // Sort
-    if (sortOption === "lowToHigh") {
-        categoryWiseFoods = categoryWiseFoods.slice().sort((a, b) => (a?.itemPrice ?? 0) - (b?.itemPrice ?? 0));
-    } else if (sortOption === "highToLow") {
-        categoryWiseFoods = categoryWiseFoods.slice().sort((a, b) => (b?.itemPrice ?? 0) - (a?.itemPrice ?? 0));
-    } else {
-        categoryWiseFoods = categoryWiseFoods.slice().sort(() => Math.random() - 0.5);
-    }
+  // Scroll handler
+  const scrollToProducts = () => {
+    productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-    return (
-        <div className="flex flex-col lg:flex-row gap-6   lg:px-10 mt-24">
-            {/* Left side (Main Content) */}
-            <div className="w-full md:[80vw] lg:w-[calc(100%-360px)] space-y-6">
-                <FoodVendorHeader currentVendor={currentVendor} />
-                <div className="bg-white rounded-lg shadow-sm p-4">
-                    {/* <FoodVendorDetails currentVendor={currentVendor} /> */}
-                    <FoodVendorMealCategory categories={data?.categories} selectedCategory={selectedVendorMealCategory} />
-                    <FoodVendorProducts venderLogo={currentVendor?.image} foodItems={categoryWiseFoods} />
-                </div>
-            </div>
+  // Page foods
+  const currentPageFoods = data?.pages?.[currentPageIndex]?.foods || [];
 
-            {/* Right side (Order Summary - only on large screens) */}
-            <div className="hidden lg:block w-full lg:w-[340px]">
-  <div className="fixed top-20 right-6">
-    <FoodOrderComputerOrder />
-  </div>
-</div>
+  // Filter foods
+  let filteredFoods = currentPageFoods;
 
-        </div>
+  if (selectedVendorMealCategory && selectedVendorMealCategory !== "All") {
+    filteredFoods = filteredFoods.filter(
+      (food) => food?.category === selectedVendorMealCategory
     );
+  }
+
+  if (searchTerm?.trim()) {
+    const lowerSearch = searchTerm.toLowerCase();
+    filteredFoods = filteredFoods.filter(
+      (food) =>
+        food?.name?.toLowerCase().includes(lowerSearch) ||
+        food?.description?.toLowerCase().includes(lowerSearch) ||
+        food?.category?.toLowerCase().includes(lowerSearch)
+    );
+  }
+
+  // Sort
+  if (sortOption === "lowToHigh") {
+    filteredFoods = filteredFoods.slice().sort((a, b) => (a?.itemPrice ?? 0) - (b?.itemPrice ?? 0));
+  } else if (sortOption === "highToLow") {
+    filteredFoods = filteredFoods.slice().sort((a, b) => (b?.itemPrice ?? 0) - (a?.itemPrice ?? 0));
+  } 
+
+  // Handlers
+  const handleNext = () => {
+    if (currentPageIndex + 1 < (data?.pages.length || 0)) {
+      setCurrentPageIndex((prev) => prev + 1);
+      scrollToProducts();
+    } else if (hasNextPage) {
+      fetchNextPage().then(() => {
+        setCurrentPageIndex((prev) => prev + 1);
+        scrollToProducts();
+      });
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentPageIndex > 0) {
+      setCurrentPageIndex((prev) => prev - 1);
+      scrollToProducts();
+    }
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row gap-6 lg:px-10 mt-24">
+      {/* Left Section */}
+      <div className="w-full md:[80vw] lg:w-[calc(100%-360px)] space-y-6">
+        <FoodVendorHeader currentVendor={currentVendor} />
+
+        {/* Products Area */}
+        <div ref={productsRef} className="bg-white rounded-lg shadow-sm p-4">
+          <FoodVendorMealCategory
+            categories={vendorCategories}
+            selectedCategory={selectedVendorMealCategory}
+          />
+
+          <FoodVendorProducts
+            venderLogo={currentVendor?.image}
+            foodItems={filteredFoods}
+          />
+
+          {/* Pagination Buttons */}
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <button
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 disabled:opacity-40 transition"
+              onClick={handlePrevious}
+              disabled={currentPageIndex === 0}
+            >
+              ← Previous
+            </button>
+
+            <span className="text-sm font-medium text-gray-600">
+              Page {currentPageIndex + 1}
+            </span>
+
+            <button
+              className="px-4 py-2 bg-primary text-white rounded-full hover:bg-primary/90 disabled:opacity-40 transition"
+              onClick={handleNext}
+              disabled={
+                (!hasNextPage && currentPageIndex === data?.pages.length - 1) ||
+                isFetchingNextPage
+              }
+            >
+              {isFetchingNextPage ? "Loading..." : "Next →"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Section */}
+      <div className="hidden lg:block w-full lg:w-[340px]">
+        <div className="fixed top-20 right-6">
+          <FoodOrderComputerOrder />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default FoodVender;

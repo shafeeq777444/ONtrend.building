@@ -30,6 +30,8 @@ import SignUP from './pages/SignUP';
 
 import MainLayout from './layouts/MainLayout';
 import FoodVender from './pages/FoodVender';
+import Whishlist from './pages/Whishlist';
+import Cart from './pages/Cart';
 
 
 export default function App() {
@@ -43,6 +45,8 @@ export default function App() {
         { path: 'auth/signup', element: <SignUP /> },
         { path: 'food', element: <Food /> },
         { path: 'food/:vendorId', element: <FoodVender /> },
+        { path: 'wishlist', element: <Whishlist /> },
+        { path: 'cart', element: <Cart /> },
         { path: 'about', element: <About /> },
       ],
     },

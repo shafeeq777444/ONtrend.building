@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -12,36 +12,36 @@ import { useGetAllFoodVendors } from "../../../hooks/queries/useVendors";
 import SkeltonTopRestuarent from "../../../components/skeleton/SkeltonTopRestuarent";
 import RestuarentCard from "../../../components/RestuarentCard";
 import { useSelector } from "react-redux";
+import { useWishlist } from "@/hooksDemo/userMutation";
 
 const NewVendors = () => {
-    const [favorites, setFavorites] = React.useState([]);
+    const { data: wishlist = [] } = useWishlist("user12");
+    const wishlistIds = useMemo(() => new Set(wishlist.map((item) => item.id)), [wishlist]);
 
-    const toggleFavorite = (id) => {
-        setFavorites((prev) => (prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]));
-    };
-const {location:{lat,lng}}=useSelector(state=>state.user)
-    const { data: allFoodvendors, isLoading } = useGetAllFoodVendors(lat,lng);
+    const {
+        location: { lat, lng },
+    } = useSelector((state) => state.user);
+    const { data: allFoodvendors, isLoading } = useGetAllFoodVendors(lat, lng);
 
     // sortedVendors: latest first
     const newVendors = React.useMemo(() => {
-    if (!allFoodvendors) return [];
-    return allFoodvendors
-        .slice() // clone to avoid mutation
-        .sort((a, b) => {
-            const timeA = a.timeStamp?.toDate?.()?.getTime() ?? 0;
-            const timeB = b.timeStamp?.toDate?.()?.getTime() ?? 0;
-            return timeB - timeA; // latest first
-        })
-        .slice(0, 20);
-}, [allFoodvendors]);
-console.log(newVendors,"--new vendors")
+        if (!allFoodvendors) return [];
+        return allFoodvendors
+            .slice() // clone to avoid mutation
+            .sort((a, b) => {
+                const timeA = a.timeStamp?.toDate?.()?.getTime() ?? 0;
+                const timeB = b.timeStamp?.toDate?.()?.getTime() ?? 0;
+                return timeB - timeA; // latest first
+            })
+            .slice(0, 20);
+    }, [allFoodvendors]);
+    console.log(newVendors, "--new vendors");
     if (isLoading) {
         return <SkeltonTopRestuarent />;
     }
 
     return (
         <div className="px-4 py-6 relative w-full">
-
             {/* Navigation Buttons */}
             <button className="swiper-button-prev-restuarent absolute top-1 right-16 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
                 <FiChevronLeft size={22} />
@@ -79,7 +79,7 @@ console.log(newVendors,"--new vendors")
             >
                 {newVendors.map((restaurant) => (
                     <SwiperSlide key={restaurant.id} className="overflow-visible">
-                        <RestuarentCard favorites={favorites} restaurant={restaurant} toggleFavorite={toggleFavorite} />
+                        <RestuarentCard isLiked={wishlistIds.has(restaurant.id)} restaurant={restaurant} />
                     </SwiperSlide>
                 ))}
             </Swiper>

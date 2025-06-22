@@ -28,12 +28,12 @@ const RatingStars = ({ rating }) => {
   );
 };
 
-const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents = false }) => {
+const RestuarentCard = ({ restaurant, topRestuarents = false, isLiked }) => {
   const navigate = useNavigate();
   const averageRating = restaurant.Ratings && restaurant.totalRatings
     ? restaurant.Ratings / restaurant.totalRatings
     : 0;
-
+// console.log(isLiked,restaurant?.id)
   return (
     <div className="px-1 pb-3">
       <div
@@ -49,8 +49,8 @@ const RestuarentCard = ({ restaurant, favorites, toggleFavorite, topRestuarents 
 
         {/* Favorite (Heart) Button */}
         <FavoriteButton
-          isLiked={favorites.includes(restaurant.id)}
-          onToggle={() => toggleFavorite(restaurant.id)}
+        product ={restaurant}
+        isLiked={isLiked}
         />
 
         {/* Banner Image */}

@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import {  getApps, initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import {  getAuth } from "firebase/auth";
 import {
@@ -19,11 +19,13 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
+const app = getApps().find(app => app.name === "[DEFAULT]") || initializeApp(firebaseConfig);
+
 // getAnalytics(app);
 
 
-// exports
+// exports------------------------------
 export const auth = getAuth(app);
 // ── CORRECTED: embed cacheSizeBytes inside persistentLocalCache ──
 export const db = initializeFirestore(app, {

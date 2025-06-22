@@ -1,4 +1,4 @@
-import { collection, collectionGroup, getDocs, query, where } from "firebase/firestore";
+import { collection, collectionGroup, getDocs, limit, query, startAfter, where } from "firebase/firestore";
 import { db } from "../config";
 
 // each vendors foods(parallel version---------------------------------------------------
@@ -44,44 +44,78 @@ import { db } from "../config";
 //   }
 // };
 
-// avoid collection mapping--------------(avoid fetching collection)
-export const getVendorFoodsAndCategories = async (vendorId) => {
+// get all catergories (vedner included)
+export const getVendorFoodCategories = async (vendorId) => {
   try {
-    const foodsQuery = query(
+    const q = query(
       collectionGroup(db, "details"),
       where("isApproved", "==", true),
       where("addedBy", "==", vendorId)
     );
 
-    const snapshot = await getDocs(foodsQuery);
+    const snapshot = await getDocs(q);
 
     const categoriesSet = new Set();
-    const foods = [];
 
     snapshot.forEach((doc) => {
-      const data = doc.data();
-      const category = data.tag || "Unknown";
-
-      categoriesSet.add(category);
-
-      foods.push({
-        ...data,
-        id: doc.id,
-        category, // use tag as category
-      });
+      const tag = doc.data()?.tag;
+      if (tag) categoriesSet.add(tag);
     });
 
-    const uniqueCategories = ["All", ...categoriesSet];
+    const categories = ["All", ...Array.from(categoriesSet)];
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return ["All"];
+  }
+};
+
+// avoid collection mapping--------------(avoid fetching collection)
+export const getVendorFoodsPaginated = async (
+  vendorId,
+  pageSize = 12,
+  lastVisibleDoc = null,
+  categoryFilter = "All"
+) => {
+  try {
+    let filters = [
+      where("isApproved", "==", true),
+      where("addedBy", "==", vendorId)
+    ];
+
+    if (categoryFilter && categoryFilter !== "All") {
+      filters.push(where("tag", "==", categoryFilter));
+    }
+
+    let q = query(
+      collectionGroup(db, "details"),
+      ...filters,
+      limit(pageSize)
+    );
+
+    if (lastVisibleDoc) {
+      q = query(q, startAfter(lastVisibleDoc));
+    }
+
+    const snapshot = await getDocs(q);
+
+    const foods = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+      category: doc.data()?.tag || "Unknown",
+    }));
 
     return {
       foods,
-      categories: uniqueCategories,
+      lastVisible: snapshot.docs[snapshot.docs.length - 1] || null,
+      hasMore: snapshot.size === pageSize,
     };
   } catch (error) {
-    console.error("Error fetching vendor foods and categories:", error);
+    console.error("Error fetching paginated foods:", error);
     return {
       foods: [],
-      categories: [],
+      lastVisible: null,
+      hasMore: false,
     };
   }
 };

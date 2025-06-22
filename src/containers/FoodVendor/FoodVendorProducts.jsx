@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setVendorMealCategory } from "@/features/food/foodSlice";
 
 
-const FoodVendorProducts = ({ foodItems, venderLogo }) => {
+const FoodVendorProducts = ({ foodItems=[], venderLogo }) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const dispatch=useDispatch()
@@ -20,7 +20,7 @@ const FoodVendorProducts = ({ foodItems, venderLogo }) => {
             <div className="text-xl font-bold mb-4">&nbsp;</div>
 
             {/* Grid Layout */}
-            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+            {/* <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}> */}
               <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
                     {foodItems?.map((item) => (
@@ -35,8 +35,8 @@ const FoodVendorProducts = ({ foodItems, venderLogo }) => {
                         />
                     ))}
                 </div>
-                <FoodVendorDrawer item={selectedItem} venderLogo={venderLogo} />
-            </Drawer>
+                {/* <FoodVendorDrawer item={selectedItem} venderLogo={venderLogo} /> */}
+            {/* </Drawer> */}
         </div>
     );
 };

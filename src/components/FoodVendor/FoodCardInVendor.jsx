@@ -3,11 +3,14 @@ import { FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { DrawerTrigger,} from "@/components/ui/drawer"
 import FoodVendorDrawer from './FoodVendorDrawer';
+import { useAddToCart } from '@/hooksDemo/userMutation';
+import { useSelector } from 'react-redux';
 
 
 const FoodCardInVendor = ({ item, venderLogo, onClick}) => {
+  const {userId}=useSelector(state=>state.user)
   const [isImageError, setIsImageError] = useState(false);
-
+const {mutate:addToCart} = useAddToCart(userId);
 
 
   const description = item.description ||
@@ -18,7 +21,7 @@ const FoodCardInVendor = ({ item, venderLogo, onClick}) => {
 
   return (<>
    
-     <DrawerTrigger>
+     {/* <DrawerTrigger> */}
   <div onClick={onClick} className="relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01]">
     
     {/* Image */}
@@ -62,13 +65,13 @@ const FoodCardInVendor = ({ item, venderLogo, onClick}) => {
 
     {/* Add Button */}
     <div className="absolute bottom-0 right-0">
-      <button className="bg-onRed text-white px-2 py-1 md:px-5 md:py-2 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
+      <button onClick={()=>addToCart(item)} className="bg-onRed text-white px-2 py-1 md:px-5 md:py-2 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
         <MdOutlineShoppingBag className="text-base" />
         Add
       </button>
     </div>
   </div>
-</DrawerTrigger>
+{/* </DrawerTrigger> */}
 
    </>
   );

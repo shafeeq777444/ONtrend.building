@@ -2,13 +2,18 @@
 import { motion } from "framer-motion";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import { useToggleWishlist, useWishlist } from "@/hooksDemo/userMutation";
+import { useMemo } from "react";
 
-const FavoriteButton = ({ isLiked, onToggle }) => {
+const FavoriteButton = ({ product,isLiked}) => {
+  
+  const { mutate: toggleWishlist, isPending } = useToggleWishlist('user12');
   return (
     <motion.button
+     disabled={isPending}
       onClick={(e) => {
         e.stopPropagation();
-        onToggle();
+        toggleWishlist(product)
       }}
       className="absolute top-3 right-3 z-30 bg-white p-2 rounded-full shadow scale-95 hover:bg-red-50"
       whileTap={{ scale: 0.8 }}

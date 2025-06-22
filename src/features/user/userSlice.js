@@ -8,6 +8,9 @@ const userSlice = createSlice({
   initialState: {
     location:{lat:"",lng:""},
     locationName:"",
+   wishlistIds: new Set(),
+    userId:"user12"
+
   },
   reducers: {
     setLocation: (state,action) => {
@@ -17,8 +20,12 @@ const userSlice = createSlice({
     setLocationName: (state,action) => {
       state.locationName=action.payload
     },
+     setWhishListIds: (state,action) => {
+      state.wishlistIds=action.payload
+    },
+
   },
 });
 
-export const { setLocation,setLocationName } = userSlice.actions;
+export const { setLocation,setLocationName,setWhishListIds } = userSlice.actions;
 export default userSlice.reducer;
