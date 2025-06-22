@@ -10,8 +10,34 @@ import { setLocation, setLocationName } from "../../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DeliveryLocation from "../Location/DeliveryLocation";
+import { useTranslation } from "react-i18next";
 
 export default function TopBar({ cartCount = 2 }) {
+    const EXPIRY_DURATION = 1000 * 60 * 20; // 20 minutes
+    const [showLocationModal, setShowLocationModal] = useState(false);
+    const [addressExpiry, setAddressExpiry] = useState(false);
+
+    // address exp checking
+    useEffect(() => {
+       const checkAddressExpiry = async () => {
+    const addressExp = await localforage.getItem("AddressExp");
+    const address = await localforage.getItem("userAddress");
+
+    // Expired OR not set at all
+    if (!address || !addressExp || (Date.now() - addressExp > EXPIRY_DURATION)) {
+        console.log("⛔ Address expired or not set");
+        setAddressExpiry(true);
+    } else {
+        console.log("✅ Address still valid");
+        setAddressExpiry(false);
+    }
+};
+
+        checkAddressExpiry();
+    }, []);
+    console.log(addressExpiry, "bll");
+
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { location, locationName } = useSelector((state) => state.user);
@@ -19,15 +45,16 @@ export default function TopBar({ cartCount = 2 }) {
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const [showLocationModal, setShowLocationModal] = useState(false);
+
+    const isArabic = i18n.language === "ar";
 
     const placeholders = [
-        "Search for food, groceries, beauty, hotels...",
-        "Hungry? Find yummy food or your favorite spot",
-        "Need a ride? Try car rentals nearby",
-        "Shop essentials from our E-Store",
-        "Book hotels or apartments for your stay",
-        "Find daily needs & fresh groceries",
+        t("placeholder.search"),
+        t("placeholder.hungry"),
+        t("placeholder.ride"),
+        t("placeholder.essentials"),
+        t("placeholder.hotels"),
+        t("placeholder.groceries"),
     ];
 
     useEffect(() => {
@@ -81,12 +108,13 @@ export default function TopBar({ cartCount = 2 }) {
 
                     {/* Location (visible on all screens) */}
                     <div
-                        className="flex items-center space-x-2 text-white cursor-pointer"
+                        className="flex items-center space-x-2 text-white cursor-pointer 
+             hover:bg-white/10 rounded-md px-2 py-1 transition"
                         onClick={() => setShowLocationModal(true)}
                     >
                         <FiMapPin className="text-red-200" />
                         <span className="text-xs md:text-sm truncate max-w-[100px] md:max-w-none">
-                            {locationName || "Tap to set location"}
+                            {locationName || t("tap_to_set_location")}
                         </span>
                         <FiChevronDown />
                     </div>
@@ -110,7 +138,11 @@ export default function TopBar({ cartCount = 2 }) {
                             className="w-full pl-9 pr-3 py-1.5 rounded-md text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
                             placeholder=""
                         />
-                        <div className="absolute left-10 top-1/2 -translate-y-1/2 pointer-events-none text-sm text-gray-400">
+                        <div
+                            className={`absolute top-1/2 -translate-y-1/2 pointer-events-none text-sm text-gray-400 transition-all duration-300 ${
+                                isArabic ? "right-10 text-right" : "left-10 text-left"
+                            }`}
+                        >
                             <AnimatePresence mode="wait">
                                 <motion.span
                                     key={placeholderIndex}
@@ -128,6 +160,18 @@ export default function TopBar({ cartCount = 2 }) {
 
                 {/* Icons */}
                 <div className="hidden md:flex items-center space-x-3 text-white shrink-0">
+                    <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        onClick={() => {
+                            const nextLang = i18n.language === "en" ? "ar" : "en";
+                            i18n.changeLanguage(nextLang);
+                            document.documentElement.dir = nextLang === "ar" ? "rtl" : "ltr";
+                        }}
+                        className="w-10 h-10 text-sm font-semibold flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white"
+                        title="Toggle Language"
+                    >
+                        {i18n.language === "en" ? "AR" : "EN"}
+                    </motion.button>
                     {[
                         { Icon: <PiGiftBold />, title: "Rewards" },
                         { Icon: <FiHeart />, title: "Wishlist" },
@@ -147,9 +191,9 @@ export default function TopBar({ cartCount = 2 }) {
 
                     {/* Cart */}
                     <motion.div
-                    onClick={()=>{
-                        navigate('/cart')
-                    }}
+                        onClick={() => {
+                            navigate("/cart");
+                        }}
                         whileHover={{ scale: 1.04 }}
                         className="relative w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
                         title="Cart"
@@ -170,6 +214,7 @@ export default function TopBar({ cartCount = 2 }) {
                     >
                         <FiUser />
                     </motion.div>
+                    {/* Language Toggle */}
                 </div>
             </motion.div>
 
@@ -205,9 +250,10 @@ export default function TopBar({ cartCount = 2 }) {
             </AnimatePresence>
 
             {/* Location Modal Triggered by Null or Manual Click */}
-            {(!location || !locationName || showLocationModal) && (
-                <DeliveryLocation closeModal={() => setShowLocationModal(false)} />
+            {(!location || !locationName || showLocationModal || addressExpiry ) && (
+                <DeliveryLocation setAddressExpiry={setAddressExpiry} location={location} locationName={locationName} addressExpiry={addressExpiry} closeModal={() => setShowLocationModal(false)} />
             )}
+            {console.log(location,locationName,showLocationModal,addressExpiry)}
         </>
     );
 }

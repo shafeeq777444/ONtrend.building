@@ -7,6 +7,11 @@ import FoodOrderComputerOrder from "../components/FoodVendor/FoodOrderComputerOr
 import FoodVendorProducts from "@/containers/FoodVendor/FoodVendorProducts";
 import { useGetAllFoodVendors } from "@/hooks/queries/useVendors";
 import { useGetVendorFoodsAndCategories, useVendorFoodCategories } from "@/hooks/queries/useFoodVendor";
+import { useTranslation } from "react-i18next";
+
+const getLocalizedField = (item, field, isArabic) => {
+  return isArabic ? item?.[`${field}Arabic`] || item?.[field] : item?.[field];
+};
 
 const FoodVender = () => {
   const { vendorId } = useParams();
@@ -19,6 +24,9 @@ const FoodVender = () => {
     sortOption,
   } = useSelector((state) => state.food);
 
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
   const { data: allFoodVendors } = useGetAllFoodVendors(lat, lng);
   const currentVendor = allFoodVendors?.find((vendor) => vendor.id === vendorId);
 
@@ -30,20 +38,15 @@ const FoodVender = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useGetVendorFoodsAndCategories(currentVendor?.id, selectedVendorMealCategory);
- const {data:vendorCategories}=useVendorFoodCategories(currentVendor?.id)
 
-  // Ref to scroll
+  const { data: vendorCategories } = useVendorFoodCategories(currentVendor?.id);
+
   const productsRef = useRef(null);
-
-  // Scroll handler
   const scrollToProducts = () => {
     productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Page foods
   const currentPageFoods = data?.pages?.[currentPageIndex]?.foods || [];
-
-  // Filter foods
   let filteredFoods = currentPageFoods;
 
   if (selectedVendorMealCategory && selectedVendorMealCategory !== "All") {
@@ -56,20 +59,18 @@ const FoodVender = () => {
     const lowerSearch = searchTerm.toLowerCase();
     filteredFoods = filteredFoods.filter(
       (food) =>
-        food?.name?.toLowerCase().includes(lowerSearch) ||
-        food?.description?.toLowerCase().includes(lowerSearch) ||
-        food?.category?.toLowerCase().includes(lowerSearch)
+        getLocalizedField(food, "name", isArabic)?.toLowerCase().includes(lowerSearch) ||
+        getLocalizedField(food, "description", isArabic)?.toLowerCase().includes(lowerSearch) ||
+        getLocalizedField(food, "category", isArabic)?.toLowerCase().includes(lowerSearch)
     );
   }
 
-  // Sort
   if (sortOption === "lowToHigh") {
     filteredFoods = filteredFoods.slice().sort((a, b) => (a?.itemPrice ?? 0) - (b?.itemPrice ?? 0));
   } else if (sortOption === "highToLow") {
     filteredFoods = filteredFoods.slice().sort((a, b) => (b?.itemPrice ?? 0) - (a?.itemPrice ?? 0));
-  } 
+  }
 
-  // Handlers
   const handleNext = () => {
     if (currentPageIndex + 1 < (data?.pages.length || 0)) {
       setCurrentPageIndex((prev) => prev + 1);
@@ -90,7 +91,7 @@ const FoodVender = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:px-10 mt-24">
+    <div className="flex flex-col lg:flex-row gap-6 lg:px-10 mt-24" dir={isArabic ? "rtl" : "ltr"}>
       {/* Left Section */}
       <div className="w-full md:[80vw] lg:w-[calc(100%-360px)] space-y-6">
         <FoodVendorHeader currentVendor={currentVendor} />
@@ -105,6 +106,7 @@ const FoodVender = () => {
           <FoodVendorProducts
             venderLogo={currentVendor?.image}
             foodItems={filteredFoods}
+            isArabic={isArabic}
           />
 
           {/* Pagination Buttons */}
@@ -137,10 +139,10 @@ const FoodVender = () => {
 
       {/* Right Section */}
       <div className="hidden lg:block w-full lg:w-[340px]">
-        <div className="fixed top-20 right-6">
-          <FoodOrderComputerOrder />
-        </div>
-      </div>
+  <div className={`fixed top-20 ${isArabic ? "left-2" : "right-2"}`}>
+    <FoodOrderComputerOrder />
+  </div>
+</div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   GoogleMap,
   Marker,
@@ -13,11 +13,10 @@ import { setLocation, setLocationName } from "../../features/user/userSlice";
 // ✅ Move libraries array outside to avoid re-creating on every render
 const libraries = ["places"];
 
-const DeliveryLocation = ({ closeModal }) => {
+const DeliveryLocation = ({ closeModal,addressExpiry,location,locationName,setAddressExpiry }) => {
   const dispatch = useDispatch();
   const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-  const { location, locationName } = useSelector((state) => state.user);
 
   const defaultCenter = { lat: 23.588, lng: 58.3829 };
   const autocompleteRef = useRef(null);
@@ -34,6 +33,7 @@ const DeliveryLocation = ({ closeModal }) => {
     setMap(mapInstance);
   }, []);
 
+// type placed
   const handlePlaceChanged = async () => {
     const place = autocompleteRef.current?.getPlace();
     if (!place?.geometry?.location) return;
@@ -48,6 +48,7 @@ const DeliveryLocation = ({ closeModal }) => {
     const address = place.formatted_address || place.name || "";
     dispatch(setLocationName(address));
     await localforage.setItem("userAddress", address);
+  await localforage.setItem("AddressExp", Date.now());
 
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport);
@@ -57,45 +58,60 @@ const DeliveryLocation = ({ closeModal }) => {
       setTimeout(() => map.setZoom(15), 400);
     }
   };
+// current Location
+ // current Location with watchPosition
+let locationWatchID = null;
 
-  const useCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
-    }
+const userCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        const currentLocation = { lat, lng };
+  locationWatchID = navigator.geolocation.watchPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const currentLocation = { lat, lng };
 
-        await localforage.setItem("userLocation", currentLocation);
-        dispatch(setLocation(currentLocation));
+      await localforage.setItem("userLocation", currentLocation);
+      await localforage.setItem("AddressExp", Date.now());
+      dispatch(setLocation(currentLocation));
 
-        if (map) {
-          map.panTo(currentLocation);
-          map.setZoom(15);
-        }
-
-        const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({ location: currentLocation }, (results, status) => {
-          if (status === "OK" && results[0]) {
-            const address = results[0].formatted_address;
-            dispatch(setLocationName(address));
-            localforage.setItem("userAddress", address);
-          } else {
-            console.error("Geocoder failed due to:", status);
-          }
-        });
-      },
-      (error) => {
-        console.error("Error getting current location:", error);
-        alert("Unable to retrieve your location.");
+      if (map) {
+        map.panTo(currentLocation);
+        map.setZoom(15);
       }
-    );
-  };
 
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ location: currentLocation }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const address = results[0].formatted_address;
+          dispatch(setLocationName(address));
+          localforage.setItem("userAddress", address);
+          localforage.setItem("AddressExp", Date.now());
+        } else {
+          console.error("Geocoder failed due to:", status);
+        }
+      });
+      // ✅ Stop tracking after first update
+       navigator.geolocation.clearWatch(locationWatchID);
+       setAddressExpiry(false)
+    },
+    (error) => {
+      console.error("Error watching location:", error);
+      alert("Unable to retrieve your location.");
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000,
+    }
+  );
+};
+
+
+//handle drag
   const handleMarkerDragEnd = async (e) => {
     const lat = e.latLng.lat();
     const lng = e.latLng.lng();
@@ -111,18 +127,32 @@ const DeliveryLocation = ({ closeModal }) => {
         const address = results[0].formatted_address;
         dispatch(setLocationName(address));
         localforage.setItem("userAddress", address);
+        localforage.setItem("AddressExp", Date.now());
       } else {
         console.error("Geocoder failed:", status);
       }
     });
   };
 
+  useEffect(()=>{
+    console.log(addressExpiry)
+    if(addressExpiry){
+      console.log("wwwww worked")
+      userCurrentLocation()
+
+    }
+    
+  },[addressExpiry])
+
   // ✅ Show loading or error if map isn't ready
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
 
+  
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+
       <div className="bg-zinc-900 rounded-2xl shadow-xl w-full max-w-3xl mx-4 overflow-hidden relative border border-zinc-700">
         {/* Close Button */}
         {location && locationName && (
@@ -181,14 +211,23 @@ const DeliveryLocation = ({ closeModal }) => {
         </div>
 
         {/* Bottom Buttons */}
-        <div className="p-4 flex justify-end items-center border-t border-zinc-700 bg-zinc-800">
-          <button
-            onClick={useCurrentLocation}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
-          >
-            Use Current Location
-          </button>
-        </div>
+        <div className="p-4 flex justify-between sm:justify-end items-center gap-x-3 border-t border-zinc-700 bg-zinc-800">
+  <button
+    onClick={userCurrentLocation}
+    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
+  >
+    Use Current Location
+  </button>
+
+  {location && locationName && (
+    <button
+      onClick={closeModal}
+      className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 shadow-md"
+    >
+      Done
+    </button>
+  )}
+</div>
       </div>
     </div>
   );

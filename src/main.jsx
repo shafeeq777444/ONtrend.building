@@ -9,6 +9,7 @@ import { store } from "./app/store.js";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ClearAllCacheButton } from "./components/common/ClearAllCacheButton.jsx";
+import '@/utils/118n';
 
 
 const queryClient = new QueryClient();
