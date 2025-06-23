@@ -1,88 +1,99 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Heart, Share2, MapPin } from "lucide-react";
+import {  Heart, Share2, MapPin } from "lucide-react";
+import { IoIosArrowBack } from "react-icons/io";
+import FavoriteButton from "../common/FavouriteButton";
+import { IoIosShareAlt } from "react-icons/io";
+import { FaStar } from "react-icons/fa";
 
 const FoodVendorHeader = ({ currentVendor }) => {
-  const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false);
+    const navigate = useNavigate();
+    const [isFavorite, setIsFavorite] = useState(false);
 
-  const toggleFavorite = () => setIsFavorite(!isFavorite);
-  const handleShare = () => alert("Share clicked!");
+    const toggleFavorite = () => setIsFavorite(!isFavorite);
 
-  const rating =
-    currentVendor?.Ratings && currentVendor?.totalRatings
-      ? (currentVendor?.Ratings / currentVendor?.totalRatings).toFixed(1)
-      : "0.0";
+    const handleShare = () => {
+        alert("Share clicked!");
+    };
 
-  return (
-    <div className="relative w-full h-[120px] sm:h-[140px] rounded-xl overflow-hidden shadow">
+    const rating =
+        currentVendor?.Ratings && currentVendor?.totalRatings
+            ? (currentVendor?.Ratings / currentVendor?.totalRatings).toFixed(1)
+            : "0.0";
 
-      {/* Blurry Background Image */}
-      <img
-        src={currentVendor?.bannerImage?.[1]}
-        alt="Banner"
-        className="absolute w-full h-full object-cover blur-sm brightness-50"
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = currentVendor?.bannerImage?.[0];
-        }}
-      />
-
-      {/* Optional Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-10" />
-
-      {/* Top Buttons */}
-      <div className="absolute top-2 left-2 right-2 flex justify-between items-center z-20">
-        <button onClick={() => navigate(-1)} className="bg-white p-1 rounded-full shadow">
-          <ArrowLeft className="w-4 h-4 text-black" />
-        </button>
-        <div className="flex gap-1">
-          <button onClick={toggleFavorite} className="bg-white p-1 rounded-full shadow">
-            <Heart className={`w-4 h-4 ${isFavorite ? "text-red-500 fill-red-500" : "text-black"}`} />
-          </button>
-          <button onClick={handleShare} className="bg-white p-1 rounded-full shadow">
-            <Share2 className="w-4 h-4 text-black" />
-          </button>
-        </div>
-      </div>
-
-      {/* Bottom Info */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 p-2">
-        <div className="flex items-center gap-2">
-          <img
-            src={currentVendor?.image}
-            alt={currentVendor?.restaurantName}
-            className="w-10 h-10 rounded-lg object-cover border-2 border-white"
-          />
-          <div className="text-white">
-            <h2 className="text-sm font-semibold line-clamp-1">{currentVendor?.restaurantName}</h2>
-            <div className="flex items-center text-[10px] text-gray-200">
-              <MapPin className="w-3 h-3 mr-1" />
-              <span className="line-clamp-1">{currentVendor?.businessAddress}</span>
+    return (
+        <div className="fixed top-14 right-0 w-full">
+            <div className="relative w-full h-[220px] md:h-[260px] overflow-hidden  shadow-md">
+                {/* Banner Image */}
+                <img
+                    src={currentVendor?.bannerImage?.[1]}
+                    alt="Food Vendor Banner"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = currentVendor?.bannerImage?.[0];
+                    }}
+                />
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent " />
+                {/* Top Controls */}
+                <div className="absolute top-6 left-6 right-4 flex justify-between items-center ">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="bg-white/90 backdrop-blur-md p-2 rounded-full shadow hover:bg-white transition"
+                    >
+                       <IoIosArrowBack width={16} height={16}/>
+                    </button>
+                    <div className="flex gap-2">
+                         <button
+                            onClick={handleShare}
+                            className="bg-white/90 backdrop-blur-md p-2 rounded-full shadow hover:bg-white transition"
+                        >
+                            <IoIosShareAlt />
+                        </button>
+                        {/* <div className="relative"><FavoriteButton/></div> */}
+                       
+                    </div>
+                </div>
+                {/* Vendor Info */}
+                <div className="absolute bottom-0 left-0 right-0  px-4 pb-4">
+                    <div className="flex items-end gap-4">
+                        <img
+                            src={currentVendor?.image}
+                            alt={currentVendor?.restaurantName}
+                            className="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md"
+                        />
+                        <div className="flex-1">
+                            <h2 className="text-white text-xl font-bold leading-tight line-clamp-1">
+                                {currentVendor?.restaurantName}
+                            </h2>
+                            <div className="flex items-center text-sm text-gray-200 mt-1">
+                                <MapPin className="w-4 h-4 mr-1" />
+                                <span className="line-clamp-1">{currentVendor?.businessAddress}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-4 flex justify-between bg-black/40 backdrop-blur-md rounded-xl px-4 py-2 text-white text-sm shadow-sm">
+                        <div className="flex-1 text-center">
+                            <div className="flex justify-center items-center gap-1 font-medium">
+                                <FaStar />
+                                {rating} 
+                            </div>
+                            <div className="text-xs text-gray-200">Reviews</div>
+                        </div>
+                        <div className="flex-1 text-center border-x border-white/20">
+                            <div className="font-medium">{currentVendor?.distance} km</div>
+                            <div className="text-xs text-gray-200">Distance</div>
+                        </div>
+                        <div className="flex-1 text-center">
+                            <div className="font-medium">{currentVendor?.estimatedTime}</div>
+                            <div className="text-xs text-gray-200">Delivery Time</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-
-        <div className="mt-2 backdrop-blur bg-black/30 px-2 py-1 rounded text-white text-[10px] flex justify-between text-center">
-          <div className="flex-1">
-            <div className="font-semibold flex items-center justify-center gap-1">
-              <img width="12" src="https://img.icons8.com/ios/50/rating-circled.png" alt="rating" />
-              {rating} ({currentVendor?.Ratings})
-            </div>
-            <div className="text-[9px] text-gray-300">Reviews</div>
-          </div>
-          <div className="flex-1">
-            <div className="font-semibold">{currentVendor?.distance} km</div>
-            <div className="text-[9px] text-gray-300">Distance</div>
-          </div>
-          <div className="flex-1">
-            <div className="font-semibold">{currentVendor?.estimatedTime}</div>
-            <div className="text-[9px] text-gray-300">Delivery</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default FoodVendorHeader;

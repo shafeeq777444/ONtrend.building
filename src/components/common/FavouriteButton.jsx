@@ -1,40 +1,47 @@
 /* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
-import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
-import { useToggleWishlist, useWishlist } from "@/hooksDemo/userMutation";
-import { useMemo } from "react";
+import { Heart } from "lucide-react";
+import { useToggleWishlist } from "@/hooksDemo/userMutation";
+import { useState } from "react";
 
-const FavoriteButton = ({ product,isLiked}) => {
-  
-  const { mutate: toggleWishlist, isPending } = useToggleWishlist('user12');
+const FavoriteButton = ({ product, isLiked: initialLiked }) => {
+  const [localLiked, setLocalLiked] = useState(initialLiked);
+  const { mutate: toggleWishlist, isPending } = useToggleWishlist("user12");
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+
+    const previous = localLiked;
+    setLocalLiked(!previous); // Optimistic UI update
+
+    toggleWishlist(product, {
+      onError: () => setLocalLiked(previous), // Revert if error
+    });
+  };
+
   return (
     <motion.button
-     disabled={isPending}
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleWishlist(product)
-      }}
-      className="absolute top-3 right-3 z-30 bg-white p-2 rounded-full shadow scale-95 hover:bg-red-50"
-      whileTap={{ scale: 0.8 }}
+      disabled={isPending}
+      onClick={handleClick}
+      whileTap={{ scale: 0.85 }}
+      className={`absolute top-3 right-3 z-30 p-2 rounded-full shadow transition-all duration-150 ease-in 
+        ${localLiked ? "bg-white" : "bg-white/30 hover:bg-red-50"}`}
+      title={localLiked ? "Remove from Wishlist" : "Add to Wishlist"}
     >
       <motion.span
-        key={isLiked ? "liked" : "not-liked"}
+        key={localLiked ? "liked" : "not-liked"}
         initial={{ scale: 0.9 }}
         animate={{
           scale: [1.2, 1],
-          x: isLiked ? [0, -3, 3, -3, 3, 0] : 0, // 👈 shake when liked
-          color: isLiked ? "#ef4444" : "#4b5563", // 👈 red or gray
+          x: localLiked ? [0, -2, 2, -2, 2, 0] : 0,
         }}
-        transition={{
-          duration: 0.4,
-          ease: "easeInOut",
-        }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       >
-        {isLiked ? (
-          <FaHeart className="w-5 h-5" />
+        {localLiked ? (
+          <FaHeart className="w-4 h-4 text-red-500" />
         ) : (
-          <FiHeart className="w-5 h-5" />
+          <Heart className="w-4 h-4 text-white" />
         )}
       </motion.span>
     </motion.button>

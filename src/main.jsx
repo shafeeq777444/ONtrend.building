@@ -20,7 +20,29 @@ createRoot(document.getElementById("root")).render(
             <Provider store={store}>
                 <ReactQueryDevtools initialIsOpen={false} />
                 {/* <ClearAllCacheButton/> */}
-                <Toaster/>
+                import { Toaster } from "react-hot-toast";
+
+<Toaster
+  position="bottom-right"
+  toastOptions={{
+    style: {
+      background: "#ff3131",  // red background
+      color: "#ffffff",       // white text
+    },
+    success: {
+      style: {
+        background: "#ff3131",  // example for success
+      },
+    },
+    error: {
+      style: {
+        background: "#ff3131",
+        color: "#ffffff",
+      },
+    },
+  }}
+/>
+
                 <BrowserRouter>
                     <App />
                 </BrowserRouter>

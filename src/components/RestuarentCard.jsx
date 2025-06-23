@@ -2,31 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
 import FavoriteButton from "./common/FavouriteButton";
-
-// Optional: Simple RatingStars (you can customize this if needed)
-const RatingStars = ({ rating }) => {
-  const fullStars = Math.floor(rating);
-  const halfStar = rating % 1 >= 0.5;
-
-  return (
-    <div className="flex items-center space-x-0.5">
-      {[...Array(5)].map((_, i) => {
-        const isFull = i < fullStars;
-        const isHalf = i === fullStars && halfStar;
-
-        return (
-          <Star
-            key={i}
-            size={12}
-            stroke="#facc15"
-            fill={isFull || isHalf ? "#facc15" : "none"}
-            style={isHalf ? { clipPath: "inset(0 50% 0 0)" } : {}}
-          />
-        );
-      })}
-    </div>
-  );
-};
+import RatingStars from "./common/RatingStar";
 
 const RestuarentCard = ({ restaurant, topRestuarents = false, isLiked }) => {
   const navigate = useNavigate();
@@ -90,9 +66,9 @@ const RestuarentCard = ({ restaurant, topRestuarents = false, isLiked }) => {
             {averageRating > 0 && (
               <div className="flex items-center gap-1 mt-0.5">
                 <RatingStars rating={averageRating} />
-                <span className="text-xs text-white/80">
+                {/* <span className="text-xs text-white/80">
                   ({restaurant.Ratings || 0})
-                </span>
+                </span> */}
               </div>
             )}
 

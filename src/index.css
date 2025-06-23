@@ -188,3 +188,75 @@ body {
   }
 
 }
+
+
+@keyframes textLoop {
+  0%, 16.66% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  18% {
+    opacity: 0;
+  }
+
+  20%, 36.66% {
+    transform: translateY(-16.66%);
+    opacity: 1;
+  }
+  38% {
+    opacity: 0;
+  }
+
+  40%, 56.66% {
+    transform: translateY(-33.33%);
+    opacity: 1;
+  }
+  58% {
+    opacity: 0;
+  }
+
+  60%, 76.66% {
+    transform: translateY(-50%);
+    opacity: 1;
+  }
+  78% {
+    opacity: 0;
+  }
+
+  80%, 96.66% {
+    transform: translateY(-66.66%);
+    opacity: 1;
+  }
+  98% {
+    opacity: 0;
+  }
+
+
+}
+
+
+.loop-animation {
+  animation: textLoop 18s infinite ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+@layer utilities {
+  .animate-slide-down {
+    animation: slide-down 0.2s ease-out;
+  }
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

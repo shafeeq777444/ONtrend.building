@@ -9,7 +9,7 @@ import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 import { useGetAllFoodVendors } from "../../../hooks/queries/useVendors";
-import SkeltonTopRestuarent from "../../../components/skeleton/SkeltonTopRestuarent";
+import SkeltonNearRestuarent from "../../../components/skeleton/SkeltonNearRestuarent";
 import RestuarentCard from "../../../components/RestuarentCard";
 import { useSelector } from "react-redux";
 import { useWishlist } from "@/hooksDemo/userMutation";
@@ -35,7 +35,7 @@ const {location:{lat,lng}}=useSelector(state=>state.user)
 }, [allFoodvendors]);
 console.log(newVendors,"--new vendors")
     if (isLoading) {
-        return <SkeltonTopRestuarent />;
+        return <SkeltonNearRestuarent />;
     }
 
     return (

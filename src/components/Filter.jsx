@@ -22,7 +22,7 @@ const Filter = ({ showFilter, setShowFilter, sortOption,  }) => {
     <>
       {showFilter && (
         <div
-          className={`absolute top-16 right-4 w-48 md:w-64 bg-white rounded-xl border shadow-lg z-50 overflow-hidden transition-all duration-200 transform 
+          className={`absolute top-12 right-2 w-48 md:w-64 bg-white rounded-xl border shadow-lg z-50 overflow-hidden transition-all duration-200 transform 
           ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
         >
           <div className="p-4">

@@ -12,5 +12,18 @@
     "essentials": "Shop essentials from our E-Store",
     "hotels": "Book hotels or apartments for your stay",
     "groceries": "Find daily needs & fresh groceries"
-  }
+  },
+    "whishlist_category_labels": {
+    "food": "Food",
+    "grocery": "Grocery",
+    "hotel": "Hotel & Apartments",
+    "health": "Health & Beauty",
+    "eshop": "E-Shop",
+    "rent": "Rent a Car"
+  },
+  "busy":"Busy",
+  "km":"km",
+  "mins":"mins",
+  "Wishlist":"Wishlist"
+
 }

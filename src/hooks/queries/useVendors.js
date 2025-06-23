@@ -1,4 +1,4 @@
-import { useQuery,  } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
     fetchAllFoodVendors,
     fetchAllTopVendors,
@@ -10,7 +10,7 @@ import {
 
 //getAllVendors(food,pharmcy,grocery,...)
 
-//getAllTopVendors--(Top).....(food,pharmcy,grocery,...) [used://home page //foodpage-firstHalf]  
+//getAllTopVendors--(Top).....(food,pharmcy,grocery,...) [used://home page //foodpage-firstHalf]
 export function useGetAllTopVendors(lat, lng) {
     return useQuery({
         queryKey: ["topVendors"],

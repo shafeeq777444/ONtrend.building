@@ -58,10 +58,9 @@ const DeliveryLocation = ({ closeModal,addressExpiry,location,locationName,setAd
       setTimeout(() => map.setZoom(15), 400);
     }
   };
-// current Location
+
  // current Location with watchPosition
 let locationWatchID = null;
-
 const userCurrentLocation = () => {
   if (!navigator.geolocation) {
     alert("Geolocation is not supported by your browser.");
@@ -70,6 +69,7 @@ const userCurrentLocation = () => {
 
   locationWatchID = navigator.geolocation.watchPosition(
     async (position) => {
+      console.log(position,"--posiiton")
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       const currentLocation = { lat, lng };
@@ -110,7 +110,6 @@ const userCurrentLocation = () => {
   );
 };
 
-
 //handle drag
   const handleMarkerDragEnd = async (e) => {
     const lat = e.latLng.lat();
@@ -134,15 +133,14 @@ const userCurrentLocation = () => {
     });
   };
 
-  useEffect(()=>{
-    console.log(addressExpiry)
-    if(addressExpiry){
-      console.log("wwwww worked")
-      userCurrentLocation()
+  // useEffect(()=>{
+  //   console.log(addressExpiry)
+  //   if(addressExpiry){
+  //     userCurrentLocation()
 
-    }
+  //   }
     
-  },[addressExpiry])
+  // },[addressExpiry])
 
   // ✅ Show loading or error if map isn't ready
   if (loadError) return <div>Error loading maps</div>;

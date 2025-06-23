@@ -11,9 +11,9 @@ export function useToggleWishlist(userId) {
 
     onSuccess: (result) => {
       if (result?.action === "added") {
-        toast.success("✅ Product added to wishlist");
+        toast.success("Added to your wishlist");
       } else if (result?.action === "removed") {
-        toast("🗑️ Product removed from wishlist");
+        toast.success("Removed from wishlist");
       }
 
       // Optional: Invalidate wishlist query to refetch latest

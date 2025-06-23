@@ -6,7 +6,7 @@ import "swiper/css/mousewheel";
 import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-import SkeltonTopRestuarent from "../../components/skeleton/SkeltonTopRestuarent";
+import SkeltonTopRestuarent from "../../components/skeleton/SkeltonNearRestuarent";
 import RestuarentCard from "../../components/RestuarentCard";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import { useSelector } from "react-redux";

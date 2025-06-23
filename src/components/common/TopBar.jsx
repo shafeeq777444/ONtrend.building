@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { FiMapPin, FiSearch, FiChevronDown, FiUser, FiHeart, FiX } from "react-icons/fi";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { PiGiftBold } from "react-icons/pi";
@@ -13,39 +13,18 @@ import DeliveryLocation from "../Location/DeliveryLocation";
 import { useTranslation } from "react-i18next";
 
 export default function TopBar({ cartCount = 2 }) {
-    const EXPIRY_DURATION = 1000 * 60 * 20; // 20 minutes
+    const EXPIRY_DURATION = 1000 * 60 * 20;
     const [showLocationModal, setShowLocationModal] = useState(false);
     const [addressExpiry, setAddressExpiry] = useState(false);
-
-    // address exp checking
-    useEffect(() => {
-       const checkAddressExpiry = async () => {
-    const addressExp = await localforage.getItem("AddressExp");
-    const address = await localforage.getItem("userAddress");
-
-    // Expired OR not set at all
-    if (!address || !addressExp || (Date.now() - addressExp > EXPIRY_DURATION)) {
-        console.log("⛔ Address expired or not set");
-        setAddressExpiry(true);
-    } else {
-        console.log("✅ Address still valid");
-        setAddressExpiry(false);
-    }
-};
-
-        checkAddressExpiry();
-    }, []);
-    console.log(addressExpiry, "bll");
 
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { location, locationName } = useSelector((state) => state.user);
-
-    const [placeholderIndex, setPlaceholderIndex] = useState(0);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-
+    const [inputText, setInputText] = useState("");
+    const [debouncedInput, setDebouncedInput] = useState("");
     const isArabic = i18n.language === "ar";
 
     const placeholders = [
@@ -58,16 +37,20 @@ export default function TopBar({ cartCount = 2 }) {
     ];
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
-        }, 3000);
-        return () => clearInterval(interval);
+        const checkAddressExpiry = async () => {
+            const addressExp = await localforage.getItem("AddressExp");
+            const address = await localforage.getItem("userAddress");
+            if (!address || !addressExp || Date.now() - addressExp > EXPIRY_DURATION) {
+                setAddressExpiry(true);
+            } else {
+                setAddressExpiry(false);
+            }
+        };
+        checkAddressExpiry();
     }, []);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 10);
-        };
+        const handleScroll = () => setScrolled(window.scrollY > 10);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
@@ -76,16 +59,28 @@ export default function TopBar({ cartCount = 2 }) {
         const fetchStoredLocation = async () => {
             const savedLocation = await localforage.getItem("userLocation");
             const savedAddress = await localforage.getItem("userAddress");
-
             if (savedLocation) dispatch(setLocation(savedLocation));
             if (savedAddress) dispatch(setLocationName(savedAddress));
         };
         fetchStoredLocation();
     }, [dispatch]);
 
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedInput(inputText);
+        }, 400);
+        return () => clearTimeout(handler);
+    }, [inputText]);
+
+    useEffect(() => {
+        if (debouncedInput !== "") {
+            console.log("Searching for:", debouncedInput);
+            
+        }
+    }, [debouncedInput]);
+
     return (
         <>
-            {/* Top Bar */}
             <motion.div
                 initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -96,9 +91,7 @@ export default function TopBar({ cartCount = 2 }) {
                         : "bg-[rgba(24,24,27,0.95)] backdrop-blur-sm"
                 }`}
             >
-                {/* Logo + Location + Mobile Menu */}
                 <div className="flex items-center gap-4 flex-shrink-0 w-full md:w-auto justify-between md:justify-start">
-                    {/* Logo */}
                     <img
                         onClick={() => navigate("/")}
                         src="/ONtrend-logo.png"
@@ -106,10 +99,8 @@ export default function TopBar({ cartCount = 2 }) {
                         className="w-8 h-8 object-contain cursor-pointer"
                     />
 
-                    {/* Location (visible on all screens) */}
                     <div
-                        className="flex items-center space-x-2 text-white cursor-pointer 
-             hover:bg-white/10 rounded-md px-2 py-1 transition"
+                        className="flex items-center space-x-2 text-white cursor-pointer hover:bg-white/10 rounded-md px-2 py-1 transition"
                         onClick={() => setShowLocationModal(true)}
                     >
                         <FiMapPin className="text-red-200" />
@@ -119,7 +110,6 @@ export default function TopBar({ cartCount = 2 }) {
                         <FiChevronDown />
                     </div>
 
-                    {/* Mobile Menu Icon */}
                     <div className="md:hidden ml-auto text-white text-xl">
                         {menuOpen ? (
                             <FiX onClick={() => setMenuOpen(false)} className="cursor-pointer" />
@@ -129,36 +119,36 @@ export default function TopBar({ cartCount = 2 }) {
                     </div>
                 </div>
 
-                {/* Search */}
                 <div className="w-full md:flex-1 min-w-0 max-w-full md:max-w-3xl">
                     <div className="relative">
                         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
-                            className="w-full pl-9 pr-3 py-1.5 rounded-md text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)}
+                            className="w-full h-8 pl-9 pr-3 py-0 text-white text-sm leading-none border border-gray-300 rounded-md focus:outline-none"
                             placeholder=""
                         />
-                        <div
-                            className={`absolute top-1/2 -translate-y-1/2 pointer-events-none text-sm text-gray-400 transition-all duration-300 ${
-                                isArabic ? "right-10 text-right" : "left-10 text-left"
-                            }`}
-                        >
-                            <AnimatePresence mode="wait">
-                                <motion.span
-                                    key={placeholderIndex}
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -5 }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    {placeholders[placeholderIndex]}
-                                </motion.span>
-                            </AnimatePresence>
-                        </div>
+                        {inputText === "" && (
+                            <div
+                                className={`absolute top-1/2 -translate-y-1/2 pointer-events-none text-sm text-gray-400 transition-all duration-300 ${
+                                    isArabic ? "right-10 text-right" : "left-10 text-left"
+                                }`}
+                            >
+                                <div className="overflow-hidden h-[1.5rem] relative">
+                                    <div className="loop-animation">
+                                        {placeholders.map((text, index) => (
+                                            <div key={index} className="h-[1.5rem] leading-[1.5rem]">
+                                                {text}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Icons */}
                 <div className="hidden md:flex items-center space-x-3 text-white shrink-0">
                     <motion.button
                         whileHover={{ scale: 1.04 }}
@@ -172,28 +162,21 @@ export default function TopBar({ cartCount = 2 }) {
                     >
                         {i18n.language === "en" ? "AR" : "EN"}
                     </motion.button>
-                    {[
-                        { Icon: <PiGiftBold />, title: "Rewards" },
-                        { Icon: <FiHeart />, title: "Wishlist" },
-                    ].map(({ Icon, title }, idx) => (
-                        <motion.div
-                            onClick={() => {
-                                navigate(title.toLowerCase());
-                            }}
-                            key={idx}
-                            whileHover={{ scale: 1.04 }}
-                            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
-                            title={title}
-                        >
-                            {Icon}
-                        </motion.div>
-                    ))}
-
-                    {/* Cart */}
+                    {[{ Icon: <PiGiftBold />, title: "Rewards" }, { Icon: <FiHeart />, title: "Wishlist" }].map(
+                        ({ Icon, title }, idx) => (
+                            <motion.div
+                                onClick={() => navigate(title.toLowerCase())}
+                                key={idx}
+                                whileHover={{ scale: 1.04 }}
+                                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
+                                title={title}
+                            >
+                                {Icon}
+                            </motion.div>
+                        )
+                    )}
                     <motion.div
-                        onClick={() => {
-                            navigate("/cart");
-                        }}
+                        onClick={() => navigate("/cart")}
                         whileHover={{ scale: 1.04 }}
                         className="relative w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
                         title="Cart"
@@ -205,8 +188,6 @@ export default function TopBar({ cartCount = 2 }) {
                             </span>
                         )}
                     </motion.div>
-
-                    {/* Profile */}
                     <motion.div
                         whileHover={{ scale: 1.04 }}
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
@@ -214,11 +195,9 @@ export default function TopBar({ cartCount = 2 }) {
                     >
                         <FiUser />
                     </motion.div>
-                    {/* Language Toggle */}
                 </div>
             </motion.div>
 
-            {/* Mobile Slide-in Menu */}
             <AnimatePresence>
                 {menuOpen && (
                     <motion.div
@@ -228,19 +207,14 @@ export default function TopBar({ cartCount = 2 }) {
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="fixed top-20 right-0 w-3/4 h-screen bg-white z-40 shadow-lg p-6 flex flex-col space-y-6"
                     >
-                        {[
-                            { Icon: <PiGiftBold />, label: "Rewards" },
-                            { Icon: <FiHeart />, label: "Wishlist" },
-                            { Icon: <HiOutlineShoppingCart />, label: "Cart" },
-                            { Icon: <FiUser />, label: "Profile" },
-                        ].map(({ Icon, label }, i) => (
+                        {["Rewards", "Wishlist", "Cart", "Profile"].map((label, i) => (
                             <div
                                 key={i}
                                 className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
                                 onClick={() => setMenuOpen(false)}
                             >
                                 <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
-                                    {Icon}
+                                    {label === "Rewards" ? <PiGiftBold /> : label === "Wishlist" ? <FiHeart /> : label === "Cart" ? <HiOutlineShoppingCart /> : <FiUser />}
                                 </div>
                                 <span>{label}</span>
                             </div>
@@ -249,11 +223,15 @@ export default function TopBar({ cartCount = 2 }) {
                 )}
             </AnimatePresence>
 
-            {/* Location Modal Triggered by Null or Manual Click */}
-            {(!location || !locationName || showLocationModal || addressExpiry ) && (
-                <DeliveryLocation setAddressExpiry={setAddressExpiry} location={location} locationName={locationName} addressExpiry={addressExpiry} closeModal={() => setShowLocationModal(false)} />
+            {(!location || !locationName || showLocationModal ) && (
+                <DeliveryLocation
+                    setAddressExpiry={setAddressExpiry}
+                    location={location}
+                    locationName={locationName}
+                    addressExpiry={addressExpiry}
+                    closeModal={() => setShowLocationModal(false)}
+                />
             )}
-            {console.log(location,locationName,showLocationModal,addressExpiry)}
         </>
     );
 }

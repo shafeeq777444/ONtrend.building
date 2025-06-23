@@ -15,13 +15,12 @@ const FoodVendorProducts = ({ foodItems=[], venderLogo }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     },[])
     return (
-        <div className="py-4 px-2 max-w-[1000px] mx-auto">
+        <div className=" py-2 px-2  ">
             {/* Optional Title */}
             <div className="text-xl font-bold mb-4">&nbsp;</div>
 
-            {/* Grid Layout */}
-            {/* <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}> */}
-              <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+              <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
 
                     {foodItems?.map((item) => (
                         <FoodCardInVendor
@@ -35,8 +34,8 @@ const FoodVendorProducts = ({ foodItems=[], venderLogo }) => {
                         />
                     ))}
                 </div>
-                {/* <FoodVendorDrawer item={selectedItem} venderLogo={venderLogo} /> */}
-            {/* </Drawer> */}
+                <FoodVendorDrawer item={selectedItem} venderLogo={venderLogo} />
+            </Drawer>
         </div>
     );
 };

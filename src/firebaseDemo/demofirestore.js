@@ -5,7 +5,7 @@ import { dbDemo } from "./democonfig";
 export async function toggleToWishlist(userId, product) {
     try {
         const wishlistRef = doc(dbDemo, "users", userId, "wishlist", product.id);
-        console.log(product);
+      const { reference, ...productWithoutReference } = product;
         const snap = await getDoc(wishlistRef);
 
         if (snap.exists()) {
@@ -14,16 +14,8 @@ export async function toggleToWishlist(userId, product) {
             return { action: "removed", productId: product.id };
         } else {
             await setDoc(wishlistRef, {
-                id: product.id,
-                image: product.image,
-                bannerImage: product.bannerImage,
-                totalRatings: product.totalRatings,
-                Ratings: product.Ratings,
-                location: product.location,
-                restaurantName: product.restaurantName,
-                addedBy: userId,
                 addedAt: new Date(),
-                vendorType:product.vendorType
+                ...productWithoutReference
             });
             console.log("Product added to wishlist");
             return { action: "added", productId: product.id };

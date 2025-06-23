@@ -17,8 +17,8 @@ const FoodOffers = () => {
   }
 
   return (
-    <div className="px-4 py-6 bg-gray-50">
-      {/* <h2 className="text-xl font-bold mb-4">Offers</h2> */}
+    <div className="px-2 sm:px-4 lg:px-6 py-6 bg-gray-50">
+      <h2 className="text-xl font-bold mb-4">Offers</h2>
       <Swiper
         modules={[Autoplay]}
         slidesPerView={2}

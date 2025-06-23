@@ -23,14 +23,14 @@ const Highlites = () => {
             {/* Parent wrapper with group-hover logic */}
             <div className="relative group  ">
                 <Swiper
-                    spaceBetween={12}
+                    spaceBetween={6}
                     slidesPerView={1.2}
                     breakpoints={{
-                        480: { slidesPerView: 1.6 },
-                        640: { slidesPerView: 2.5 },
-                        768: { slidesPerView: 3.5 },
-                        1024: { slidesPerView: 4.5 },
-                        1280: { slidesPerView: 3.5 },
+                        480: { slidesPerView: 1.2 },
+                        640: { slidesPerView: 2.1 },
+                        768: { slidesPerView: 3.1 },
+                        1024: { slidesPerView: 4.1 },
+                        1280: { slidesPerView: 3.1 },
                     }}
                     autoplay={{
                         delay: 2500,
@@ -51,7 +51,7 @@ const Highlites = () => {
                                         src={imgSrc}
                                         loading="lazy"
                                         alt={`highlight-${index}`}
-                                        className="rounded-md w-full h-[260px]  object-cover shadow transition-all duration-300 ease-in-out group-hover:blur-[1.5px] group-hover/card:blur-none group-hover/card:scale-[1.02] group-hover/card:z-10"
+                                        className="rounded-md w-full h-[210px]  object-cover shadow transition-all duration-300 ease-in-out group-hover:blur-[1.5px] group-hover/card:blur-none group-hover/card:scale-[1.02] group-hover/card:z-10"
                                     />
                                 </div>
                             </div>

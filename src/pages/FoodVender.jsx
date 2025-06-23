@@ -1,28 +1,31 @@
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import FoodVendorHeader from "../components/FoodVendor/FoodVendorHeader";
+
 import FoodVendorMealCategory from "../components/FoodVendor/FoodVendorMealCategory";
-import FoodOrderComputerOrder from "../components/FoodVendor/FoodOrderComputerOrder";
+import FoodVendorHeader from "@/components/FoodVendor/FoodVendorHeader";
 import FoodVendorProducts from "@/containers/FoodVendor/FoodVendorProducts";
+
 import { useGetAllFoodVendors } from "@/hooks/queries/useVendors";
-import { useGetVendorFoodsAndCategories, useVendorFoodCategories } from "@/hooks/queries/useFoodVendor";
+import {
+  useGetVendorFoodsAndCategories,
+  useVendorFoodCategories,
+} from "@/hooks/queries/useFoodVendor";
+
 import { useTranslation } from "react-i18next";
 
 const getLocalizedField = (item, field, isArabic) => {
   return isArabic ? item?.[`${field}Arabic`] || item?.[field] : item?.[field];
 };
 
-const FoodVender = () => {
+const FoodVendor = () => {
   const { vendorId } = useParams();
   const {
     location: { lat, lng },
   } = useSelector((state) => state.user);
-  const {
-    selectedVendorMealCategory,
-    searchTerm,
-    sortOption,
-  } = useSelector((state) => state.food);
+  const { selectedVendorMealCategory, searchTerm, sortOption } = useSelector(
+    (state) => state.food
+  );
 
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
@@ -42,34 +45,39 @@ const FoodVender = () => {
   const { data: vendorCategories } = useVendorFoodCategories(currentVendor?.id);
 
   const productsRef = useRef(null);
+
   const scrollToProducts = () => {
     productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const currentPageFoods = data?.pages?.[currentPageIndex]?.foods || [];
-  let filteredFoods = currentPageFoods;
+  const getFilteredFoods = () => {
+    const currentPageFoods = data?.pages?.[currentPageIndex]?.foods || [];
+    let filteredFoods = currentPageFoods;
 
-  if (selectedVendorMealCategory && selectedVendorMealCategory !== "All") {
-    filteredFoods = filteredFoods.filter(
-      (food) => food?.category === selectedVendorMealCategory
-    );
-  }
+    if (selectedVendorMealCategory && selectedVendorMealCategory !== "All") {
+      filteredFoods = filteredFoods.filter(
+        (food) => food?.category === selectedVendorMealCategory
+      );
+    }
 
-  if (searchTerm?.trim()) {
-    const lowerSearch = searchTerm.toLowerCase();
-    filteredFoods = filteredFoods.filter(
-      (food) =>
-        getLocalizedField(food, "name", isArabic)?.toLowerCase().includes(lowerSearch) ||
-        getLocalizedField(food, "description", isArabic)?.toLowerCase().includes(lowerSearch) ||
-        getLocalizedField(food, "category", isArabic)?.toLowerCase().includes(lowerSearch)
-    );
-  }
+    if (searchTerm?.trim()) {
+      const lowerSearch = searchTerm.toLowerCase();
+      filteredFoods = filteredFoods.filter(
+        (food) =>
+          getLocalizedField(food, "name", isArabic)?.toLowerCase().includes(lowerSearch) ||
+          getLocalizedField(food, "description", isArabic)?.toLowerCase().includes(lowerSearch) ||
+          getLocalizedField(food, "category", isArabic)?.toLowerCase().includes(lowerSearch)
+      );
+    }
 
-  if (sortOption === "lowToHigh") {
-    filteredFoods = filteredFoods.slice().sort((a, b) => (a?.itemPrice ?? 0) - (b?.itemPrice ?? 0));
-  } else if (sortOption === "highToLow") {
-    filteredFoods = filteredFoods.slice().sort((a, b) => (b?.itemPrice ?? 0) - (a?.itemPrice ?? 0));
-  }
+    if (sortOption === "lowToHigh") {
+      filteredFoods = filteredFoods.slice().sort((a, b) => (a?.itemPrice ?? 0) - (b?.itemPrice ?? 0));
+    } else if (sortOption === "highToLow") {
+      filteredFoods = filteredFoods.slice().sort((a, b) => (b?.itemPrice ?? 0) - (a?.itemPrice ?? 0));
+    }
+
+    return filteredFoods;
+  };
 
   const handleNext = () => {
     if (currentPageIndex + 1 < (data?.pages.length || 0)) {
@@ -90,61 +98,85 @@ const FoodVender = () => {
     }
   };
 
+  const isNextDisabled =
+    (!hasNextPage && currentPageIndex === (data?.pages.length || 0) - 1) || isFetchingNextPage;
+
+  const filteredFoods = getFilteredFoods();
+
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:px-10 mt-24" dir={isArabic ? "rtl" : "ltr"}>
-      {/* Left Section */}
-      <div className="w-full md:[80vw] lg:w-[calc(100%-360px)] space-y-6">
+    <div className="mt-14    min-h-screen bg-gradient-to-br" dir={isArabic ? "rtl" : "ltr"}>
+      {/* Header */}
         <FoodVendorHeader currentVendor={currentVendor} />
 
-        {/* Products Area */}
-        <div ref={productsRef} className="bg-white rounded-lg shadow-sm p-4">
+
+      {/* Scrollable Content */}
+      <div className="overflow-y-hidden bg-white rounded-t-2xl z-30 mt-70 scrollbar-hide ">
+        <div ref={productsRef} className="bg-white backdrop-blur-sm  shadow-xl p-4">
+          {/* Categories */}
           <FoodVendorMealCategory
             categories={vendorCategories}
             selectedCategory={selectedVendorMealCategory}
           />
 
+          {/* Products */}
           <FoodVendorProducts
             venderLogo={currentVendor?.image}
             foodItems={filteredFoods}
             isArabic={isArabic}
           />
 
-          {/* Pagination Buttons */}
-          <div className="flex justify-center items-center gap-4 mt-8">
-            <button
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 disabled:opacity-40 transition"
-              onClick={handlePrevious}
-              disabled={currentPageIndex === 0}
-            >
-              ← Previous
-            </button>
+          {/* Pagination */}
+         <div className="flex justify-center items-center gap-6 mt-12 mb-6">
+  <button
+    className="px-5 py-2 border text-sm font-medium rounded-xl text-[#ff3131] border-[#ff3131] bg-white hover:bg-[#ff3131] hover:text-white transition"
+    onClick={handlePrevious}
+    disabled={currentPageIndex === 0}
+    aria-label={isArabic ? "الصفحة السابقة" : "Previous page"}
+  >
+    {isArabic ? "التالي ←" : "← Previous"}
+  </button>
 
-            <span className="text-sm font-medium text-gray-600">
-              Page {currentPageIndex + 1}
-            </span>
+  <span className="text-sm font-semibold text-gray-600 bg-white px-4 py-2 rounded-full border border-gray-200">
+    {isArabic ? `صفحة ${currentPageIndex + 1}` : `Page ${currentPageIndex + 1}`}
+  </span>
 
-            <button
-              className="px-4 py-2 bg-primary text-white rounded-full hover:bg-primary/90 disabled:opacity-40 transition"
-              onClick={handleNext}
-              disabled={
-                (!hasNextPage && currentPageIndex === data?.pages.length - 1) ||
-                isFetchingNextPage
-              }
-            >
-              {isFetchingNextPage ? "Loading..." : "Next →"}
-            </button>
-          </div>
+  <button
+    className="px-5 py-2 border text-sm font-medium rounded-xl text-[#ff3131] border-[#ff3131] bg-white hover:bg-[#ff3131] hover:text-white transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+    onClick={handleNext}
+    disabled={isNextDisabled}
+    aria-label={isArabic ? "الصفحة التالية" : "Next page"}
+  >
+    {isFetchingNextPage ? (
+      <>
+        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        {isArabic ? "جاري التحميل..." : "Loading..."}
+      </>
+    ) : isArabic ? (
+      "→ السابق"
+    ) : (
+      "Next →"
+    )}
+  </button>
+</div>
+
         </div>
       </div>
-
-      {/* Right Section */}
-      <div className="hidden lg:block w-full lg:w-[340px]">
-  <div className={`fixed top-20 ${isArabic ? "left-2" : "right-2"}`}>
-    <FoodOrderComputerOrder />
-  </div>
-</div>
     </div>
   );
 };
 
-export default FoodVender;
+export default FoodVendor;

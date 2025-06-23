@@ -6,11 +6,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        location: { lat: "", lng: "" },
-        locationName: "",
+        location: { lat: "17.0195", lng: "54.0894" },
+        locationName: "Salalah",
         wishlistIds: new Set(),
         userId: "user12",
-        language:"english"
+        language: "english",
     },
     reducers: {
         setLocation: (state, action) => {

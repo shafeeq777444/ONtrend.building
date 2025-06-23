@@ -3,11 +3,12 @@ import React from "react";
 import TopRatedCards from "../../components/foodHome/TopRatedCard";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import { useSelector } from "react-redux";
+import SkeltonTopRated from "@/components/skeleton/SkeltonTopRated";
 
 
 export default function TopRated() {
     const {location:{lat,lng}}=useSelector(state=>state.user)
-    const { data: allTopVendors } = useGetAllTopVendors(lat,lng);
+    const { data: allTopVendors,isLoading } = useGetAllTopVendors(lat,lng);
     console.log(allTopVendors, "all tp");
     const foodTopVendors = allTopVendors?.filter((vendor) => vendor.vendorType == "Food/Restaurant") || [];
     console.log(foodTopVendors);
@@ -19,6 +20,9 @@ export default function TopRated() {
     // .
     // .
     // console.log(randomFiveVendors,"rendom fiven vendors");
+    if(isLoading|| !randomSixVendors || randomSixVendors.length === 0 ){
+        return(<SkeltonTopRated/>)
+    }
 
     return (
         <section className="w-full px-4 sm:px-6 lg:px-8 ">

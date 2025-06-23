@@ -41,7 +41,7 @@ export async function fetchAllTopVendors() {
                 return {
                     ...vendor,
                     distance: Math.max(1, Math.round(distance * 10) / 10), // e.g., 6.3 km
-                    estimatedTime: `${finalTime} mins`,
+                    estimatedTime: `${finalTime} `,
                 };
             })
             .filter(Boolean)
@@ -54,7 +54,7 @@ export async function fetchAllTopVendors() {
     }
 }
 
-// fetchAllFoodVendors-----(added:distance,estimate time)
+// fetchAllFoodVendors-----(added:distance,estimate time)(small scale no issue)(large scale change:separe in each vendor type model)
 export async function fetchAllFoodVendors() {
     try {
         const usersRef = collection(db, "users");
@@ -91,7 +91,7 @@ export async function fetchAllFoodVendors() {
                 return {
                     ...vendor,
                     distance: Math.max(1, Math.round(distance * 10) / 10), // e.g., 6.3 km
-                    estimatedTime: `${finalTime} mins`,
+                    estimatedTime: `${finalTime} `,
                 };
             })
             .filter(Boolean)
@@ -103,6 +103,9 @@ export async function fetchAllFoodVendors() {
         return []; // return empty array on failure
     }
 }
+
+
+
 
 // fetch nearest discounted vendors
 // export async function getDiscountOfferFoodVendors() {

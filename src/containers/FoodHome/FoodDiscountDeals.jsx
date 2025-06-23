@@ -9,48 +9,18 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import DiscountDealsCard from "../../components/foodHome/DiscountDealsCard";
 import { useGetAllFoodVendors } from "../../hooks/queries/useVendors";
 import { useSelector } from "react-redux";
+import SkeletonFoodDiscountDeals from "@/components/skeleton/SkeletonFoodDiscountDeals";
 
-// const foodVendors = [
-//   {
-//     name: "Spicy Bites",
-//     rating: 4.7,
-//     distance: "1.5 km",
-//     deliveryTime: "25 mins",
-//     discount: "Flat 30% off on all orders",
-//     image: "/images/food1.jpg",
-//   },
-//   {
-//     name: "Burger Nation",
-//     rating: 4.3,
-//     distance: "2.1 km",
-//     deliveryTime: "20 mins",
-//     discount: "Buy 1 Get 1 Free",
-//     image: "/images/food2.jpg",
-//   },
-//   {
-//     name: "Tandoori Treat",
-//     rating: 4.6,
-//     distance: "3.0 km",
-//     deliveryTime: "30 mins",
-//     discount: "20% off for new users",
-//     image: "/images/food3.jpg",
-//   },
-//   {
-//     name: "Biryani House",
-//     rating: 4.8,
-//     distance: "1.2 km",
-//     deliveryTime: "15 mins",
-//     discount: "Free dessert with biryani",
-//     image: "/images/food4.jpg",
-//   },
-// ];
 
 const FoodDiscountDeals = () => {
     const { location:{lat,lng} } = useSelector((state) => state.user);
     console.log(location);
-    const { data:allfoodVendors } = useGetAllFoodVendors(lat,lng);
+    const { data:allfoodVendors,isLoading } = useGetAllFoodVendors(lat,lng);
     const discountedFoodVendors=allfoodVendors?.filter(vendor=>vendor.discountValue>0)
     console.log(discountedFoodVendors,"all vendor")
+    if(isLoading){
+        return(<SkeletonFoodDiscountDeals/>)
+    }
     return (
         <div className="px-4 py-6 relative bg-white">
             <h2 className="text-xl font-bold mb-4">Discount Deals</h2>
