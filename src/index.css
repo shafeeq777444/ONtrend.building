@@ -260,3 +260,13 @@ body {
     }
   }
 }
+
+
+/* .drawer-content div.w-\[100px\].h-2 {
+  display: none !important;
+  margin: 0 !important;
+} */
+/* Hide the swipe/drag handle at top of shadcn Drawer */
+.group-data-\[vaul-drawer-direction\=bottom\]\/drawer-content\:block {
+  display: none !important;
+}

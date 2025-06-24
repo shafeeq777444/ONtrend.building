@@ -36,37 +36,73 @@ export function useWishlist(userId) {
   });
 }
 
-// cart------------------------------------------------
-// add cart (create/update)
+//################################################# cart #################################################
+//------------------------    add cart (create/update)    ------------------------------------------------
 export const useAddToCart = (userId) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (product) => addToCart(userId, product),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(["cart", userId]); // ⏮️ refetch after update
-      toast.success("cart added successfully")
+      queryClient.invalidateQueries(["cart", userId]);
+      toast.success("Cart added successfully");
+    },
+
+    onError: (error) => {
+      if (error.message === "You can only order from one vendor at a time.") {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to add to cart.");
+        console.error("Add to cart failed:", error);
+      }
     },
   });
 };
 
-// update cart qunatity
+
+// ----------------------------------       update cart qunatity      ----------------------------------
 export const useChangeCartQuantity = (userId) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ productId, delta }) => {
+    mutationFn: ({ cartId, delta }) => {
       if (!userId) throw new Error("User ID is required.");
-      return changeCartQuantity(userId, productId, delta);
+      return changeCartQuantity(userId, cartId, delta);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["cart", userId]); // 🔄 Refetch cart
+
+    // 🔄 Optimistic Update
+    onMutate: async ({ cartId, delta }) => {
+      await queryClient.cancelQueries(["cart", userId]);
+
+      const previousCart = queryClient.getQueryData(["cart", userId]);
+
+      queryClient.setQueryData(["cart", userId], (old = []) =>
+        old.map((item) =>
+          item.id === cartId
+            ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+            : item
+        )
+      );
+
+      return { previousCart };
     },
-    onError: (err) => {
+
+    // ❌ Rollback on Error
+    onError: (err, _variables, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(["cart", userId], context.previousCart);
+      }
       console.error("Failed to update cart quantity:", err.message);
+    },
+
+    // ✅ Always refetch after success or error
+    onSettled: () => {
+      queryClient.invalidateQueries(["cart", userId]);
     },
   });
 };
+
 
 // read All
 export const useCartItems = (userId) => {

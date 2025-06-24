@@ -6,8 +6,9 @@ import { setSearchTerm, setVendorMealCategory } from '@/features/food/foodSlice'
 import Filter from '../Filter';
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion, AnimatePresence } from 'framer-motion';
+import SkeletonCategoryTabs from '../skeleton/SkeltonVendorFoodCategories';
 
-const FoodVendorMealCategory = ({ categories, selectedCategory }) => {
+const FoodVendorMealCategory = ({ categories, selectedCategory,isLoading }) => {
   const dispatch = useDispatch();
   const { searchTerm, sortOption } = useSelector(state => state.food);
   const [localSearch, setLocalSearch] = useState(searchTerm);
@@ -70,6 +71,9 @@ const FoodVendorMealCategory = ({ categories, selectedCategory }) => {
       dispatch(setSearchTerm(''));
     }
   };
+  if(isLoading){
+    return(<SkeletonCategoryTabs/>)
+  }
 
   return (
     <div className="relative p-4 rounded-2xl bg-white">

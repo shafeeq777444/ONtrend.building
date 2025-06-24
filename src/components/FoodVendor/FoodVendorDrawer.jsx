@@ -1,224 +1,194 @@
-import { useState } from "react";
-import { DrawerContent } from "../ui/drawer";
+import React, { useEffect, useRef, useState } from "react";
+import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Clock, MapPin, Tag, Star, ChefHat } from "lucide-react";
-import localforage from "localforage";
+import { useSelector } from "react-redux";
+import { useAddToCart } from "@/hooksDemo/userMutation";
 
 
-const FoodVendorDrawer = ({ item  }) => {
+const FoodVendorDrawer = ({ item, onClose }) => {
+  const [selectedVariant, setSelectedVariant] = useState(() => {
+    const keys = item?.variants ? Object.keys(item.variants) : [];
+    return keys.length > 0 ? keys[0] : undefined;
+  });
+  const [addons, setAddons] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
-  const [selectedVariant, setSelectedVariant] = useState("");
+  const drawerRef = useRef();
+
+  const { userId } = useSelector((state) => state.user);
+    const { mutate: addToCart } = useAddToCart(userId);
+
+  // Close when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+
   if (!item) return null;
 
-  const variants = item.variants || {};
-  const currentVariant = variants[selectedVariant];
-  const hasVariants = Object.keys(variants).length > 0;
+  const toggleAddon = (addon) => {
+    setAddons((prev) =>
+      prev.includes(addon)
+        ? prev.filter((a) => a !== addon)
+        : [...prev, addon]
+    );
+  };
 
-  const description =
-    item.description ||
-    `Delicious ${item.category?.toLowerCase() || "dish"} from ${
-      item.restaurantName || "our kitchen"
-    }.`;
-  const shortDesc =
-    description.length > 100 ? description.slice(0, 100) + "..." : description;
+ const getPricePerQuantity = () => {
+        const variantPrice = parseFloat(item.variants?.[selectedVariant]?.price || item.itemPrice || 0);
 
-  const handleAddToCart = async () => {
-  if (hasVariants && !selectedVariant) {
-    alert("Please select a variant.");
-    return;
-  }
+        const addonsTotal = Object.values(item.addOn || {})
+            .flat()
+            .filter((addon) => addons.includes(addon.name.trim()))
+            .reduce((sum, addon) => sum + parseFloat(addon.price || 0), 0);
 
-  try {
-    const existingCart = (await localforage.getItem("cart")) || {};
-    const userId = "user12"; // replace with dynamic ID if needed
-
-    // ✅ Sanitize item to avoid DataCloneError
-    const sanitizedItem = JSON.parse(JSON.stringify(item));
-
-    const newItem = {
-      ...sanitizedItem,
-      selectedVariant,
-      timestamp:
-        item.timestamp?.toMillis?.() ||
-        item.timestamp?.toString?.() ||
-        Date.now(),
-      cartAddedAt: Date.now(),
+        const total = variantPrice + addonsTotal;
+        return total.toFixed(3);
     };
 
-    const userCart = existingCart[userId] || [];
-
-    // Check if item with same id and variant already exists
-    const existingIndex = userCart.findIndex(
-      (cartItem) =>
-        cartItem.id === newItem.id &&
-        JSON.stringify(cartItem.selectedVariant) ===
-          JSON.stringify(newItem.selectedVariant)
-    );
-
-    if (existingIndex > -1) {
-      console.log("exist");
-      // If exists, increase quantity
-      userCart[existingIndex].quantity =
-        (userCart[existingIndex].quantity || 1) + 1;
-    } else {
-      console.log("not exist");
-      // If not, add with quantity = 1
-      userCart.push({ ...newItem, quantity: 1 });
-    }
-
-    // Save back to cart
-    existingCart[userId] = userCart;
-    console.log(existingCart, "existing cart");
-
-    const result = await localforage.setItem("cart", existingCart);
-    console.log(result, "result");
-
-    alert("Item added to cart!");
-  } catch (error) {
-    console.error("Failed to add to cart:", error);
-  }
-};
-
-
-  const convertTo12Hour = (time24) => {
-  const [hourStr, minute] = time24.split(":");
-  let hour = parseInt(hourStr, 10);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  hour = hour % 12 || 12; // convert 0 to 12
-  return `${hour}:${minute} ${ampm}`;
-};
-
   return (
-    <DrawerContent className="text-black bg-white border-t border-gray-200 ">
-      <div className="relative h-[85vh] flex flex-col">
-        <div className="overflow-y-auto px-6 pt-6 flex-grow">
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Image */}
-            <div className="md:w-1/2 w-full">
-              <div className="relative md:sticky md:top-6">
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  className="w-full h-auto max-h-[400px] object-cover rounded-xl shadow-xl"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 right-4 bg-white/80 md:bg-black/50 px-3 py-1 rounded-full">
-                  <div className="flex items-center gap-1 text-yellow-600 md:text-yellow-400">
-                    <Star className="w-4 h-4 fill-current" />
-                    <span className="text-sm font-medium">4.5</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Info */}
-            <div className="md:w-1/2 w-full">
-              <h2 className="text-2xl font-bold mb-1">{item.name}</h2>
-              {item.localName && (
-                <h3 className="text-lg italic text-gray-600 md:text-gray-300">
-                  {item.localName}
-                </h3>
-              )}
-              {item.arabicRestaurantName && (
-                <p className="text-base text-gray-500 md:text-gray-400">
-                  {item.arabicRestaurantName}
-                </p>
-              )}
-
-              <p className="mt-4 text-sm text-gray-700 md:text-gray-300">
-                {shortDesc}
-              </p>
-
-              <div className="grid gap-4 my-6">
-                <InfoItem icon={<Tag />} label="Category" value={item.tag} />
-                {item.localTag && (
-                  <InfoItem icon={<Tag />} label="Local Tag" value={item.localTag} />
-                )}
-                <InfoItem
-                  icon={<Clock />}
-                  label="Prep Time"
-                  value={`${item.preparationTime} min`}
-                />
-                <InfoItem
-                  icon={<ChefHat />}
-                  label="Restaurant"
-                  value={item.restaurantName}
-                />
-               {item.availableTime && (
-  <InfoItem
-    icon={<MapPin />}
-    label="Available"
-    value={`${convertTo12Hour(item.availableTime.from)} - ${convertTo12Hour(item.availableTime.to)}`}
-  />
-)}
-              </div>
-
-              {/* Price */}
-              <div className="mb-4">
-                <p className="text-xl font-semibold">
-                  Price:{" "}
-                  <span className="text-red-600">
-                    OMR {currentVariant?.price || item.itemPrice}
-                  </span>
-                </p>
-              </div>
-
-              {/* Variants */}
-              {hasVariants && (
-                <div className="mb-20">
-                  <h3 className="text-lg font-semibold mb-2">Select Variant</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(variants).map(([key, variant]) => (
-                      <button
-                        key={key}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium border ${
-                          selectedVariant === key
-                            ? "bg-red-600 text-white border-red-600"
-                            : "bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200  "
-                        }`}
-                        onClick={() => setSelectedVariant(key)}
-                      >
-                        <div>{key}</div>
-                        {variant.price && (
-                          <div className="text-xs text-gray-500 md:text-gray-400">
-                            OMR {variant.price}
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+    <>
+      <div
+        ref={drawerRef}
+        className="flex-1 overflow-y-auto scrollbar-hide rounded-t-lg bg-white"
+      >
+        {/* Image Header */}
+        <div className="relative">
+          <img
+            src={item.imageUrl}
+            alt={item.name}
+            className="w-full h-64 object-cover p-1 rounded-2xl"
+          />
+          <div
+            onClick={onClose}
+            className="absolute top-4 left-4 bg-white rounded-full p-2 shadow cursor-pointer"
+          >
+            <ChevronLeft size={20} />
           </div>
         </div>
 
-        {/* Bottom Sticky Button */}
-        <div className="sticky bottom-0 px-6 py-4 border-t border-gray-200  bg-white ">
-          <Button
-            onClick={handleAddToCart}
-            className="w-full py-4 text-lg font-bold rounded-xl shadow-md"
-            style={{
-              backgroundColor: "#ff3131",
-              color: "#fff",
-            }}
-          >
-            Add to Cart
-          </Button>
+        {/* Content */}
+        <div className="p-5 flex flex-col justify-between">
+          {/* Title & Description */}
+          <div>
+            <h2 className="text-2xl font-bold mb-1">{item.name}</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              {item.description || "A tasty dish from our kitchen."}
+            </p>
+
+            {/* Variant Selection */}
+            {item.variants && Object.keys(item.variants).length > 0 && (
+              <div className="mt-5">
+                <h3 className="text-sm font-semibold text-gray-500 mb-2">
+                  SELECT OPTION
+                </h3>
+                <div className="flex gap-3 flex-wrap">
+                  {Object.entries(item.variants).map(([variantName]) => (
+                    <button
+                      key={variantName}
+                      className={`px-4 py-1 rounded-full border text-sm font-medium ${
+                        selectedVariant === variantName
+                          ? "bg-black text-white"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
+                      onClick={() => setSelectedVariant(variantName)}
+                    >
+                      {variantName.trim()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Add-ons */}
+            {item.addOn && (
+              <div className="mt-5 space-y-6 mb-24">
+                {Object.entries(item.addOn).map(([groupName, options]) => (
+                  <div key={groupName}>
+                    <h3 className="text-sm font-semibold text-gray-500 mb-2">
+                      {groupName.trim().toUpperCase()}
+                    </h3>
+                    <div className="flex gap-3 flex-wrap">
+                      {options.map((option) => {
+                        const trimmedName = option.name.trim();
+                        return (
+                          <div
+                            key={trimmedName}
+                            className={`border-2 rounded-xl p-3 min-w-[100px] text-center cursor-pointer ${
+                              addons.includes(trimmedName)
+                                ? "border-black bg-gray-100"
+                                : "border-gray-300"
+                            }`}
+                            onClick={() => toggleAddon(trimmedName)}
+                          >
+                            <div className="text-sm font-medium">
+                              {trimmedName}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              +OMR {option.price?.toFixed(3) || "0.000"}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="bg-white py-4 px-4 border-t fixed bottom-0 left-0 right-0 z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-xl font-bold">OMR {(getPricePerQuantity() * quantity).toFixed(3)}</div>
+
+            <div className="flex items-center gap-3">
+              <button
+                className="w-8 h-8 rounded-full bg-gray-100 text-xl"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              >
+                -
+              </button>
+              <span className="text-lg font-medium">{quantity}</span>
+              <button
+                className="w-8 h-8 rounded-full bg-gray-100 text-xl"
+                onClick={() => setQuantity((q) => q + 1)}
+              >
+                +
+              </button>
+            </div>
+
+            <Button
+              className="bg-red-600 text-white px-5 py-2 rounded-full font-semibold shadow-md"
+               onClick={() => {
+    const variant = selectedVariant;
+    const selectedAddons = addons;
+    const pricePerQuantity = getPricePerQuantity();
+
+    addToCart({
+      ...item,
+      selectedVariant: variant,
+      selectedAddons,
+      pricePerQuantity,
+      quantity
+    });
+
+    onClose();
+  }}
+            >
+              Add to order
+            </Button>
+          </div>
         </div>
       </div>
-    </DrawerContent>
+    </>
   );
 };
-
-const InfoItem = ({ icon, label, value }) => (
-  <div className="flex items-center gap-3 text-sm border-b border-gray-200  pb-2">
-    <div className="text-red-500">{icon}</div>
-    <div>
-      <div className="text-gray-500">{label}:</div>
-      <div className="text-gray-700  font-medium">{value}</div>
-    </div>
-  </div>
-);
 
 export default FoodVendorDrawer;
