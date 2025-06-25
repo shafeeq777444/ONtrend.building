@@ -10,66 +10,92 @@ import DiscountDealsCard from "../../components/foodHome/DiscountDealsCard";
 import { useGetAllFoodVendors } from "../../hooks/queries/useVendors";
 import { useSelector } from "react-redux";
 import SkeletonFoodDiscountDeals from "@/components/skeleton/SkeletonFoodDiscountDeals";
-
+import { useTranslation } from "react-i18next";
 
 const FoodDiscountDeals = () => {
-    const { location:{lat,lng} } = useSelector((state) => state.user);
-    console.log(location);
-    const { data:allfoodVendors,isLoading } = useGetAllFoodVendors(lat,lng);
-    const discountedFoodVendors=allfoodVendors?.filter(vendor=>vendor.discountValue>0)
-    console.log(discountedFoodVendors,"all vendor")
-    if(isLoading){
-        return(<SkeletonFoodDiscountDeals/>)
-    }
-    return (
-        <div className="px-4 py-6 relative bg-white">
-            <h2 className="text-xl font-bold mb-4">Discount Deals</h2>
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
 
-            <button className="swiper-button-prev-food absolute top-0 right-14 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
-                <FiChevronLeft size={20} />
-            </button>
+  const {
+    location: { lat, lng },
+  } = useSelector((state) => state.user);
 
-            <button className="swiper-button-next-food absolute top-0 right-4 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
-                <FiChevronRight size={20} />
-            </button>
+  const { data: allfoodVendors, isLoading } = useGetAllFoodVendors(lat, lng);
+  const discountedFoodVendors = allfoodVendors?.filter(
+    (vendor) => vendor.discountValue > 0
+  );
 
-            <Swiper
-                spaceBetween={1}
-                slidesPerView={1.3}
-                breakpoints={{
-                    480: { slidesPerView: 1.5 },
-                    640: { slidesPerView: 2.5 },
-                    768: { slidesPerView: 3.5 },
-                    1024: { slidesPerView: 4.5 },
-                    1280: { slidesPerView: 5.5 },
-                }}
-                navigation={{
-                    nextEl: ".swiper-button-next-food",
-                    prevEl: ".swiper-button-prev-food",
-                }}
-                autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                }}
-                freeMode={true}
-                mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    releaseOnEdges: true,
-                }}
-                modules={[Navigation, FreeMode, Mousewheel, Autoplay]}
-            >
-                {discountedFoodVendors?.map((vendor, idx) => (
-                    <SwiperSlide key={idx}>
-                        <div className="p-2">
-                            <DiscountDealsCard vendor={vendor} />
-                        </div>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-        </div>
-    );
+  if (isLoading) {
+    return <SkeletonFoodDiscountDeals />;
+  }
+
+  return (
+    <div className="px-4 py-6 relative bg-white">
+      {/* Heading */}
+      <h2
+        className={`text-xl font-bold mb-4 ${
+          isArabic ? "text-right" : "text-left"
+        }`}
+      >
+        {isArabic ? "عروض الخصم" : "Discount Deals"}
+      </h2>
+
+      {/* Swiper Buttons */}
+      <button
+        className={`swiper-button-prev-food absolute top-0 ${
+          isArabic ? "left-4" : "right-14"
+        } z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
+      >
+        <FiChevronLeft size={20} />
+      </button>
+
+      <button
+        className={`swiper-button-next-food absolute top-0 ${
+          isArabic ? "left-14" : "right-4"
+        } z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
+      >
+        <FiChevronRight size={20} />
+      </button>
+
+      {/* Swiper Carousel */}
+      <Swiper
+        dir={isArabic ? "rtl" : "ltr"}
+        spaceBetween={1}
+        slidesPerView={1.3}
+        breakpoints={{
+          480: { slidesPerView: 1.5 },
+          640: { slidesPerView: 2.5 },
+          768: { slidesPerView: 3.5 },
+          1024: { slidesPerView: 4.5 },
+          1280: { slidesPerView: 5.5 },
+        }}
+        navigation={{
+          nextEl: ".swiper-button-next-food",
+          prevEl: ".swiper-button-prev-food",
+        }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        freeMode={true}
+        mousewheel={{
+          forceToAxis: true,
+          sensitivity: 1,
+          releaseOnEdges: true,
+        }}
+        modules={[Navigation, FreeMode, Mousewheel, Autoplay]}
+      >
+        {discountedFoodVendors?.map((vendor, idx) => (
+          <SwiperSlide key={idx}>
+            <div className="p-2">
+              <DiscountDealsCard vendor={vendor} />
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  );
 };
 
 export default FoodDiscountDeals;

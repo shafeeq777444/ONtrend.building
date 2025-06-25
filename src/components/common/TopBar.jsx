@@ -162,7 +162,9 @@ export default function TopBar({ cartCount = 2 }) {
                     >
                         {i18n.language === "en" ? "AR" : "EN"}
                     </motion.button>
-                    {[{ Icon: <PiGiftBold />, title: "Rewards" }, { Icon: <FiHeart />, title: "Wishlist" }].map(
+                    {[
+                        // { Icon: <PiGiftBold />, title: "Rewards" }, 
+                        { Icon: <FiHeart />, title: "Wishlist" }].map(
                         ({ Icon, title }, idx) => (
                             <motion.div
                                 onClick={() => navigate(title.toLowerCase())}
@@ -207,7 +209,9 @@ export default function TopBar({ cartCount = 2 }) {
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="fixed top-20 right-0 w-3/4 h-screen bg-white z-40 shadow-lg p-6 flex flex-col space-y-6"
                     >
-                        {["Rewards", "Wishlist", "Cart", "Profile"].map((label, i) => (
+                        {[
+                            // "Rewards", 
+                            "Wishlist", "Cart", "Profile"].map((label, i) => (
                             <div
                                 key={i}
                                 className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"

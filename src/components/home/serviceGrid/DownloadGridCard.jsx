@@ -1,38 +1,50 @@
-import React from 'react'
+import React from 'react';
 import { FaApple, FaGooglePlay } from "react-icons/fa";
-
+import { useTranslation } from 'react-i18next';
 
 const DownloadGridCard = () => {
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
 
   return (
+    <a
+      target="_blank"
+      href="https://ontrend.live/socials"
+      className="bg-red-700 rounded-lg text-white flex flex-col md:flex-row items-center justify-around gap-6 p-4 w-full md:col-span-3 lg:col-span-2 shadow-md cursor-pointer"
+    >
+      {/* Logo + Title */}
+      <div className="flex flex-col items-center text-center md:text-start">
+        <img
+          src="/ONtrend-logo.png"
+          alt="ONtrend Logo"
+          className="object-contain w-20 h-20 mb-2"
+          loading="lazy"
+        />
+        <h3 className="text-lg font-semibold">
+          {isArabic ? "حمّل التطبيق" : "Download the App"}
+        </h3>
+      </div>
 
-        <a target='_blank' href='https://ontrend.live/socials'
-         className="bg-red-700 rounded-lg text-white flex items-center justify-evenly p-4 w-full md:col-span-3 lg:col-span-2 shadow-md cursor-pointer">
-          <div className="flex justify-center items-center flex-col text-center">
-        
-            <img
-              src="/ONtrend-logo.png"
-              alt="ONtrend Logo"
-              className="object-contain w-24 h-24 mb-3"
-              loading="lazy"
-            />
-            <h3 className="text-lg font-semibold mb-1">Download the App</h3>
-        
+      {/* Store Buttons + Description */}
+      <div className={`flex flex-col items-center md:items-start text-center md:text-start ${isArabic ? "md:items-end md:text-end" : ""}`}>
+        <div className={`flex gap-4 flex-wrap items-center justify-center ${isArabic ? "flex-row-reverse" : ""}`}>
+          <div className="flex items-center gap-2">
+            <FaApple size={18} />
+            <span>{isArabic ? "آب ستور" : "App Store"}</span>
           </div>
-          <div className="flex flex-col gap-4">
-        
-              <div className='flex gap-4'>
-                  <FaApple size={18} />
-                  <span>App Store</span>
-                  <FaGooglePlay size={18} />
-                  <span>Google Play</span>
-              </div>
-            <p className="text-sm text-white/90 w-70">
-              Stay connected with us and follow our latest updates on social media.
-            </p>
+          <div className="flex items-center gap-2">
+            <FaGooglePlay size={18} />
+            <span>{isArabic ? "جوجل بلاي" : "Google Play"}</span>
           </div>
-        </a>
+        </div>
 
+        <p className="text-sm text-white/90 mt-3 max-w-xs">
+          {isArabic
+            ? "ابقَ على تواصل معنا وتابع آخر التحديثات على وسائل التواصل الاجتماعي."
+            : "Stay connected with us and follow our latest updates on social media."}
+        </p>
+      </div>
+    </a>
   );
 };
 

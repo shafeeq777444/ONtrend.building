@@ -1,9 +1,9 @@
 import { Star, Heart, Clock, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // RatingStars Component
 const RatingStars = ({ rating }) => {
-
   return (
     <div className="flex items-center space-x-0.5">
       {[...Array(5)].map((_, i) => {
@@ -33,14 +33,20 @@ const RatingStars = ({ rating }) => {
 };
 
 const TopRatedCards = ({ vendor }) => {
-    const navigate=useNavigate()
+  const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
   const averageRating =
     vendor.Ratings && vendor.totalRatings
       ? vendor.Ratings / vendor.totalRatings
       : 0;
 
   return (
-    <div onClick={()=>navigate(`/food/${vendor?.id}`)} className="rounded-md bg-white shadow-sm relative w-full max-w-lg mx-auto group overflow-hidden">
+    <div
+      onClick={() => navigate(`/food/${vendor?.id}`)}
+      className="rounded-md bg-white shadow-sm relative w-full max-w-lg mx-auto group overflow-hidden"
+    >
       {/* Banner Image */}
       {vendor.bannerImage?.length > 0 && (
         <img
@@ -51,25 +57,36 @@ const TopRatedCards = ({ vendor }) => {
         />
       )}
 
+      {/* Busy Overlay */}
+      {!vendor.isOnline && (
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+          <span className="text-white text-sm font-semibold">
+            {isArabic ? "مشغول" : "Busy"}
+          </span>
+        </div>
+      )}
+
       {/* Overlay Section */}
       <div className="absolute bottom-0 left-0 w-full px-4 py-3 flex justify-between items-end backdrop-blur-[2px] rounded-b-md bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-        {/* Left Info */}
-        <div className="flex items-start space-x-3">
+        {/* Info + Logo section */}
+        <div className={`flex items-start ${isArabic ? " gap-4 space-x-reverse" : ""} space-x-3 z-20`}>
           {/* Logo */}
-          <div className="rounded-lg w-12 h-12 shadow-md overflow-hidden bg-white shrink-0">
+          <div className="rounded-lg w-12 h-12 shadow-md overflow-hidden bg-white shrink-0 z-20">
             <img
               loading="lazy"
               src={vendor.image}
-              alt={`${vendor.restaurantName} Logo`}
-              className="w-full h-full object-cover"
+              alt={`${
+                isArabic ? vendor.restaurantArabicName : vendor.restaurantName
+              } Logo`}
+              className="w-full h-full object-cover z-20"
             />
           </div>
 
           {/* Text Info */}
-          <div className="text-white">
-            {/* Restaurant Name */}
+          <div className={`text-white ${isArabic ? "text-right" : "text-left"}`}>
+            {/* Name */}
             <h3 className="text-sm font-semibold max-w-[160px] break-words leading-tight">
-              {vendor.restaurantName}
+              {isArabic ? vendor.restaurantArabicName : vendor.restaurantName}
             </h3>
 
             {/* Ratings */}
@@ -84,17 +101,17 @@ const TopRatedCards = ({ vendor }) => {
 
             {/* Distance and Time */}
             {(vendor.estimatedTime || vendor.distance) && (
-              <div className="flex items-center gap-3 mt-1 text-xs text-white/80">
+              <div className="flex items-center gap-3 mt-1 text-xs text-white/80 rtl:space-x-reverse">
                 {vendor.estimatedTime && (
                   <div className="flex items-center gap-1">
                     <Clock size={14} className="text-white/60" />
-                    {vendor.estimatedTime}
+                    {vendor.estimatedTime} {isArabic ? "دقيقة" : "mins"}
                   </div>
                 )}
                 {vendor.distance && (
                   <div className="flex items-center gap-1">
                     <MapPin size={14} className="text-white/60" />
-                    {vendor.distance} km
+                    {vendor.distance} {isArabic ? "كم" : "km"}
                   </div>
                 )}
               </div>
@@ -106,7 +123,7 @@ const TopRatedCards = ({ vendor }) => {
         <div className="flex flex-col gap-2 items-center">
           <button
             className="p-1.5 rounded-full hover:bg-white/10 transition-all duration-200 ease-in-out transform hover:scale-105"
-            title="Add to Wishlist"
+            title={isArabic ? "المفضلة" : "Add to Wishlist"}
           >
             <Heart size={18} className="text-white" />
           </button>

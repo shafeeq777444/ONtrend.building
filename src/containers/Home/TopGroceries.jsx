@@ -15,6 +15,7 @@ import {
 } from "react-icons/fi";
 import { MapPin, Clock } from "lucide-react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import SkeletonTopGroceries from "../../components/skeleton/SkeletonTopGroceries";
@@ -27,6 +28,9 @@ const TopGroceries = () => {
   } = useSelector((state) => state.user);
 
   const { data: vendors, isLoading, error } = useGetAllTopVendors(lat, lng);
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
   const topGroceries =
     vendors?.filter((vendor) => vendor.vendorType === "Grocery") || [];
 
@@ -35,20 +39,22 @@ const TopGroceries = () => {
     return (
       <div className="px-4 py-6 text-center">
         <p className="text-red-600 font-semibold">
-          Failed to load top groceries. Please try again later.
+          {isArabic ? "فشل تحميل المتاجر، يرجى المحاولة لاحقًا" : "Failed to load top groceries. Please try again later."}
         </p>
       </div>
     );
 
   return (
-    <div className="px-4 relative">
-      <h2 className="text-xl font-bold mb-4">Top Groceries</h2>
+    <div className="px-4 relative" dir={isArabic ? "rtl" : "ltr"}>
+      <h2 className="text-xl font-bold mb-4">
+        {isArabic ? "أفضل متاجر البقالة" : "Top Groceries"}
+      </h2>
 
       {/* Navigation Buttons */}
-      <button className="swiper-button-prev-grocery absolute top-0 right-14 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
+      <button className={`swiper-button-prev-grocery absolute top-0  ${isArabic?"left-10":"right-14"}  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}>
         <FiChevronLeft size={20} />
       </button>
-      <button className="swiper-button-next-grocery absolute top-0 right-4 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">
+      <button className={`swiper-button-next-grocery absolute top-0 ${isArabic?"left-20":"right-4"}  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}>
         <FiChevronRight size={20} />
       </button>
 
@@ -85,46 +91,51 @@ const TopGroceries = () => {
             <SwiperSlide key={item.id}>
               <div className="p-2">
                 <div className="group relative rounded-lg shadow-md hover:shadow-lg transition-all flex flex-col items-center text-center hover:scale-[1.02] duration-200 ease-in-out">
-                  
+
                   {/* Image Block */}
                   <div className="w-full h-44 rounded-lg overflow-hidden mb-3 relative">
+
                     {/* Favorite Button */}
-                    <FavoriteButton />
+                    <div
+                      className={`absolute top-0 ${isArabic ? "left-16" : "right-2"} z-20`}
+                    >
+                      <FavoriteButton />
+                    </div>
 
-                    {/* Main Image */}
-                    <img
-                      src={item.bannerImage?.[0]}
-                      alt={item.restaurantName}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
-
-                    {/* Optional Logo Top-Left */}
+                    {/* Vendor Logo */}
                     {item.image && (
-                      <div className="absolute top-2 left-2 z-20 w-10 h-10 rounded-full overflow-hidden border border-white shadow-md">
+                      <div
+                        className={`absolute top-2 ${isArabic ? "right-2" : "left-2"} z-20 w-10 h-10 rounded-full overflow-hidden border border-white shadow-md`}
+                      >
                         <img
                           src={item.image}
-                          alt={`${item.restaurantName} logo`}
+                          alt={`${isArabic ? item.restaurantArabicName : item.restaurantName} logo`}
                           className="w-full h-full object-cover"
                         />
                       </div>
                     )}
 
+                    {/* Main Image */}
+                    <img
+                      src={item.bannerImage?.[0]}
+                      alt={isArabic ? item.restaurantArabicName : item.restaurantName}
+                      loading="lazy"
+                      className="w-full h-full object-cover"
+                    />
+
                     {/* Shop Closed Overlay */}
                     {!item.isOnline && (
                       <div className="absolute inset-0 bg-black/30 flex items-center justify-center cursor-default z-20">
                         <div className="text-xs text-gray-300 italic bg-black/20 backdrop-blur-xs rounded-full px-2 py-1">
-                          Shop closed
+                          {isArabic ? "المتجر مغلق" : "Shop closed"}
                         </div>
                       </div>
                     )}
 
-                    {/* Title Overlay */}
-                   
-
-                    {/* Bottom-left: Ratings, Time, Distance */}
-                    <div className="absolute bottom-2 left-2 z-20 flex flex-col items-start gap-1 text-white text-xs">
-                      
+                    {/* Bottom Ratings, Time, Distance */}
+                    <div
+                      className={`absolute bottom-2 ${isArabic ? "right-2 items-end" : "left-2 items-start"} z-20 flex flex-col gap-1 text-white text-xs`}
+                    >
                       {averageRating > 0 && (
                         <div className="flex items-center gap-1 bg-black/20 px-2 py-1 rounded-full">
                           <RatingStars rating={averageRating} />
@@ -143,7 +154,7 @@ const TopGroceries = () => {
                           {item.distance && (
                             <div className="flex items-center gap-1">
                               <MapPin size={12} />
-                              <span>{item.distance} km</span>
+                              <span>{item.distance} كم</span>
                             </div>
                           )}
                         </div>
@@ -151,13 +162,21 @@ const TopGroceries = () => {
                     </div>
                   </div>
 
+                  {/* Name */}
+                  <div className="font-semibold text-sm text-gray-800 line-clamp-1">
+                    {isArabic ? item.restaurantArabicName : item.restaurantName}
+                  </div>
+
                   {/* Online Status */}
                   {item.isOnline ? (
                     <div className="flex items-center gap-1 p-2 text-sm font-medium text-green-600">
-                      <FiShoppingBag size={16} /> Shop Now
+                      <FiShoppingBag size={16} />
+                      {isArabic ? "تسوق الآن" : "Shop Now"}
                     </div>
                   ) : (
-                    <div className="text-xs text-gray-400 p-2 italic">Shop closed</div>
+                    <div className="text-xs text-gray-400 p-2 italic">
+                      {isArabic ? "المتجر مغلق" : "Shop closed"}
+                    </div>
                   )}
                 </div>
               </div>

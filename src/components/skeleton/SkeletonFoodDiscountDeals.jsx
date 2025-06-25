@@ -2,6 +2,7 @@ import React from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { useTranslation } from "react-i18next";
 
 const CardSkeleton = () => {
   return (
@@ -29,9 +30,14 @@ const CardSkeleton = () => {
 };
 
 const SkeletonFoodDiscountDeals = () => {
+  const { i18n, t } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
   return (
     <div className="px-4 py-6 relative bg-white">
-      <h2 className="text-xl font-bold mb-4">Discount Deals</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {isArabic ? "عروض الخصم" : "Discount Deals"}
+      </h2>
 
       {/* Navigation buttons */}
       <button className="swiper-button-prev-food absolute top-0 right-14 z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition">

@@ -5,8 +5,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import FavoriteButton from "../common/FavouriteButton";
 import { IoIosShareAlt } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
+import SkeletonFoodVendorHeader from "../skeleton/SkeletonFoodVendorHeader";
 
-const FoodVendorHeader = ({ currentVendor }) => {
+const FoodVendorHeader = ({ currentVendor,isLoading }) => {
     const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
 
@@ -21,6 +22,9 @@ const FoodVendorHeader = ({ currentVendor }) => {
             ? (currentVendor?.Ratings / currentVendor?.totalRatings).toFixed(1)
             : "0.0";
 
+            if(isLoading){
+                return(<SkeletonFoodVendorHeader/>)
+            }
     return (
         <div className="fixed top-14 right-0 w-full">
             <div className="relative w-full h-[220px] md:h-[260px] overflow-hidden  shadow-md">
@@ -28,6 +32,7 @@ const FoodVendorHeader = ({ currentVendor }) => {
                 <img
                     src={currentVendor?.bannerImage?.[1]}
                     alt="Food Vendor Banner"
+                    loading="lazy"
                     className="w-full h-full object-cover"
                     onError={(e) => {
                         e.target.onerror = null;

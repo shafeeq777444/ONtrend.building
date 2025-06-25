@@ -88,15 +88,15 @@ const FoodOrderComputerOrderCard = () => {
       <div className="mt-6 space-y-2 text-sm text-gray-700">
         <div className="flex justify-between">
           <span>Subtotal</span>
-          <span>OMR{subtotal.toFixed(2)}</span>
+          <span>OMR{subtotal.toFixed(3)}</span>
         </div>
         <div className="flex justify-between">
           <span>Delivery Fee</span>
-          <span>OMR{DeliveryFee.toFixed(2)}</span>
+          <span>OMR{DeliveryFee.toFixed(3)}</span>
         </div>
         <div className="flex justify-between text-base font-semibold border-t pt-3">
           <span>Total</span>
-          <span className="text-[#ff3131]">OMR{total.toFixed(2)}</span>
+          <span className="text-[#ff3131]">OMR{total.toFixed(3)}</span>
         </div>
       </div>
 
