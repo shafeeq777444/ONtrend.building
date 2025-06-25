@@ -43,7 +43,7 @@ const FoodDiscountDeals = () => {
       {/* Swiper Buttons */}
       <button
         className={`swiper-button-prev-food absolute top-0 ${
-          isArabic ? "left-4" : "right-14"
+          isArabic ? "left-8" : "right-14"
         } z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
       >
         <FiChevronLeft size={20} />
@@ -51,7 +51,7 @@ const FoodDiscountDeals = () => {
 
       <button
         className={`swiper-button-next-food absolute top-0 ${
-          isArabic ? "left-14" : "right-4"
+          isArabic ? "left-20" : "right-4"
         } z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
       >
         <FiChevronRight size={20} />

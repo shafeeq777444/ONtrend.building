@@ -1,8 +1,10 @@
 import { FaGoogle, FaApple, FaFacebookF, FaPhone, FaEnvelope } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { i18n } = useTranslation();
+  const navigate=useNavigate()
   const isArabic = i18n.language === "ar";
 
   const loginOptions = [
@@ -34,6 +36,7 @@ const Login = () => {
         <div className="flex flex-wrap justify-center gap-3">
           {loginOptions.map((option, index) => (
             <button
+            onClick={()=>{navigate('/auth')}}
               key={index}
               className="flex flex-col items-center justify-center px-3 py-2 w-12 h-12 md:w-16 md:h-16 rounded-md bg-[#fe3031] hover:bg-[#e02829] text-white transition-all duration-200"
             >

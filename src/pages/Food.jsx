@@ -38,7 +38,7 @@ const Food = () => {
  
   return (
     <div className="mt-18">
-      <FoodHomeHIgliteCarousel/>
+      {/* <FoodHomeHIgliteCarousel/> */}
      {/* <FoodHighlites/> */}
      <FoodOffers/>
      {/* <TypeOfFoods/> */}

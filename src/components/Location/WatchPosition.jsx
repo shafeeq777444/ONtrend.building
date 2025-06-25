@@ -41,7 +41,7 @@ const useWatchLocation = (map) => {
       },
       (error) => {
         console.error("Error watching location:", error);
-        alert("Unable to retrieve your location.");
+        // alert("Unable to retrieve your location.");
       },
       {
         enableHighAccuracy: true,

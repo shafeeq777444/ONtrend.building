@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")).render(
             <Provider store={store}>
                 <ReactQueryDevtools initialIsOpen={false} />
                 {/* <ClearAllCacheButton/> */}
-                import { Toaster } from "react-hot-toast";
+
 
 <Toaster
   position="bottom-right"

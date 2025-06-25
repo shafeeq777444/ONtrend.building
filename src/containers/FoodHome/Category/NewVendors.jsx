@@ -13,11 +13,13 @@ import SkeltonTopRestuarent from "../../../components/skeleton/SkeltonNearRestua
 import RestuarentCard from "../../../components/RestuarentCard";
 import { useSelector } from "react-redux";
 import { useWishlist } from "@/hooksDemo/userMutation";
+import { useTranslation } from "react-i18next";
 
 const NewVendors = () => {
     const { data: wishlist = [] } = useWishlist("user12");
     const wishlistIds = useMemo(() => new Set(wishlist.map((item) => item.id)), [wishlist]);
-
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
     const {
         location: { lat, lng },
     } = useSelector((state) => state.user);
@@ -43,12 +45,18 @@ const NewVendors = () => {
     return (
         <div className="px-4 py-6 relative w-full">
             {/* Navigation Buttons */}
-            <button className="swiper-button-prev-restuarent absolute top-1 right-16 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
-                <FiChevronLeft size={22} />
-            </button>
-            <button className="swiper-button-next-restuarent absolute top-1 right-4 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition">
-                <FiChevronRight size={22} />
-            </button>
+            <button
+                    className={`swiper-button-prev-restuarent absolute -top-12 ${
+                      isArabic ? "left-10" : "right-16"
+                    } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+                  >
+                    <FiChevronLeft size={22} />
+                  </button>
+                  <button className={`swiper-button-next-restuarent absolute -top-12 ${
+                       isArabic ? "left-22" : "right-4"
+                    } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}>
+                    <FiChevronRight size={22} />
+                  </button>
 
             <Swiper
                 spaceBetween={1}
