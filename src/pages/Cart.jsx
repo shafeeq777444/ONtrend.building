@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useCartItems, useChangeCartQuantity, useRemoveFromCart } from "@/hooksDemo/userMutation";
 import { ClipLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
+import DownloadModal from "@/components/common/DownloadModal";
 
 const CartPage = () => {
     const { userId } = useSelector((state) => state.user);
     const [loadingItemId, setLoadingItemId] = React.useState(null);
+    const [downloadModal,setDownloadModal]=useState(false)
     const { t, i18n } = useTranslation();
     const isArabic = i18n.language === "ar";
 
@@ -168,12 +170,15 @@ const CartPage = () => {
                         </div>
 
                         {/* Checkout Button */}
-                        <button className="mt-6 w-full bg-[#ff3131] text-white py-3 rounded-full font-semibold hover:opacity-90 transition-all">
+                        <button onClick={()=>{
+                            setDownloadModal(true)
+                        }} className="mt-6 w-full bg-[#ff3131] text-white py-3 rounded-full font-semibold hover:opacity-90 transition-all">
                             {isArabic ? "المتابعة إلى الدفع" : "Proceed to Payment"}
                         </button>
                     </div>
                 </div>
             </div>
+            {downloadModal && <DownloadModal setDownloadModal={setDownloadModal}/>}
         </div>
     );
 };

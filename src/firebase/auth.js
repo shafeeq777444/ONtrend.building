@@ -15,7 +15,20 @@ import { auth, dbDemo } from "@/firebaseDemo/democonfig";
 
 const fbProvider = new FacebookAuthProvider();
 
-
+//----------------------- Fetch current user Data ---------------------------
+export const fetchCurrentUserData = async ({setUserData,toast} ) => {
+      const currentUser = auth.currentUser;
+      console.log(currentUser)
+      if (currentUser) {
+        const docRef = doc(db, "users", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());
+        } else {
+          toast.error("No user data found in Firestore");
+        }
+      }
+    };
 
 // --------------- sign with google ------------------------------------------
 export const handleGoogleLogin = async ({toast,navigate}) => {
@@ -27,7 +40,7 @@ export const handleGoogleLogin = async ({toast,navigate}) => {
     const user = result.user;
 
     const uid = user.uid;
-    const userRef = doc(dbDemo, "users", uid);
+    const userRef = doc(db, "users", uid);
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {

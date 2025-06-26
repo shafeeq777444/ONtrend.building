@@ -104,13 +104,13 @@ const FoodVendor = () => {
             <div className="overflow-y-hidden bg-white rounded-t-2xl z-30 mt-80  scrollbar-hide ">
                 <div ref={productsRef} className="bg-white backdrop-blur-sm  shadow-xl p-4">
                     {/* Categories */}
-                    <FoodVendorMealCategory isLoading={vendorCategoryLoading || getVendorLoading} categories={vendorCategories} selectedCategory={selectedVendorMealCategory} />
+                    <FoodVendorMealCategory setCurrentPageIndex={setCurrentPageIndex} isOnline={currentVendor?.isOnline} isLoading={vendorCategoryLoading || getVendorLoading} categories={vendorCategories} selectedCategory={selectedVendorMealCategory} />
 
                     {/* Products */}
                     <FoodVendorProducts isLoading={allProductsLoading || getVendorLoading} isOnline={currentVendor?.isOnline} foodItems={filteredFoods} isArabic={isArabic} venderLogo={currentVendor?.image}/>
 
                     {/* Pagination */}
-                    <PaginationButtons currentPageIndex={currentPageIndex} handleNext={handleNext} handlePrevious={handlePrevious} isArabic={isArabic} isFetchingNextPage={isFetchingNextPage} isNextDisabled={isNextDisabled} />
+                    <PaginationButtons isOnline={currentVendor?.isOnline} currentPageIndex={currentPageIndex} handleNext={handleNext} handlePrevious={handlePrevious} isArabic={isArabic} isFetchingNextPage={isFetchingNextPage} isNextDisabled={isNextDisabled} />
                 </div>
             </div>
         </div>

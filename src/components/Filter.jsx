@@ -2,7 +2,7 @@ import { setSortOption } from "@/features/food/foodSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const Filter = ({ showFilter, setShowFilter, sortOption,  }) => {
+const Filter = ({ showFilter, setShowFilter, sortOption,setCurrentPageIndex  }) => {
   const [isVisible, setIsVisible] = useState(false);
   const dispatch=useDispatch()
 
@@ -13,6 +13,7 @@ const Filter = ({ showFilter, setShowFilter, sortOption,  }) => {
   }, [showFilter]);
 
   const handleSelect = (option) => {
+    setCurrentPageIndex(0)
     dispatch(setSortOption(option));
     setIsVisible(false);
     setTimeout(() => setShowFilter(false), 200); // Wait for animation to finish

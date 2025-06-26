@@ -2,7 +2,7 @@
 App.jsx
 import { useRoutes } from 'react-router-dom';
 import Home from './pages/Home';
-import About from './components/foodHome/FoodSearchVendors';
+
 import Food from './pages/Food';
 import MainLayout from './layouts/MainLayout';
 import FoodVender from './pages/FoodVender';
@@ -12,6 +12,8 @@ import Login from './components/auth/Login';
 import AuthLayout from './components/auth/AuthLayout';
 import Sign from './components/auth/Signup';
 import Credential from './components/auth/Credential';
+import UserProdileModal from './components/auth/UserProdileModal';
+
 
 
 export default function App() {
@@ -25,7 +27,7 @@ export default function App() {
         { path: 'food/:vendorId', element: <FoodVender /> },
         { path: 'wishlist', element: <Whishlist /> },
         { path: 'cart', element: <Cart /> },
-        { path: 'about', element: <About /> },
+        { path: 'about', element: <UserProdileModal/> },
       ],
     },
     { path: 'auth', element: <AuthLayout /> ,

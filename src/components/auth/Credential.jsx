@@ -16,6 +16,7 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { appDemo, auth, dbDemo } from "@/firebaseDemo/democonfig";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { getFriendlyFirebaseError } from "@/firebase/auth";
+import { db } from "@/firebase/config";
 
 const Credential = () => {
     const navigate = useNavigate();
@@ -71,7 +72,7 @@ const Credential = () => {
       updatedAt: serverTimestamp(), // ⏱ Track last update time
     };
 
-    await setDoc(doc(dbDemo, "users", uid), userDoc, { merge: true });
+    await setDoc(doc(db, "users", uid), userDoc, { merge: true });
 
     toast.success("Account created");
     navigate("/");

@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
 import VendorModal from "@/components/foodHome/FoodSearchCard";
+import { TypeAnimation } from "react-type-animation";
 import "swiper/css";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
@@ -42,31 +43,41 @@ const FoodSearchGridCard = () => {
           ))}
         </Swiper>
 
-        {/* Center Text Overlay */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6">
-          <motion.h2
+        {/* Center Text and Button */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 space-y-4">
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="text-white text-2xl sm:text-4xl md:text-5xl  leading-snug drop-shadow-md"
           >
-            Find the best bites near you             
-            <br />
-            <span className="text-yellow-400 ">on <span className=" decoration-yellow-400">trend</span></span>
-          </motion.h2>
-        </div>
+            <TypeAnimation
+              sequence={[
+                "Find the best bites near you",
+                2000,
+                "Taste the trendiest food spots",
+                2000,
+                "Order now from top vendors",
+                2000,
+              ]}
+              wrapper="h2"
+              speed={50}
+              className="text-white text-2xl sm:text-4xl md:text-5xl leading-snug drop-shadow-md"
+              repeat={Infinity}
+            />
+          </motion.div>
 
-        {/* Bottom Center Search Button */}
-        <div className="absolute bottom-6 left-0 right-0 z-10 flex justify-start px-4">
           <motion.button
-            onClick={() => setModalOpen(true)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-sm sm:text-base font-semibold shadow-lg"
-          >
-            <Search className="w-4 h-4" />
-            <span>Search Vendors</span>
-          </motion.button>
+  onClick={() => setModalOpen(true)}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="flex items-center justify-center gap-2 w-[220px] sm:w-[260px] bg-white text-black px-6 py-3 rounded-full text-sm sm:text-base font-semibold shadow-lg relative overflow-hidden"
+>
+  <Search className="w-4 h-4" />
+  <span className="relative">
+    Search Vendors
+    <span className="absolute -right-2 top-0 h-full w-[2px] bg-black animate-blink" />
+  </span>
+</motion.button>
         </div>
       </motion.div>
 

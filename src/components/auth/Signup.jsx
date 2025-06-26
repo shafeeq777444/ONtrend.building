@@ -69,7 +69,7 @@ const SignUP = () => {
       // phone & nationality will be updated later
     };
 
-    await setDoc(doc(dbDemo, "users", uid), userDoc);
+    await setDoc(doc(db, "users", uid), userDoc);
 
     // 3. ✅ Redirect to credential page for phone & nationality
     toast.success("Signup successful");

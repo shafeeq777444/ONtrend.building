@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { DrawerTrigger } from "@/components/ui/drawer";
 import FoodVendorDrawer from './FoodVendorDrawer';
 
-const FoodCardInVendor = ({ item, venderLogo, onClick ,isOnline}) => {
+const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
   const [isImageError, setIsImageError] = useState(false);
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
@@ -26,8 +26,10 @@ const FoodCardInVendor = ({ item, venderLogo, onClick ,isOnline}) => {
 
   return (
     <div
-      onClick={onClick}
-      className="relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01]"
+      onClick={isOnline ? onClick : undefined}
+      className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01] ${
+        !isOnline ? 'grayscale  pointer-events-none' : ''
+      }`}
     >
       {/* Image */}
       <div className="relative">
@@ -58,13 +60,6 @@ const FoodCardInVendor = ({ item, venderLogo, onClick ,isOnline}) => {
           <p className="text-white text-xs sm:text-sm font-semibold">
             {item?.localTag}
           </p>
-        </div>
-
-        {/* Heart Icon */}
-        <div className={`absolute top-2 ${isArabic ? 'right-2' : 'left-2'} z-10`}>
-          <button className="bg-white/30 p-2 rounded-full shadow-md hover:bg-white/80 transition">
-            <FaHeart className="text-red-500 text-sm" />
-          </button>
         </div>
       </div>
 
@@ -105,6 +100,15 @@ const FoodCardInVendor = ({ item, venderLogo, onClick ,isOnline}) => {
           {isArabic ? "أضف" : "Add"}
         </button>
       </div>
+
+      {/* Offline Overlay */}
+      {/* {!isOnline && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-30">
+          <span className="text-white text-sm font-semibold">
+            {isArabic ? 'غير متصل' : 'Offline'}
+          </span>
+        </div>
+      )} */}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { auth, dbDemo } from "@/firebaseDemo/democonfig";
 import { handleGoogleLogin } from "@/firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/config";
 
 const LoginScreen = () => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const LoginScreen = () => {
             const userCred = await signInWithEmailAndPassword(auth, email, password);
             const uid = userCred.user.uid;
 
-            const userRef = doc(dbDemo, "users", uid);
+            const userRef = doc(db, "users", uid);
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {

@@ -122,12 +122,15 @@ export default function TopBar({ cartCount = 2 }) {
 
                 <div className="w-full md:flex-1 min-w-0 max-w-full md:max-w-3xl">
                     <div className="relative">
-                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        {/* <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /> */}
                         <input
+                        disabled={true}
                             type="text"
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            className="w-full h-8 pl-9 pr-3 py-0 text-white text-sm leading-none border border-gray-300 rounded-md focus:outline-none"
+                            className="w-full h-8 pl-9 pr-3 py-0 text-white text-sm leading-none 
+
+                            rounded-md focus:outline-none"
                             placeholder=""
                             onFocus={() => setIsSearchFocused(true)}
                             onBlur={() => setIsSearchFocused(false)}
@@ -251,7 +254,7 @@ export default function TopBar({ cartCount = 2 }) {
                     closeModal={() => setShowLocationModal(false)}
                 />
             )}
-            {isSearchFocused && <SearchComponent/>}
+
         </>
     );
 }

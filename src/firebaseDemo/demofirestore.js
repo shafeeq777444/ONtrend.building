@@ -3,6 +3,7 @@ import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "
 import { dbDemo } from "./democonfig";
 import { serverTimestamp } from "firebase/firestore";
 import toast from "react-hot-toast";
+import { db } from "@/firebase/config";
 
 //************ utils ************
 const generateCartItemId = (productId, variant, addons, pricePerQunatity) => {
@@ -14,7 +15,7 @@ const generateCartItemId = (productId, variant, addons, pricePerQunatity) => {
 // whishlist
 export async function toggleToWishlist(userId, product) {
     try {
-        const wishlistRef = doc(dbDemo, "users", userId, "wishlist", product.id);
+        const wishlistRef = doc(db, "users", userId, "wishlist", product.id);
         const { reference, ...productWithoutReference } = product;
         const snap = await getDoc(wishlistRef);
 
@@ -36,7 +37,7 @@ export async function toggleToWishlist(userId, product) {
 }
 
 export const fetchWishlist = async (userId) => {
-    const colRef = collection(dbDemo, "users", userId, "wishlist");
+    const colRef = collection(db, "users", userId, "wishlist");
     const snapshot = await getDocs(colRef);
     console.log(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -58,9 +59,9 @@ export const addToCart = async (userId, product) => {
 
   const price = parseFloat(pricePerQuantity);
   const cartItemId = generateCartItemId(id, selectedVariant, selectedAddons, price);
-  const cartRef = doc(dbDemo, "users", userId, "cart", cartItemId);
+  const cartRef = doc(db, "users", userId, "cart", cartItemId);
 
-  const cartCollectionRef = collection(dbDemo, "users", userId, "cart");
+  const cartCollectionRef = collection(db, "users", userId, "cart");
   const cartSnapshot = await getDocs(cartCollectionRef);
 
   if (!cartSnapshot.empty) {
@@ -97,7 +98,7 @@ export const addToCart = async (userId, product) => {
 
 // -------- change/update cart qunatity (from cart page) ------------
 export const changeCartQuantity = async (userId, cartId, delta) => {
-    const cartRef = doc(dbDemo, "users", userId, "cart", cartId);
+    const cartRef = doc(db, "users", userId, "cart", cartId);
     const existingItem = await getDoc(cartRef);
 
     if (!existingItem.exists()) {
@@ -118,7 +119,7 @@ export const changeCartQuantity = async (userId, cartId, delta) => {
 
 //get all cart product
 export const getAllCartItems = async (userId) => {
-    const cartCollection = collection(dbDemo, "users", userId, "cart");
+    const cartCollection = collection(db, "users", userId, "cart");
     const snapshot = await getDocs(cartCollection);
 
     const items = snapshot.docs.map((doc) => ({
@@ -132,6 +133,6 @@ export const getAllCartItems = async (userId) => {
 
 //delete cart product
 export const removeFromCart = async (userId, productId) => {
-    const cartRef = doc(dbDemo, "users", userId, "cart", productId);
+    const cartRef = doc(db, "users", userId, "cart", productId);
     await deleteDoc(cartRef);
 };
