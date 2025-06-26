@@ -107,6 +107,7 @@ export async function fetchAllFoodVendors() {
 
 
 
+
 // fetch nearest discounted vendors
 // export async function getDiscountOfferFoodVendors() {
 //     try {

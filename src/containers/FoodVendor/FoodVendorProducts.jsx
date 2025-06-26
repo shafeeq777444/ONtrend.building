@@ -8,7 +8,7 @@ import FoodOrderDetailModal from "@/components/FoodVendor/FoodOrderDetailModal";
 import ModalPortal from "@/components/common/ModalPortal";
 import SkeltonFoodCard from "@/components/skeleton/SkeltonFoodCard";
 
-const FoodVendorProducts = ({ foodItems = [], venderLogo ,isLoading}) => {
+const FoodVendorProducts = ({ foodItems = [], venderLogo ,isLoading,isOnline}) => {
     // ****** states ******
     const [selectedItem, setSelectedItem] = useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -34,7 +34,7 @@ const FoodVendorProducts = ({ foodItems = [], venderLogo ,isLoading}) => {
     }
 
     return (
-        <div className=" py-2 px-2  ">
+        <div className=" py-2 px-2  scrollbar-hide">
             {/* Optional Title */}
             <div className="text-xl font-bold mb-4">&nbsp;</div>
 
@@ -43,6 +43,7 @@ const FoodVendorProducts = ({ foodItems = [], venderLogo ,isLoading}) => {
                     <FoodCardInVendor
                         key={item.id}
                         item={item}
+                        isOnline={isOnline}
                         venderLogo={venderLogo}
                         onClick={() => {
                             setSelectedItem(item);

@@ -8,6 +8,7 @@ import NearByFood from "../containers/FoodHome/Category/NearByFoodVendors"
 import NewVendors from "../containers/FoodHome/Category/NewVendors"
 import TopPicks from "../containers/FoodHome/Category/TopPicks"
 import FoodHomeHIgliteCarousel from "@/containers/FoodHome/FoodHomeHIgliteCarousel"
+import FoodSearchVendors from "@/components/foodHome/FoodSearchVendors"
 
 const RenderCategorySection = () => {
   const {categoryBar}=useSelector(state=>state.food)
@@ -37,9 +38,9 @@ const Food = () => {
   
  
   return (
-    <div className="mt-18">
+    <div className="mt-14">
+      <FoodSearchVendors/>
       {/* <FoodHomeHIgliteCarousel/> */}
-     {/* <FoodHighlites/> */}
      <FoodOffers/>
      {/* <TypeOfFoods/> */}
      <TopRated/>

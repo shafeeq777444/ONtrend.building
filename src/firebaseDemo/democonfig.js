@@ -19,7 +19,7 @@ const firebaseConfigDemo = {
 };
 
 // Initialize Firebase
-const appDemo = getApps().find(app => app.name === "demo") || initializeApp(firebaseConfigDemo, "demo");
+export const appDemo = getApps().find(app => app.name === "demo") || initializeApp(firebaseConfigDemo, "demo");
 
 export const auth = getAuth(appDemo);
 // ── CORRECTED: embed cacheSizeBytes inside persistentLocalCache ──

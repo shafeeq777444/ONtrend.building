@@ -34,6 +34,7 @@ export function useGetAllFoodVendors(lat, lng) {
     });
 }
 
+
 // getNearest Discount Provided Vendors
 // export function useGetNearestDiscountedVendors(lat, lng) {
 //     console.log(lat, "hook worked");
@@ -99,3 +100,5 @@ export function useGetAllFoodVendors(lat, lng) {
 //         enabled: false, // disable automatic fetch
 //     });
 // }
+
+// get

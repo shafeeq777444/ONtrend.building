@@ -26,18 +26,19 @@ createRoot(document.getElementById("root")).render(
   position="bottom-right"
   toastOptions={{
     style: {
-      background: "#ff3131",  // red background
+      // background: "#ff3131",  // red background
       color: "#ffffff",       // white text
     },
     success: {
       style: {
-        background: "#ff3131",  // example for success
+        background: "#ff3131", 
+          color: "#ffffff",  // example for success
       },
     },
     error: {
       style: {
-        background: "#ff3131",
-        color: "#ffffff",
+        // background: "#ff3131",
+        color: "#ff3131",
       },
     },
   }}

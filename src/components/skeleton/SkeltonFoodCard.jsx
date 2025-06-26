@@ -21,7 +21,7 @@ const FoodCardSkeleton = () => (
 const SkeltonFoodCard = () => {
   return (
     <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-      {Array.from({ length: 6 }).map((_, i) => (
+      {Array.from({ length: 12 }).map((_, i) => (
         <FoodCardSkeleton key={i} />
       ))}
     </div>

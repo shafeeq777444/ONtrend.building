@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { DrawerTrigger } from "@/components/ui/drawer";
 import FoodVendorDrawer from './FoodVendorDrawer';
 
-const FoodCardInVendor = ({ item, venderLogo, onClick }) => {
+const FoodCardInVendor = ({ item, venderLogo, onClick ,isOnline}) => {
   const [isImageError, setIsImageError] = useState(false);
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";

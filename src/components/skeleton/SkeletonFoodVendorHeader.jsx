@@ -2,7 +2,7 @@ import React from "react";
 
 const SkeletonFoodVendorHeader = () => {
   return (
-    <div className="fixed top-14 right-0 w-full z-10">
+    <div className="fixed top-14 right-0 w-full ">
       <div className="relative w-full h-[220px] md:h-[260px] overflow-hidden bg-gray-200 animate-pulse">
         {/* Top Controls */}
         <div className="absolute top-6 left-6 right-4 flex justify-between items-center">

@@ -28,6 +28,7 @@ const FoodVendor = () => {
 
     const { data: allFoodVendors,isLoading:getVendorLoading } = useGetAllFoodVendors(lat, lng);
     const currentVendor = allFoodVendors?.find((vendor) => vendor.id === vendorId);
+    console.log(currentVendor,"busy checl")
 
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
@@ -100,13 +101,13 @@ const FoodVendor = () => {
             <FoodVendorHeader isLoading={vendorCategoryLoading || getVendorLoading}  currentVendor={currentVendor} />
 
             {/* Scrollable Content */}
-            <div className="overflow-y-hidden bg-white rounded-t-2xl z-30 mt-70 scrollbar-hide ">
+            <div className="overflow-y-hidden bg-white rounded-t-2xl z-30 mt-80  scrollbar-hide ">
                 <div ref={productsRef} className="bg-white backdrop-blur-sm  shadow-xl p-4">
                     {/* Categories */}
                     <FoodVendorMealCategory isLoading={vendorCategoryLoading || getVendorLoading} categories={vendorCategories} selectedCategory={selectedVendorMealCategory} />
 
                     {/* Products */}
-                    <FoodVendorProducts isLoading={allProductsLoading || getVendorLoading} venderLogo={currentVendor?.image} foodItems={filteredFoods} isArabic={isArabic} />
+                    <FoodVendorProducts isLoading={allProductsLoading || getVendorLoading} isOnline={currentVendor?.isOnline} foodItems={filteredFoods} isArabic={isArabic} venderLogo={currentVendor?.image}/>
 
                     {/* Pagination */}
                     <PaginationButtons currentPageIndex={currentPageIndex} handleNext={handleNext} handlePrevious={handlePrevious} isArabic={isArabic} isFetchingNextPage={isFetchingNextPage} isNextDisabled={isNextDisabled} />

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DeliveryLocation from "../Location/DeliveryLocation";
 import { useTranslation } from "react-i18next";
+import SearchComponent from "./SearchComponent";
 
 export default function TopBar({ cartCount = 2 }) {
     const EXPIRY_DURATION = 1000 * 60 * 20;
@@ -25,6 +26,7 @@ export default function TopBar({ cartCount = 2 }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [inputText, setInputText] = useState("");
     const [debouncedInput, setDebouncedInput] = useState("");
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
     const isArabic = i18n.language === "ar";
 
     const placeholders = [
@@ -75,7 +77,6 @@ export default function TopBar({ cartCount = 2 }) {
     useEffect(() => {
         if (debouncedInput !== "") {
             console.log("Searching for:", debouncedInput);
-            
         }
     }, [debouncedInput]);
 
@@ -128,6 +129,8 @@ export default function TopBar({ cartCount = 2 }) {
                             onChange={(e) => setInputText(e.target.value)}
                             className="w-full h-8 pl-9 pr-3 py-0 text-white text-sm leading-none border border-gray-300 rounded-md focus:outline-none"
                             placeholder=""
+                            onFocus={() => setIsSearchFocused(true)}
+                            onBlur={() => setIsSearchFocused(false)}
                         />
                         {inputText === "" && (
                             <div
@@ -156,6 +159,8 @@ export default function TopBar({ cartCount = 2 }) {
                             const nextLang = i18n.language === "en" ? "ar" : "en";
                             i18n.changeLanguage(nextLang);
                             document.documentElement.dir = nextLang === "ar" ? "rtl" : "ltr";
+                             window.location.reload();
+
                         }}
                         className="w-10 h-10 text-sm font-semibold flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white"
                         title="Toggle Language"
@@ -163,20 +168,19 @@ export default function TopBar({ cartCount = 2 }) {
                         {i18n.language === "en" ? "AR" : "EN"}
                     </motion.button>
                     {[
-                        // { Icon: <PiGiftBold />, title: "Rewards" }, 
-                        { Icon: <FiHeart />, title: "Wishlist" }].map(
-                        ({ Icon, title }, idx) => (
-                            <motion.div
-                                onClick={() => navigate(title.toLowerCase())}
-                                key={idx}
-                                whileHover={{ scale: 1.04 }}
-                                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
-                                title={title}
-                            >
-                                {Icon}
-                            </motion.div>
-                        )
-                    )}
+                        // { Icon: <PiGiftBold />, title: "Rewards" },
+                        { Icon: <FiHeart />, title: "Wishlist" },
+                    ].map(({ Icon, title }, idx) => (
+                        <motion.div
+                            onClick={() => navigate(title.toLowerCase())}
+                            key={idx}
+                            whileHover={{ scale: 1.04 }}
+                            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
+                            title={title}
+                        >
+                            {Icon}
+                        </motion.div>
+                    ))}
                     <motion.div
                         onClick={() => navigate("/cart")}
                         whileHover={{ scale: 1.04 }}
@@ -210,15 +214,26 @@ export default function TopBar({ cartCount = 2 }) {
                         className="fixed top-20 right-0 w-3/4 h-screen bg-white z-40 shadow-lg p-6 flex flex-col space-y-6"
                     >
                         {[
-                            // "Rewards", 
-                            "Wishlist", "Cart", "Profile"].map((label, i) => (
+                            // "Rewards",
+                            "Wishlist",
+                            "Cart",
+                            "Profile",
+                        ].map((label, i) => (
                             <div
                                 key={i}
                                 className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
                                 onClick={() => setMenuOpen(false)}
                             >
                                 <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
-                                    {label === "Rewards" ? <PiGiftBold /> : label === "Wishlist" ? <FiHeart /> : label === "Cart" ? <HiOutlineShoppingCart /> : <FiUser />}
+                                    {label === "Rewards" ? (
+                                        <PiGiftBold />
+                                    ) : label === "Wishlist" ? (
+                                        <FiHeart />
+                                    ) : label === "Cart" ? (
+                                        <HiOutlineShoppingCart />
+                                    ) : (
+                                        <FiUser />
+                                    )}
                                 </div>
                                 <span>{label}</span>
                             </div>
@@ -227,7 +242,7 @@ export default function TopBar({ cartCount = 2 }) {
                 )}
             </AnimatePresence>
 
-            {(!location || !locationName || showLocationModal ) && (
+            {(!location || !locationName || showLocationModal) && (
                 <DeliveryLocation
                     setAddressExpiry={setAddressExpiry}
                     location={location}
@@ -236,6 +251,7 @@ export default function TopBar({ cartCount = 2 }) {
                     closeModal={() => setShowLocationModal(false)}
                 />
             )}
+            {isSearchFocused && <SearchComponent/>}
         </>
     );
 }

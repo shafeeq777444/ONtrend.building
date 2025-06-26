@@ -1,37 +1,17 @@
-// import { BrowserRouter, useRoutes } from "react-router-dom"
-// import routes from "./routes"
-
-// function AppRouter(){
-//   return useRoutes(routes)
-// }
-
-// function App() {
-//   const element=useRoutes(routes)
-//   console.log(element)
-//   return (
-//     <>
-//     <BrowserRouter>
-//    <AppRouter/>
-//     </BrowserRouter>
-    
-//     </>
-//   )
-// }
-
-// export default App
 
 App.jsx
 import { useRoutes } from 'react-router-dom';
 import Home from './pages/Home';
-import About from './pages/About';
+import About from './components/foodHome/FoodSearchVendors';
 import Food from './pages/Food';
-import Auth from './pages/Auth';
-import SignUP from './pages/SignUP';
-
 import MainLayout from './layouts/MainLayout';
 import FoodVender from './pages/FoodVender';
 import Whishlist from './pages/Whishlist';
 import Cart from './pages/Cart';
+import Login from './components/auth/Login';
+import AuthLayout from './components/auth/AuthLayout';
+import Sign from './components/auth/Signup';
+import Credential from './components/auth/Credential';
 
 
 export default function App() {
@@ -41,8 +21,6 @@ export default function App() {
       element: <MainLayout />, // Wrap all routes with Navbar
       children: [
         { index: true, element: <Home /> },
-        { path: 'auth', element: <Auth /> },
-        { path: 'auth/signup', element: <SignUP /> },
         { path: 'food', element: <Food /> },
         { path: 'food/:vendorId', element: <FoodVender /> },
         { path: 'wishlist', element: <Whishlist /> },
@@ -50,6 +28,13 @@ export default function App() {
         { path: 'about', element: <About /> },
       ],
     },
+    { path: 'auth', element: <AuthLayout /> ,
+          children:[
+            {index:true,element:<Login/>},
+            {path:'signup',element:<Sign/>},
+            {path:'credential',element:<Credential/>}
+          ]
+        },
 
   ]);
   return routes; // `useRoutes` returns the matching route component

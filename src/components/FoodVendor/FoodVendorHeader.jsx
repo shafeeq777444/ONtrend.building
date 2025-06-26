@@ -24,14 +24,16 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
   if (isLoading) return <SkeletonFoodVendorHeader />;
 
   return (
-    <div className="fixed top-14 right-0 w-full z-30">
+    <div className="fixed top-14 right-0 w-full scrollbar-hide">
       <div className="relative w-full h-[220px] md:h-[260px] overflow-hidden shadow-md">
         {/* Banner Image */}
         <img
           src={currentVendor?.bannerImage?.[1]}
           alt="Food Vendor Banner"
           loading="lazy"
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover ${
+            currentVendor?.isOnline === false ? "grayscale" : ""
+          }`}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = currentVendor?.bannerImage?.[0];
@@ -42,11 +44,11 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
         {/* Top Buttons */}
-        <div className={`absolute top-5 w-full px-4 flex justify-between items-center`}>
+        <div className="absolute top-5 w-full px-4 flex justify-between items-center">
           {/* Back Button */}
           <button
             onClick={() => navigate(-1)}
-            className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-md hover:bg-white transition-all duration-200"
+            className="bg-white/80 cursor-pointer backdrop-blur-md p-2 rounded-full shadow-md hover:bg-white transition-all duration-200"
             aria-label="Back"
           >
             <IoIosArrowBack
@@ -55,27 +57,39 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
           </button>
 
           {/* Share Button */}
-          <button
+          {/* <button
             onClick={handleShare}
             className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-md hover:bg-white transition-all duration-200"
             aria-label="Share"
           >
             <IoIosShareAlt className="w-5 h-5 text-gray-900" />
-          </button>
+          </button> */}
         </div>
 
         {/* Vendor Info */}
         <div className="absolute bottom-0 left-0 right-0 px-4 pb-4">
           <div className="flex items-end gap-4">
-            <img
-              src={currentVendor?.image}
-              alt={
-                isArabic
-                  ? currentVendor?.restaurantArabicName
-                  : currentVendor?.restaurantName
-              }
-              className="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md"
-            />
+            {/* Vendor Image + Busy Badge */}
+            <div className="relative">
+              <img
+                src={currentVendor?.image}
+                alt={
+                  isArabic
+                    ? currentVendor?.restaurantArabicName
+                    : currentVendor?.restaurantName
+                }
+                className={`w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md ${
+                  currentVendor?.isOnline === false ? "grayscale" : ""
+                }`}
+              />
+              {currentVendor?.isOnline === false && (
+                <div className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full shadow">
+                  {isArabic ? "مشغول" : "Busy"}
+                </div>
+              )}
+            </div>
+
+            {/* Vendor Details */}
             <div className="flex-1">
               <h2 className="text-white text-xl font-bold leading-tight line-clamp-1">
                 {isArabic
@@ -83,7 +97,7 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
                   : currentVendor?.restaurantName}
               </h2>
               <div className="flex items-center text-sm text-gray-200 mt-1">
-                <MapPin className={`w-4 h-4 ${isArabic?"-mr-2":"mr-1"} `} />
+                <MapPin className={`w-4 h-4 ${isArabic ? "-mr-2" : "mr-1"}`} />
                 <span className="line-clamp-1">{currentVendor?.businessAddress}</span>
               </div>
             </div>
