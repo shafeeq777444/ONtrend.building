@@ -12,12 +12,15 @@ import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import { useSelector } from "react-redux";
 import { useWishlist } from "@/hooksDemo/userMutation";
 import { useTranslation } from "react-i18next";
+import { auth } from "@/firebase/config";
+// import { auth } from "@/firebaseDemo/democonfig";
 
 const TopRestaurants = () => {
+    const currentUserId = auth.currentUser?.uid;
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 
-  const { data: wishlist = [] } = useWishlist("user12");
+  const { data: wishlist = [] } = useWishlist(currentUserId);
   const wishlistIds = useMemo(
     () => new Set(wishlist.map((item) => item.id)),
     [wishlist]

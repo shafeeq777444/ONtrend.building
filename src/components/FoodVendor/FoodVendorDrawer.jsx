@@ -3,9 +3,12 @@ import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { useAddToCart } from "@/hooksDemo/userMutation";
+import { useNavigate } from "react-router-dom";
+import { auth } from "@/firebase/config";
 
 
 const FoodVendorDrawer = ({ item, onClose }) => {
+  const navigate=useNavigate()
   const [selectedVariant, setSelectedVariant] = useState(() => {
     const keys = item?.variants ? Object.keys(item.variants) : [];
     return keys.length > 0 ? keys[0] : undefined;
@@ -167,6 +170,10 @@ const FoodVendorDrawer = ({ item, onClose }) => {
             <Button
               className="bg-red-600 text-white px-5 py-2 rounded-full font-semibold shadow-md"
                onClick={() => {
+                 if (!auth.currentUser) {
+      navigate("/auth");
+      return;
+    }
     const variant = selectedVariant;
     const selectedAddons = addons;
     const pricePerQuantity = getPricePerQuantity();

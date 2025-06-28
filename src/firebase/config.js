@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 // const app = initializeApp(firebaseConfig);
-const app = getApps().find(app => app.name === "[DEFAULT]") || initializeApp(firebaseConfig);
+export const app = getApps().find(app => app.name === "[DEFAULT]") || initializeApp(firebaseConfig);
 
 // getAnalytics(app);
 

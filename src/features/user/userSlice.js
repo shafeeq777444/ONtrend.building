@@ -1,7 +1,6 @@
+
 import { createSlice } from "@reduxjs/toolkit";
-// const defaultCenter = {
-//             lat: 23.588,
-//             lng: 58.3829}
+// import { auth } from "@/firebaseDemo/democonfig";
 
 const userSlice = createSlice({
     name: "user",
@@ -9,12 +8,15 @@ const userSlice = createSlice({
         location: { lat: "17.0195", lng: "54.0894" },
         locationName: "Salalah",
         wishlistIds: new Set(),
-        userId: "user12",
+        userId: null,
         language: "english",
     },
     reducers: {
         setLocation: (state, action) => {
             state.location = action.payload;
+        },
+          setUserID: (state, action) => {
+            state.userId = action.payload;
         },
         setLocationName: (state, action) => {
             state.locationName = action.payload;
@@ -25,5 +27,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setLocation, setLocationName, setWhishListIds } = userSlice.actions;
+export const { setLocation, setLocationName, setWhishListIds,setUserID } = userSlice.actions;
 export default userSlice.reducer;

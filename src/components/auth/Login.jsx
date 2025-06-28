@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import toast from "react-hot-toast";
-import { auth, dbDemo } from "@/firebaseDemo/democonfig";
+// import { auth, dbDemo } from "@/firebaseDemo/democonfig";
 import { handleGoogleLogin } from "@/firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/config";
+import { auth, db } from "@/firebase/config";
 
 const LoginScreen = () => {
     const navigate = useNavigate();
@@ -51,7 +51,7 @@ const LoginScreen = () => {
         }
     };
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="min-h-[80vh] flex items-center justify-center bg-white px-4">
             <motion.div
                 className="w-full max-w-md space-y-8"
                 initial={{ opacity: 0, y: 20 }}

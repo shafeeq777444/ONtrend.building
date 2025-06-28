@@ -7,28 +7,29 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
 } from "firebase/auth";
-import {  db } from "./config";
+import {  auth, db } from "./config";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, dbDemo } from "@/firebaseDemo/democonfig";
+// import { auth, dbDemo } from "@/firebaseDemo/democonfig";
 
 
 
 const fbProvider = new FacebookAuthProvider();
 
 //----------------------- Fetch current user Data ---------------------------
-export const fetchCurrentUserData = async ({setUserData,toast} ) => {
-      const currentUser = auth.currentUser;
-      console.log(currentUser)
-      if (currentUser) {
-        const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());
-        } else {
-          toast.error("No user data found in Firestore");
-        }
-      }
-    };
+export const fetchCurrentUserData = async () => {
+  const currentUser = auth.currentUser;
+  console.log(currentUser)
+  if (!currentUser) throw new Error("User not signed in");
+
+  const docRef = doc(db, "users", currentUser.uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    throw new Error("No user data found in Firestore");
+  }
+};
 
 // --------------- sign with google ------------------------------------------
 export const handleGoogleLogin = async ({toast,navigate}) => {

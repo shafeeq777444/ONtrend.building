@@ -12,7 +12,7 @@ import Login from './components/auth/Login';
 import AuthLayout from './components/auth/AuthLayout';
 import Sign from './components/auth/Signup';
 import Credential from './components/auth/Credential';
-import UserProdileModal from './components/auth/UserProdileModal';
+import UserProfileModal from './components/auth/UserProdileModal';
 
 
 
@@ -27,7 +27,7 @@ export default function App() {
         { path: 'food/:vendorId', element: <FoodVender /> },
         { path: 'wishlist', element: <Whishlist /> },
         { path: 'cart', element: <Cart /> },
-        { path: 'about', element: <UserProdileModal/> },
+        { path: 'about', element: <UserProfileModal/> },
       ],
     },
     { path: 'auth', element: <AuthLayout /> ,

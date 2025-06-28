@@ -14,9 +14,12 @@ import RestuarentCard from "../../../components/RestuarentCard";
 import { useSelector } from "react-redux";
 import { useWishlist } from "@/hooksDemo/userMutation";
 import { useTranslation } from "react-i18next";
+import { auth } from "@/firebase/config";
+// import { auth } from "@/firebaseDemo/democonfig";
 
 const NewVendors = () => {
-    const { data: wishlist = [] } = useWishlist("user12");
+      const currentUserId = auth.currentUser?.uid;
+    const { data: wishlist = [] } = useWishlist(currentUserId);
     const wishlistIds = useMemo(() => new Set(wishlist.map((item) => item.id)), [wishlist]);
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";

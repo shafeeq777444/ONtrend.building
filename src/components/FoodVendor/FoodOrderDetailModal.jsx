@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAddToCart } from "@/hooksDemo/userMutation";
 import { useSelector } from "react-redux";
+import { auth } from "@/firebase/config";
+import { useNavigate } from "react-router-dom";
 
 // Animation configs
 const backdropVariants = {
@@ -18,6 +20,8 @@ const modalVariants = {
 };
 
 const FoodOrderDetailModal = ({ item, onClose }) => {
+    const navigate = useNavigate();
+
     const [selectedVariant, setSelectedVariant] = useState(() => {
         const keys = item?.variants ? Object.keys(item.variants) : [];
         return keys.length > 0 ? keys[0] : undefined;
@@ -177,6 +181,10 @@ const FoodOrderDetailModal = ({ item, onClose }) => {
                         </div>
                         <Button
                             onClick={() => {
+                                if (!auth.currentUser) {
+                                    navigate("/auth");
+                                    return;
+                                }
                                 const variant = selectedVariant;
                                 const selectedAddons = addons;
                                 const pricePerQuantity = getPricePerQuantity();
@@ -188,7 +196,6 @@ const FoodOrderDetailModal = ({ item, onClose }) => {
                                     pricePerQuantity,
                                     quantity,
                                 });
-
 
                                 onClose();
                             }}

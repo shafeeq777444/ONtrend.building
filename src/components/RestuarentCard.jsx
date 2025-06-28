@@ -31,7 +31,7 @@ const RestaurantCard = ({ restaurant, topRestuarents = false, isLiked }) => {
         )}
 
         {/* Favorite Button */}
-        <div className="absolute top-2 left-2 z-30">
+        <div className={`absolute top-2  z-30 ${isArabic?"left-16":"right-2"}`}>
           <FavoriteButton product={restaurant} isLiked={isLiked} />
         </div>
 

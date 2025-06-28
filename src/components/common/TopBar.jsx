@@ -3,15 +3,20 @@
 import { FiMapPin, FiSearch, FiChevronDown, FiUser, FiHeart, FiX } from "react-icons/fi";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { PiGiftBold } from "react-icons/pi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import localforage from "localforage";
-import { setLocation, setLocationName } from "../../features/user/userSlice";
+import { setLocation, setLocationName, setUserID } from "../../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DeliveryLocation from "../Location/DeliveryLocation";
 import { useTranslation } from "react-i18next";
 import SearchComponent from "./SearchComponent";
+import UserProfileModal from "../auth/UserProdileModal";
+// import { auth } from "@/firebaseDemo/democonfig";
+// import LoginScreen from "../auth/Login";
+import PopupModal from "./PopupModal";
+import { auth } from "@/firebase/config";
 
 export default function TopBar({ cartCount = 2 }) {
     const EXPIRY_DURATION = 1000 * 60 * 20;
@@ -27,6 +32,11 @@ export default function TopBar({ cartCount = 2 }) {
     const [inputText, setInputText] = useState("");
     const [debouncedInput, setDebouncedInput] = useState("");
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const [showUserModal, setShowUserMOdal] = useState(false);
+    const [showUserReminderModal, setShowUserReminderModal] = useState(false);
+    const timeoutRef = useRef(null);
+    const intervalRef = useRef(null);
+
     const isArabic = i18n.language === "ar";
 
     const placeholders = [
@@ -37,6 +47,43 @@ export default function TopBar({ cartCount = 2 }) {
         t("placeholder.hotels"),
         t("placeholder.groceries"),
     ];
+const menuItems = [
+  { label: "Wishlist", icon: <FiHeart />, onClick: () => navigate("/wishlist") },
+  { label: "Cart", icon: <HiOutlineShoppingCart />, onClick: () => navigate("/cart") },
+  { label: "Profile", icon: <FiUser />, onClick: () => setShowUserMOdal(true) },
+];
+    useEffect(() => {
+        const showModalIfNotLoggedIn = () => {
+            const user = auth.currentUser;
+            if (!user) {
+                setShowUserReminderModal(true);
+            }
+        };
+
+        timeoutRef.current = setTimeout(() => {
+            showModalIfNotLoggedIn();
+
+            intervalRef.current = setInterval(() => {
+                showModalIfNotLoggedIn();
+            }, 1000 * 60 * 3 ); // Every 5 mins
+        }, 1000 * 60 * 1 ); // First after 1 min
+
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                 dispatch(setUserID(user.uid));
+                // Stop future modals if user logged in
+                clearTimeout(timeoutRef.current);
+                clearInterval(intervalRef.current);
+                setShowUserReminderModal(false);
+            }
+        });
+
+        return () => {
+            clearTimeout(timeoutRef.current);
+            clearInterval(intervalRef.current);
+            unsubscribe();
+        };
+    }, []);
 
     useEffect(() => {
         const checkAddressExpiry = async () => {
@@ -80,6 +127,14 @@ export default function TopBar({ cartCount = 2 }) {
         }
     }, [debouncedInput]);
 
+    const handleClick = () => {
+        const user = auth.currentUser;
+        if (user) {
+            setShowUserMOdal(true);
+        } else {
+            navigate("/auth"); // replace with your login route
+        }
+    };
     return (
         <>
             <motion.div
@@ -113,9 +168,20 @@ export default function TopBar({ cartCount = 2 }) {
 
                     <div className="md:hidden ml-auto text-white text-xl">
                         {menuOpen ? (
-                            <FiX onClick={() => setMenuOpen(false)} className="cursor-pointer" />
+                            <FiX
+                                onClick={() => {
+                                    setMenuOpen(false);
+                                }}
+                                className="cursor-pointer"
+                            />
                         ) : (
-                            <FiUser onClick={() => setMenuOpen(true)} className="cursor-pointer" />
+                            <FiUser
+                                onClick={() => {
+                                    setMenuOpen(true);
+
+                                }}
+                                className="cursor-pointer"
+                            />
                         )}
                     </div>
                 </div>
@@ -124,7 +190,7 @@ export default function TopBar({ cartCount = 2 }) {
                     <div className="relative">
                         {/* <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /> */}
                         <input
-                        disabled={true}
+                            disabled={true}
                             type="text"
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
@@ -162,8 +228,7 @@ export default function TopBar({ cartCount = 2 }) {
                             const nextLang = i18n.language === "en" ? "ar" : "en";
                             i18n.changeLanguage(nextLang);
                             document.documentElement.dir = nextLang === "ar" ? "rtl" : "ltr";
-                             window.location.reload();
-
+                            window.location.reload();
                         }}
                         className="w-10 h-10 text-sm font-semibold flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white"
                         title="Toggle Language"
@@ -193,7 +258,8 @@ export default function TopBar({ cartCount = 2 }) {
                         <HiOutlineShoppingCart className="text-xl" />
                         {cartCount > 0 && (
                             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5">
-                                {cartCount}
+                                {/* {cartCount} */}
+                                &nbsp;
                             </span>
                         )}
                     </motion.div>
@@ -201,6 +267,9 @@ export default function TopBar({ cartCount = 2 }) {
                         whileHover={{ scale: 1.04 }}
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
                         title="Profile"
+                        onClick={() => {
+                            handleClick();
+                        }}
                     >
                         <FiUser />
                     </motion.div>
@@ -216,31 +285,21 @@ export default function TopBar({ cartCount = 2 }) {
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="fixed top-20 right-0 w-3/4 h-screen bg-white z-40 shadow-lg p-6 flex flex-col space-y-6"
                     >
-                        {[
-                            // "Rewards",
-                            "Wishlist",
-                            "Cart",
-                            "Profile",
-                        ].map((label, i) => (
-                            <div
-                                key={i}
-                                className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
-                                onClick={() => setMenuOpen(false)}
-                            >
-                                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
-                                    {label === "Rewards" ? (
-                                        <PiGiftBold />
-                                    ) : label === "Wishlist" ? (
-                                        <FiHeart />
-                                    ) : label === "Cart" ? (
-                                        <HiOutlineShoppingCart />
-                                    ) : (
-                                        <FiUser />
-                                    )}
-                                </div>
-                                <span>{label}</span>
-                            </div>
-                        ))}
+                        {menuItems.map(({ label, icon, onClick }, i) => (
+  <div
+    key={i}
+    className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
+    onClick={() => {
+      onClick();
+      setMenuOpen(false);
+    }}
+  >
+    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
+      {icon}
+    </div>
+    <span>{label}</span>
+  </div>
+))}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -254,7 +313,8 @@ export default function TopBar({ cartCount = 2 }) {
                     closeModal={() => setShowLocationModal(false)}
                 />
             )}
-
+            {showUserModal && <UserProfileModal setShowUserMOdal={setShowUserMOdal} />}
+            {showUserReminderModal && <PopupModal setShowUserReminderModal={setShowUserReminderModal}/>}
         </>
     );
 }

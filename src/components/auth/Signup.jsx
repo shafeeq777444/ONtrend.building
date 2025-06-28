@@ -9,7 +9,8 @@ import CryptoJS from "crypto-js";
 import { handleGoogleLogin } from "@/firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, dbDemo } from "@/firebaseDemo/democonfig";
+import { auth } from "@/firebase/config";
+// import { auth, dbDemo } from "@/firebaseDemo/democonfig";
 
 
 const SignUP = () => {

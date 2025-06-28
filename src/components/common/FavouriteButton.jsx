@@ -4,13 +4,24 @@ import { FaHeart } from "react-icons/fa";
 import { Heart } from "lucide-react";
 import { useToggleWishlist } from "@/hooksDemo/userMutation";
 import { useState } from "react";
+import { auth } from "@/firebase/config";
+import { useNavigate } from "react-router-dom";
+// import { auth } from "@/firebaseDemo/democonfig";
 
 const FavoriteButton = ({ product, isLiked: initialLiked }) => {
+    const currentUserId = auth.currentUser?.uid;
   const [localLiked, setLocalLiked] = useState(initialLiked);
-  const { mutate: toggleWishlist, isPending } = useToggleWishlist("user12");
+  const { mutate: toggleWishlist, isPending } = useToggleWishlist(currentUserId);
+  const navigate=useNavigate()
 
   const handleClick = (e) => {
+    
+
     e.stopPropagation();
+     if (!auth.currentUser) {
+      navigate("/auth");
+      return;
+    }
 
     const previous = localLiked;
     setLocalLiked(!previous); // Optimistic UI update
@@ -25,8 +36,14 @@ const FavoriteButton = ({ product, isLiked: initialLiked }) => {
       disabled={isPending}
       onClick={handleClick}
       whileTap={{ scale: 0.85 }}
-      className={`absolute top-3 right-3 z-30 p-2 rounded-full shadow transition-all duration-150 ease-in 
-        ${localLiked ? "bg-white" : "bg-white/30 hover:bg-red-50"}`}
+      whileHover={{ scale: 1.1 }} // 🔁 Subtle zoom on hover
+      className={`absolute top-3 right-3 z-30 p-2 rounded-full shadow-md backdrop-blur
+        transition-all duration-300 ease-in-out 
+        ${
+          localLiked
+            ? "bg-white hover:bg-red-100"
+            : "bg-white/20 hover:bg-white/40"
+        }`}
       title={localLiked ? "Remove from Wishlist" : "Add to Wishlist"}
     >
       <motion.span

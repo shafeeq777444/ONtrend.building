@@ -162,7 +162,9 @@ const DeliveryLocation = ({
       <div className="bg-zinc-900 rounded-2xl shadow-xl w-full max-w-3xl mx-4 overflow-hidden relative border border-zinc-700">
         {location && locationName && (
           <button
-            onClick={closeModal}
+            onClick={()=>{closeModal
+              window.location.reload();
+            }}
             className="absolute top-4 right-4 p-2 rounded-full bg-zinc-800 text-gray-300 hover:text-red-500 border border-zinc-700 hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-110 active:scale-95"
             aria-label="Close modal"
           >
@@ -223,7 +225,9 @@ const DeliveryLocation = ({
 
           {location && locationName && (
             <button
-              onClick={closeModal}
+               onClick={()=>{closeModal
+              window.location.reload();
+            }}
               className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 shadow-md"
             >
               {isArabic ? "تم" : "Done"}

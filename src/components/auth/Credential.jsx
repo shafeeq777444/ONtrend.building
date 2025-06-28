@@ -13,10 +13,10 @@ import countryList from "country-list";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { appDemo, auth, dbDemo } from "@/firebaseDemo/democonfig";
+
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { getFriendlyFirebaseError } from "@/firebase/auth";
-import { db } from "@/firebase/config";
+import { app, db } from "@/firebase/config";
 
 const Credential = () => {
     const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Credential = () => {
   }
 
   try {
-    const auth = getAuth(appDemo);
+    const auth = getAuth(app);
     const currentUser = auth.currentUser;
 
     if (!currentUser) {
