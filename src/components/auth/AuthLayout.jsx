@@ -21,6 +21,7 @@ const AuthLayout = () => {
           src="/login/loginui.png"
           alt="testimonial"
           className="absolute inset-0 w-full h-full object-cover z-0"
+          loading="lazy"
         />
         <div className="z-20 absolute bottom-4 text-white max-w-xl px-6">
           {/* <p className="text-xl font-semibold">
