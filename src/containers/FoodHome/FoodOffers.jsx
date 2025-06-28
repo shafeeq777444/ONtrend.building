@@ -5,12 +5,14 @@ import "swiper/css";
 
 import { useGetAllOffers } from "../../hooks/queries/usePromotions";
 import SkeltonFoodOffer from "../../components/skeleton/SkeltonFoodOffer";
+import { useNavigate } from "react-router-dom";
 
 const FoodOffers = () => {
-  const { data: offers, isLoading } = useGetAllOffers();
+  const { data: offers = [], isLoading } = useGetAllOffers();
+  const navigate = useNavigate();
 
-  const offerImages = offers?.map((offer) => offer.imageUrl) || [];
-  const shuffledOfferImages = offerImages.sort(() => 0.5 - Math.random());
+  // Shuffle offers
+  const shuffledOffers = [...offers].sort(() => 0.5 - Math.random());
 
   if (isLoading) {
     return <SkeltonFoodOffer />;
@@ -24,7 +26,7 @@ const FoodOffers = () => {
         slidesPerView={2}
         spaceBetween={16}
         autoplay={{
-          delay: 2000, // time between slides
+          delay: 2000,
           disableOnInteraction: false,
         }}
         loop={true}
@@ -34,12 +36,13 @@ const FoodOffers = () => {
           1024: { slidesPerView: 4 },
         }}
       >
-        {shuffledOfferImages.map((imgSrc, index) => (
-          <SwiperSlide key={index}>
+        {shuffledOffers.map((offer, index) => (
+          <SwiperSlide key={offer.id || index}>
             <img
-              src={imgSrc}
+              // onClick={() => navigate(`/food/${offer.id}`)}
+              src={offer.imageUrl}
               alt={`offer-${index}`}
-              className="rounded-md w-full h-[160px] object-cover shadow"
+              className="rounded-md w-full h-[160px] object-cover shadow cursor-pointer"
               loading="lazy"
             />
           </SwiperSlide>
