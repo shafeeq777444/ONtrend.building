@@ -5,8 +5,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        location: { lat: "17.0195", lng: "54.0894" },
-        locationName: "Salalah",
+        location: { lat: "", lng: "" },
+        locationName: "Tap Here to Set Location",
         wishlistIds: new Set(),
         userId: null,
         language: "english",
