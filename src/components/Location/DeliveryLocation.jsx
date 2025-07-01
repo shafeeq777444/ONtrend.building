@@ -145,11 +145,22 @@ const DeliveryLocation = ({
   };
 
   useEffect(() => {
-    if (addressExpiry && !hasTriggeredRef.current) {
+  const checkIfLocationMissing = async () => {
+    const storedLocation = await localforage.getItem("userLocation");
+    const storedAddress = await localforage.getItem("userAddress");
+    const storedExp = await localforage.getItem("AddressExp");
+
+    const isMissing = !storedLocation || !storedAddress || !storedExp;
+
+    if (isMissing && !hasTriggeredRef.current) {
       hasTriggeredRef.current = true;
       userCurrentLocation();
     }
-  }, [addressExpiry]);
+  };
+
+  checkIfLocationMissing();
+}, []);
+
 
   if (loadError) return <div>{isArabic ? "خطأ في تحميل الخريطة" : "Error loading maps"}</div>;
   if (!isLoaded) return <div>{isArabic ? "جارٍ التحميل..." : "Loading..."}</div>;
