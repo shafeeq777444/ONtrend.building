@@ -59,6 +59,7 @@ const FoodDiscountDeals = () => {
 
       {/* Swiper Carousel */}
       <Swiper
+      
         dir={isArabic ? "rtl" : "ltr"}
         spaceBetween={1}
         slidesPerView={1.3}
@@ -73,10 +74,10 @@ const FoodDiscountDeals = () => {
           nextEl: ".swiper-button-next-food",
           prevEl: ".swiper-button-prev-food",
         }}
+        loop={true}
         autoplay={{
-          delay: 3000,
+          delay: 2500,
           disableOnInteraction: false,
-          pauseOnMouseEnter: true,
         }}
         freeMode={true}
         mousewheel={{

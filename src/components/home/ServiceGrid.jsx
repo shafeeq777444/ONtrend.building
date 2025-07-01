@@ -31,7 +31,7 @@ const ServiceGrid = () => {
               ? "ابحث عن إقامة مريحة، فنادق فاخرة، وشقق بأسعار مناسبة حسب الموقع والراحة"
               : "Find cozy stays, luxury hotels, and budget apartments tailored to your comfort and location needs"
           }
-          image="/gird/hotel2.jpg"
+          image="/gird/hotel4.jpg"
         />
       </div>
 

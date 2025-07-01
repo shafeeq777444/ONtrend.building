@@ -49,6 +49,7 @@ const SkeletonFoodDiscountDeals = () => {
 
       {/* Skeleton Swiper */}
       <Swiper
+      
         spaceBetween={1}
         slidesPerView={1.3}
         breakpoints={{

@@ -44,13 +44,13 @@ const DiscountDealsCard = ({ vendor, favorites, toggleFavorite }) => {
       onClick={() => navigate(`/food/${vendor.id}`)}
     >
       {vendor.discountValue && (
-        <div className="absolute top-2 right-2 bg-gradient-to-r from-red-600 to-red-400 text-white text-[11px] px-3 py-1 rounded-full shadow-lg z-20 font-semibold tracking-wide">
-          <span className="whitespace-nowrap">
-            {`${Math.floor(vendor.discountValue)}% ${isArabic ? "خصم" : "OFF"}`}
-            {vendor.selectedItems ? ` ${isArabic ? "• عناصر محددة" : "• Selected Items"}` : ""}
-          </span>
-        </div>
-      )}
+  <div className="absolute top-2 right-2 bg-gradient-to-r from-green-600 to-green-400 text-white text-[11px] px-3 py-1 rounded-full shadow-lg z-20 font-semibold tracking-wide">
+    <span className="whitespace-nowrap">
+      {`${Math.floor(vendor.discountValue)}% ${isArabic ? "خصم" : "OFF"}`}
+      {vendor.selectedItems ? ` ${isArabic ? "• عناصر محددة" : "• Selected Items"}` : ""}
+    </span>
+  </div>
+)}
 
       <div className="relative w-full aspect-[4/3]">
         <img

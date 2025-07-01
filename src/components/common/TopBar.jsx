@@ -17,6 +17,7 @@ import UserProfileModal from "../auth/UserProdileModal";
 // import LoginScreen from "../auth/Login";
 import PopupModal from "./PopupModal";
 import { auth } from "@/firebase/config";
+import SlideInLoginModal from "../auth/SlideInLoginModal";
 
 export default function TopBar({ cartCount = 2 }) {
     const EXPIRY_DURATION = 1000 * 60 * 20;
@@ -26,6 +27,8 @@ export default function TopBar({ cartCount = 2 }) {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    // ####### states ###################################
     const { location, locationName } = useSelector((state) => state.user);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -47,11 +50,11 @@ export default function TopBar({ cartCount = 2 }) {
         t("placeholder.hotels"),
         t("placeholder.groceries"),
     ];
-const menuItems = [
-  { label: "Wishlist", icon: <FiHeart />, onClick: () => navigate("/wishlist") },
-  { label: "Cart", icon: <HiOutlineShoppingCart />, onClick: () => navigate("/cart") },
-  { label: "Profile", icon: <FiUser />, onClick: () => setShowUserMOdal(true) },
-];
+    const menuItems = [
+        { label: "Wishlist", icon: <FiHeart />, onClick: () => navigate("/wishlist") },
+        { label: "Cart", icon: <HiOutlineShoppingCart />, onClick: () => navigate("/cart") },
+        { label: "Profile", icon: <FiUser />, onClick: () => setShowUserMOdal(true) },
+    ];
 
     // ################## useEFfect ###################################################
     useEffect(() => {
@@ -67,12 +70,12 @@ const menuItems = [
 
             intervalRef.current = setInterval(() => {
                 showModalIfNotLoggedIn();
-            }, 1000 * 60 * 3 ); // Every 5 mins
-        }, 1000 * 60 * 1 ); // First after 1 min
+            }, 1000 * 60 * 3); // Every 5 mins
+        }, 1000 * 60*1); // First after 1 min
 
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                 dispatch(setUserID(user.uid));
+                dispatch(setUserID(user.uid));
                 // Stop future modals if user logged in
                 clearTimeout(timeoutRef.current);
                 clearInterval(intervalRef.current);
@@ -87,24 +90,21 @@ const menuItems = [
         };
     }, []);
 
+    useEffect(() => {
+        const checkAndForceOpenLocation = async () => {
+            const addressExp = await localforage.getItem("AddressExp");
+            const address = await localforage.getItem("userAddress");
+            const location = await localforage.getItem("userLocation");
 
+            const isExpired = !addressExp || Date.now() - addressExp > EXPIRY_DURATION;
 
-   useEffect(() => {
-    const checkAndForceOpenLocation = async () => {
-        const addressExp = await localforage.getItem("AddressExp");
-        const address = await localforage.getItem("userAddress");
-        const location = await localforage.getItem("userLocation");
+            if (!address || !location || isExpired) {
+                setShowLocationModal(true);
+            }
+        };
 
-        const isExpired = !addressExp || Date.now() - addressExp > EXPIRY_DURATION;
-
-        if (!address || !location || isExpired) {
-            setShowLocationModal(true);
-        }
-    };
-
-    checkAndForceOpenLocation();
-}, []);
-
+        checkAndForceOpenLocation();
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -186,7 +186,6 @@ const menuItems = [
                             <FiUser
                                 onClick={() => {
                                     setMenuOpen(true);
-
                                 }}
                                 className="cursor-pointer"
                             />
@@ -294,20 +293,20 @@ const menuItems = [
                         className="fixed top-20 right-0 w-3/4 h-screen bg-white z-40 shadow-lg p-6 flex flex-col space-y-6"
                     >
                         {menuItems.map(({ label, icon, onClick }, i) => (
-  <div
-    key={i}
-    className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
-    onClick={() => {
-      onClick();
-      setMenuOpen(false);
-    }}
-  >
-    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
-      {icon}
-    </div>
-    <span>{label}</span>
-  </div>
-))}
+                            <div
+                                key={i}
+                                className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
+                                onClick={() => {
+                                    onClick();
+                                    setMenuOpen(false);
+                                }}
+                            >
+                                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
+                                    {icon}
+                                </div>
+                                <span>{label}</span>
+                            </div>
+                        ))}
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -322,7 +321,9 @@ const menuItems = [
                 />
             )}
             {showUserModal && <UserProfileModal setShowUserMOdal={setShowUserMOdal} />}
-            {showUserReminderModal && <PopupModal setShowUserReminderModal={setShowUserReminderModal}/>}
+            {showUserReminderModal && (
+                <SlideInLoginModal isOpen={showUserReminderModal} onClose={() => setShowUserReminderModal(false)} />
+            )}
         </>
     );
 }
