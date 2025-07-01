@@ -8,14 +8,17 @@ import { auth, db } from "@/firebase/config";
 import { handleGoogleLogin } from "@/firebase/auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SlideInLoginModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
 
   const handleLogin = async () => {
-    if (!email || !password) return toast.error("Enter email and password");
+    if (!email || !password) return toast.error(isArabic ? "أدخل البريد وكلمة المرور" : "Enter email and password");
     try {
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       const uid = userCred.user.uid;
@@ -24,18 +27,18 @@ const SlideInLoginModal = ({ isOpen, onClose }) => {
       if (userSnap.exists()) {
         const user = userSnap.data();
         if (user.number && user.nationality) {
-          toast.success("Welcome back!");
+          toast.success(isArabic ? "مرحبًا بعودتك!" : "Welcome back!");
           navigate("/");
         } else {
-          toast("Complete signup details");
+          toast(isArabic ? "يرجى إكمال بيانات التسجيل" : "Complete signup details");
           navigate("/auth/credential");
         }
         onClose();
       } else {
-        toast.error("User not found");
+        toast.error(isArabic ? "المستخدم غير موجود" : "User not found");
       }
     } catch (err) {
-      toast.error("Login failed: " + err.message);
+      toast.error((isArabic ? "فشل تسجيل الدخول: " : "Login failed: ") + err.message);
     }
   };
 
@@ -54,7 +57,9 @@ const SlideInLoginModal = ({ isOpen, onClose }) => {
 
           {/* Centered Popup Modal */}
           <motion.div
-            className="fixed top-1/2 left-1/2 w-full max-w-md transform -translate-x-1/2 -translate-y-1/2 bg-white z-50 shadow-xl rounded-xl p-6"
+            className={`fixed top-1/2 left-1/2 w-full max-w-md transform -translate-x-1/2 -translate-y-1/2 bg-white z-50 shadow-xl rounded-xl p-6 ${
+              isArabic ? "rtl text-right" : ""
+            }`}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -75,58 +80,66 @@ const SlideInLoginModal = ({ isOpen, onClose }) => {
             </div>
 
             {/* Heading */}
-            <h2 className="text-xl font-semibold text-center mb-2">Login to Continue</h2>
+            <h2 className="text-xl font-semibold text-center mb-2">
+              {isArabic ? "تسجيل الدخول للمتابعة" : "Login to Continue"}
+            </h2>
             <p className="text-sm text-center text-gray-500 mb-6">
-              Quick access to your cravings, now simpler.
+              {isArabic
+                ? "وصول سريع إلى طلباتك، بسهولة أكبر."
+                : "Quick access to your cravings, now simpler."}
             </p>
 
             {/* Form */}
             <div className="space-y-4">
               <input
                 type="email"
-                placeholder="Email"
+                placeholder={isArabic ? "البريد الإلكتروني" : "Email"}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                dir={isArabic ? "rtl" : "ltr"}
               />
               <input
                 type="password"
-                placeholder="Password"
+                placeholder={isArabic ? "كلمة المرور" : "Password"}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                dir={isArabic ? "rtl" : "ltr"}
               />
-              <div className="text-right text-sm text-red-500 cursor-pointer">
-                Forgot Password?
+              <div className="text-sm text-red-500 cursor-pointer text-right">
+                {isArabic ? "هل نسيت كلمة المرور؟" : "Forgot Password?"}
               </div>
 
               <button
                 className="w-full bg-red-600 text-white py-2 rounded-full hover:bg-red-700 transition"
                 onClick={handleLogin}
               >
-                Sign In
+                {isArabic ? "تسجيل الدخول" : "Sign In"}
               </button>
             </div>
 
             {/* Divider */}
             <div className="flex items-center my-4">
               <hr className="flex-1 border-gray-300" />
-              <span className="mx-2 text-gray-400 text-sm">OR</span>
+              <span className="mx-2 text-gray-400 text-sm">{isArabic ? "أو" : "OR"}</span>
               <hr className="flex-1 border-gray-300" />
             </div>
 
             {/* Google Login */}
             <button
               onClick={() => handleGoogleLogin({ navigate, toast })}
-              className="w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-full hover:bg-gray-100 transition"
+              className={`w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-full hover:bg-gray-100 transition ${
+                isArabic ? "flex-row-reverse" : ""
+              }`}
             >
               <FaGoogle className="text-red-500" />
-              <span>Continue with Google</span>
+              <span>{isArabic ? "المتابعة باستخدام جوجل" : "Continue with Google"}</span>
             </button>
 
             {/* Sign Up Redirect */}
             <p className="text-center text-sm mt-6">
-              Don't have an account?{" "}
+              {isArabic ? "ليس لديك حساب؟" : "Don't have an account?"}{" "}
               <span
                 className="text-red-500 font-semibold cursor-pointer"
                 onClick={() => {
@@ -134,7 +147,7 @@ const SlideInLoginModal = ({ isOpen, onClose }) => {
                   navigate("/auth/signup");
                 }}
               >
-                Sign Up
+                {isArabic ? "سجّل الآن" : "Sign Up"}
               </span>
             </p>
           </motion.div>

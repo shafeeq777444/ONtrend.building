@@ -5,12 +5,15 @@ import { Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
 import VendorModal from "@/components/foodHome/FoodSearchCard";
 import { TypeAnimation } from "react-type-animation";
+import { useTranslation } from "react-i18next";
 import "swiper/css";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
 
 const FoodSearchGridCard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
 
   return (
     <>
@@ -44,21 +47,36 @@ const FoodSearchGridCard = () => {
         </Swiper>
 
         {/* Center Text and Button */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 space-y-4">
+        <div
+          className={`absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 space-y-4 ${
+            isArabic ? "rtl" : ""
+          }`}
+        >
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
             <TypeAnimation
-              sequence={[
-                "Find the best bites near you",
-                2000,
-                "Taste the trendiest food spots",
-                2000,
-                "Order now from top vendors",
-                2000,
-              ]}
+              sequence={
+                isArabic
+                  ? [
+                      "ابحث عن أفضل الأطعمة من حولك",
+                      2000,
+                      "استمتع بأشهى الأماكن العصرية",
+                      2000,
+                      "اطلب الآن من أفضل البائعين",
+                      2000,
+                    ]
+                  : [
+                      "Find the best bites near you",
+                      2000,
+                      "Taste the trendiest food spots",
+                      2000,
+                      "Order now from top vendors",
+                      2000,
+                    ]
+              }
               wrapper="h2"
               speed={50}
               className="text-white text-2xl sm:text-4xl md:text-5xl leading-snug drop-shadow-md"
@@ -67,17 +85,19 @@ const FoodSearchGridCard = () => {
           </motion.div>
 
           <motion.button
-  onClick={() => setModalOpen(true)}
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  className="flex items-center justify-center gap-2 w-[220px] sm:w-[260px] bg-white text-black px-6 py-3 rounded-full text-sm sm:text-base font-semibold shadow-lg relative overflow-hidden"
->
-  <Search className="w-4 h-4" />
-  <span className="relative">
-    Search Vendors
-    <span className="absolute -right-2 top-0 h-full w-[2px] bg-black animate-blink" />
-  </span>
-</motion.button>
+            onClick={() => setModalOpen(true)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`flex items-center justify-center gap-2 w-[220px] sm:w-[260px] bg-white text-black px-6 py-3 rounded-full text-sm sm:text-base font-semibold shadow-lg relative overflow-hidden ${
+              isArabic ? "flex-row-reverse" : ""
+            }`}
+          >
+            <Search className="w-4 h-4" />
+            <span className="relative">
+              {isArabic ? "بحث عن بائعين" : "Search Vendors"}
+              <span className="absolute -right-2 top-0 h-full w-[2px] bg-black animate-blink" />
+            </span>
+          </motion.button>
         </div>
       </motion.div>
 

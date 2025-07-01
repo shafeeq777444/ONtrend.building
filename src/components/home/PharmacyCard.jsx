@@ -10,7 +10,8 @@ const PharmacyCard = ({ pharmacy }) => {
   const isArabic = i18n.language === "ar";
 
   const {
-    name,
+    restaurantName,
+    restaurantArabicName,
     bannerImage,
     image,
     isOnline,
@@ -20,8 +21,8 @@ const PharmacyCard = ({ pharmacy }) => {
     totalRatings,
   } = pharmacy;
 
-  const averageRating =
-    Ratings && totalRatings ? Ratings / totalRatings : 0;
+  const averageRating = Ratings && totalRatings ? Ratings / totalRatings : 0;
+  const displayName = isArabic ? restaurantArabicName : restaurantName;
 
   return (
     <div className="p-2 w-full">
@@ -30,7 +31,7 @@ const PharmacyCard = ({ pharmacy }) => {
         <div className="relative h-40 w-full">
           <img
             src={bannerImage?.[0]}
-            alt={name}
+            alt={displayName}
             loading="lazy"
             className="w-full h-full object-cover"
           />
@@ -45,7 +46,7 @@ const PharmacyCard = ({ pharmacy }) => {
             <div className="absolute top-2 left-2 w-10 h-10 rounded-full border border-white overflow-hidden z-20 shadow">
               <img
                 src={image}
-                alt={`${name} logo`}
+                alt={`${displayName} logo`}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -59,9 +60,9 @@ const PharmacyCard = ({ pharmacy }) => {
             </div>
           )}
 
-          <div className="absolute bottom-2 left-2 z-20">
+          <div className={`absolute bottom-2 z-20 ${!isArabic?"left-2 " : "right-2"}`}>
             <h3 className="text-white text-sm font-semibold drop-shadow">
-              {name}
+              {displayName}
             </h3>
           </div>
         </div>

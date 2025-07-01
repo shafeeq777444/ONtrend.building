@@ -5,18 +5,17 @@ import { FaGoogle, FaApple, FaFacebookF } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import CryptoJS from "crypto-js";
-import { handleGoogleLogin } from "@/firebase/auth";
+import { useTranslation } from "react-i18next";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth } from "@/firebase/config";
-// import { auth, dbDemo } from "@/firebaseDemo/democonfig";
-
+import { handleGoogleLogin } from "@/firebase/auth";
+import { auth, db } from "@/firebase/config";
 
 const SignUP = () => {
-  const secretKey =import.meta.env.VITE_CRYPTO_SECRET ||""
-  console.log(secretKey)
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const navigate = useNavigate();
+  const secretKey = import.meta.env.VITE_CRYPTO_SECRET || "";
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,62 +33,54 @@ const SignUP = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    const { firstName, lastName, email, password } = formData;
 
-  const { firstName, lastName, email, password } = formData;
-
-  if (firstName.trim().length < 3) {
-    toast.error("First name too short");
-    return;
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    toast.error("Invalid email");
-    return;
-  }
-
-  if (password.length < 6) {
-    toast.error("Password too short");
-    return;
-  }
-
-  try {
-    // 1. 🔐 Create Firebase Auth User
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    const uid = userCred.user.uid;
-
-    // 2. 📝 Save initial profile info in Firestore
-    const userDoc = {
-      role: "User",
-      firstName,
-      lastName,
-      email,
-      profileImageUrl: "",
-      timeStamp: serverTimestamp(),
-      // phone & nationality will be updated later
-    };
-
-    await setDoc(doc(db, "users", uid), userDoc);
-
-    // 3. ✅ Redirect to credential page for phone & nationality
-    toast.success("Signup successful");
-    navigate("/auth/credential");
-
-  } catch (error) {
-    console.error("Signup error:", error);
-    if (error.code === "auth/email-already-in-use") {
-      toast.error("Email already registered");
-    } else {
-      toast.error("Signup failed");
+    if (firstName.trim().length < 3) {
+      toast.error(isArabic ? "الاسم قصير جدًا" : "First name too short");
+      return;
     }
-  }
-};
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error(isArabic ? "بريد إلكتروني غير صالح" : "Invalid email");
+      return;
+    }
 
+    if (password.length < 6) {
+      toast.error(isArabic ? "كلمة المرور قصيرة جدًا" : "Password too short");
+      return;
+    }
+
+    try {
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCred.user.uid;
+
+      const userDoc = {
+        role: "User",
+        firstName,
+        lastName,
+        email,
+        profileImageUrl: "",
+        timeStamp: serverTimestamp(),
+      };
+
+      await setDoc(doc(db, "users", uid), userDoc);
+
+      toast.success(isArabic ? "تم التسجيل بنجاح" : "Signup successful");
+      navigate("/auth/credential");
+    } catch (error) {
+      console.error("Signup error:", error);
+      if (error.code === "auth/email-already-in-use") {
+        toast.error(isArabic ? "البريد الإلكتروني مسجل بالفعل" : "Email already registered");
+      } else {
+        toast.error(isArabic ? "فشل في التسجيل" : "Signup failed");
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+    <div className={`min-h-screen flex items-center justify-center bg-white px-4 ${isArabic ? "rtl" : ""}`} dir={isArabic ? "rtl" : "ltr"}>
       <motion.div
         className="w-full max-w-md space-y-8"
         initial={{ opacity: 0, y: 20 }}
@@ -113,10 +104,13 @@ const SignUP = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-         <h1 className="text-xl font-semibold text-gray-800">Let’s Get You Set Up</h1>
-
-          <p className="text-sm text-gray-400 mt-2">
-            Create your account and start your cravings journey with onTrend
+          <h1 className="text-xl font-semibold text-gray-800">
+            {isArabic ? "هيا بنا نبدأ" : "Let’s Get You Set Up"}
+          </h1>
+          <p className="text-sm text-gray-400 mt-2 leading-relaxed">
+            {isArabic
+              ? "أنشئ حسابك وابدأ رحلتك مع onTrend"
+              : "Create your account and start your cravings journey with onTrend"}
           </p>
         </motion.div>
 
@@ -128,11 +122,11 @@ const SignUP = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-row-reverse md:flex-row">
             <input
               type="text"
               name="firstName"
-              placeholder="First Name"
+              placeholder={isArabic ? "الاسم الأول" : "First Name"}
               value={formData.firstName}
               onChange={handleChange}
               className="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -140,7 +134,7 @@ const SignUP = () => {
             <input
               type="text"
               name="lastName"
-              placeholder="Last Name (optional)"
+              placeholder={isArabic ? "الاسم الأخير (اختياري)" : "Last Name (optional)"}
               value={formData.lastName}
               onChange={handleChange}
               className="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -149,7 +143,7 @@ const SignUP = () => {
           <input
             type="email"
             name="email"
-            placeholder="Email address"
+            placeholder={isArabic ? "البريد الإلكتروني" : "Email address"}
             value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -157,7 +151,7 @@ const SignUP = () => {
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder={isArabic ? "كلمة المرور" : "Password"}
             value={formData.password}
             onChange={handleChange}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -169,7 +163,7 @@ const SignUP = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
           >
-            Create Account
+            {isArabic ? "إنشاء الحساب" : "Create Account"}
           </motion.button>
         </motion.form>
 
@@ -180,12 +174,12 @@ const SignUP = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          Already have an account?{" "}
+          {isArabic ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
           <span
             className="text-red-500 font-semibold cursor-pointer"
             onClick={() => navigate("/auth")}
           >
-            Login
+            {isArabic ? "تسجيل الدخول" : "Login"}
           </span>
         </motion.p>
 
@@ -195,11 +189,15 @@ const SignUP = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <p className="text-center text-sm text-gray-500 mb-3">Or sign up with</p>
+          <p className="text-center text-sm text-gray-500 mb-3">
+            {isArabic ? "أو سجل عبر" : "Or sign up with"}
+          </p>
           <div className="flex justify-center gap-4">
             <button
-            onClick={()=>handleGoogleLogin({navigate,toast})}
-             type="button" className="p-3 bg-gray-100 rounded-full hover:bg-gray-200 text-lg">
+              onClick={() => handleGoogleLogin({ navigate, toast })}
+              type="button"
+              className="p-3 bg-gray-100 rounded-full hover:bg-gray-200 text-lg"
+            >
               <FaGoogle />
             </button>
             <button type="button" className="p-3 bg-gray-100 rounded-full hover:bg-gray-200 text-lg">
