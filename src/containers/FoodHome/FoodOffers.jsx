@@ -39,6 +39,7 @@ const FoodOffers = () => {
         {shuffledOffers.map((offer, index) => (
           <SwiperSlide key={offer.id || index}>
             <img
+            onClick={()=>{navigate(`/food/foodDiscountVendor/${offer?.discountValue}`)}}
               // onClick={() => navigate(`/food/${offer.id}`)}
               src={offer.imageUrl}
               alt={`offer-${index}`}

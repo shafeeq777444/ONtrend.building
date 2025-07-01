@@ -54,7 +54,7 @@ export async function fetchAllTopVendors() {
     }
 }
 
-// fetchAllFoodVendors-----(added:distance,estimate time)(small scale no issue)(large scale change:separe in each vendor type model)
+// fetchAllFoodVendors-----(added:distance,estimate time)(small scale no issue)(large scale change:separe in each vendor type model)(use:food home)
 export async function fetchAllFoodVendors() {
     try {
         const usersRef = collection(db, "users");
@@ -103,6 +103,8 @@ export async function fetchAllFoodVendors() {
         return []; // return empty array on failure
     }
 }
+
+
 
 
 

@@ -13,6 +13,7 @@ import AuthLayout from './components/auth/AuthLayout';
 import Sign from './components/auth/Signup';
 import Credential from './components/auth/Credential';
 import UserProfileModal from './components/auth/UserProdileModal';
+import FoodVendorDiscount from './pages/FoodVendorDiscount';
 
 
 
@@ -25,6 +26,7 @@ export default function App() {
         { index: true, element: <Home /> },
         { path: 'food', element: <Food /> },
         { path: 'food/:vendorId', element: <FoodVender /> },
+        { path: 'food/foodDiscountVendor/:discountValue', element: <FoodVendorDiscount/> },
         { path: 'wishlist', element: <Whishlist /> },
         { path: 'cart', element: <Cart /> },
         { path: 'about', element: <UserProfileModal/> },
