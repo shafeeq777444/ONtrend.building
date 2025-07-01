@@ -8,11 +8,18 @@ import SkeltonFoodOffer from "../../components/skeleton/SkeltonFoodOffer";
 import { useNavigate } from "react-router-dom";
 
 const FoodOffers = () => {
-  const { data: offers = [], isLoading } = useGetAllOffers();
+  const { data: offersData = [], isLoading } = useGetAllOffers();
   const navigate = useNavigate();
 
+  // Sort offers in ascending order based on discountValue
+const offers = [...offersData].sort((a, b) => {
+  const discountA = a?.discountValue || 0;
+  const discountB = b?.discountValue || 0;
+  return discountA - discountB;
+});
+
   // Shuffle offers
-  const shuffledOffers = [...offers].sort(() => 0.5 - Math.random());
+  // const shuffledOffers = [...offers].sort(() => 0.5 - Math.random());
 
   if (isLoading) {
     return <SkeltonFoodOffer />;
@@ -36,11 +43,10 @@ const FoodOffers = () => {
           1024: { slidesPerView: 4 },
         }}
       >
-        {shuffledOffers.map((offer, index) => (
+        {offers.map((offer, index) => (
           <SwiperSlide key={offer.id || index}>
             <img
             onClick={()=>{navigate(`/food/foodDiscountVendor/${offer?.discountValue}`)}}
-              // onClick={() => navigate(`/food/${offer.id}`)}
               src={offer.imageUrl}
               alt={`offer-${index}`}
               className="rounded-md w-full h-[160px] object-cover shadow cursor-pointer"

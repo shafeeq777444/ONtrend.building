@@ -52,6 +52,8 @@ const menuItems = [
   { label: "Cart", icon: <HiOutlineShoppingCart />, onClick: () => navigate("/cart") },
   { label: "Profile", icon: <FiUser />, onClick: () => setShowUserMOdal(true) },
 ];
+
+    // ################## useEFfect ###################################################
     useEffect(() => {
         const showModalIfNotLoggedIn = () => {
             const user = auth.currentUser;
@@ -85,18 +87,24 @@ const menuItems = [
         };
     }, []);
 
-    useEffect(() => {
-        const checkAddressExpiry = async () => {
-            const addressExp = await localforage.getItem("AddressExp");
-            const address = await localforage.getItem("userAddress");
-            if (!address || !addressExp || Date.now() - addressExp > EXPIRY_DURATION) {
-                setAddressExpiry(true);
-            } else {
-                setAddressExpiry(false);
-            }
-        };
-        checkAddressExpiry();
-    }, []);
+
+
+   useEffect(() => {
+    const checkAndForceOpenLocation = async () => {
+        const addressExp = await localforage.getItem("AddressExp");
+        const address = await localforage.getItem("userAddress");
+        const location = await localforage.getItem("userLocation");
+
+        const isExpired = !addressExp || Date.now() - addressExp > EXPIRY_DURATION;
+
+        if (!address || !location || isExpired) {
+            setShowLocationModal(true);
+        }
+    };
+
+    checkAndForceOpenLocation();
+}, []);
+
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
