@@ -6,9 +6,8 @@ const LazyImage = ({ src, alt, className, placeholder = "/extras/imageicon.png" 
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
       {!loaded && (
-        <img
-          src={placeholder}
-          alt="loading"
+        <div
+
           className="absolute inset-0 w-full h-full object-cover blur-sm scale-105 transition-opacity duration-300"
         />
       )}
