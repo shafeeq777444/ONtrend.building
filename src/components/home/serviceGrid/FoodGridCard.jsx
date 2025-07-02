@@ -5,6 +5,7 @@ import { Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "swiper/css";
+import LazyImage from "@/components/common/LazyImage";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
 
@@ -33,7 +34,7 @@ const FoodGridCard = () => {
                 >
                     {images.map((img, i) => (
                         <SwiperSlide key={i}>
-                            <img src={img} alt={`food-${i}`} className="object-cover w-full h-full" />
+                            <LazyImage src={img} alt={`food-${i}`} />
                             <div className="absolute inset-0 bg-black/20" />
                         </SwiperSlide>
                     ))}
@@ -45,13 +46,13 @@ const FoodGridCard = () => {
                 <div className="bg-white/20 border border-white/40 cursor-default px-3 py-1 text-xs rounded-full group-hover:opacity-90 hover:opacity-100 duration-300 ease-in transition-all">
                     {isArabic ? "أفضل طعام للأبد" : "BEST FOOD FOREVER"}
                 </div>
-               <div
-    className={`bg-white text-black cursor-pointer rounded-full p-2 opacity-0 group-hover:opacity-90 duration-300 ease-in transition-all hover:bg-black hover:text-white 
+                <div
+                    className={`bg-white text-black cursor-pointer rounded-full p-2 opacity-0 group-hover:opacity-90 duration-300 ease-in transition-all hover:bg-black hover:text-white 
         ${isArabic ? "hover:rotate-[-45deg]" : "hover:rotate-45"}
     `}
->
-    <ArrowUpRight size={20} className={isArabic ? "scale-x-[-1]" : ""} />
-</div>
+                >
+                    <ArrowUpRight size={20} className={isArabic ? "scale-x-[-1]" : ""} />
+                </div>
             </div>
 
             {/* Main Heading */}

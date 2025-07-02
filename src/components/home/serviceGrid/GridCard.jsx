@@ -1,3 +1,4 @@
+import LazyImage from "@/components/common/LazyImage";
 import { ArrowUpRight } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next"; // ✅ Add this
@@ -9,7 +10,7 @@ const GridCard = ({ title, description, image }) => {
     return (
         <div className="relative group w-full h-full cursor-pointer overflow-hidden rounded-lg shadow-md">
             {/* Image */}
-            <img className="w-full h-full object-cover" src={image} alt={title} />
+                <LazyImage src={image} alt={title} />
 
             {/* Dark overlay */}
             <div className="absolute inset-0 bg-black/20 bg-opacity-30 group-hover:bg-opacity-50 transition duration-300" />

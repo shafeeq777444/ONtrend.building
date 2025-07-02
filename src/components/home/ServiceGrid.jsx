@@ -18,7 +18,7 @@ const ServiceGrid = () => {
       </div>
 
       {/* Grocery */}
-      <div className="lg:row-span-3 bg-green-300 rounded-md flex items-center justify-center text-white overflow-hidden">
+      <div className="lg:row-span-3  rounded-md flex items-center justify-center text-white overflow-hidden">
         <GroceryGridCard />
       </div>
 

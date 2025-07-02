@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import LazyImage from '@/components/common/LazyImage';
 
 const GroceryGridCard = () => {
   const { i18n } = useTranslation();
@@ -9,11 +10,16 @@ const GroceryGridCard = () => {
   return (
     <div className="relative group w-full h-full cursor-pointer overflow-hidden rounded-lg shadow-md">
       {/* Image */}
-      <img
+      {/* <img
         className="w-full h-full object-cover"
         src="/gird/grocery2.jpg"
         alt="Grocery"
-      />
+      /> */}
+      <LazyImage
+  src="/gird/grocery2.jpg"
+  alt="Grocery"
+  className="w-full h-full"
+/>
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/20 group-hover:bg-opacity-50 transition duration-300" />
