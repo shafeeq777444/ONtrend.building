@@ -70,7 +70,7 @@ const ServiceGrid = () => {
           //     ? "احجز سيارتك بسهولة — من السيارات الصغيرة إلى السيدان الفاخرة والدفع الرباعي"
           //     : "Book your ride with ease — from hatchbacks to premium sedans and SUVs."
           // }
-          image="/gird/car2.png"
+          image="/gird/car.jpeg"
         />
       </div>
 

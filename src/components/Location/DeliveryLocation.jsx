@@ -110,9 +110,6 @@ const DeliveryLocation = ({
       },
       (error) => {
         console.error("Error watching location:", error);
-        // toast.error(
-        //   isArabic ? "تعذر تحديد موقعك الحالي" : "Unable to retrieve your location."
-        // );
       },
       {
         enableHighAccuracy: true,
@@ -145,52 +142,56 @@ const DeliveryLocation = ({
   };
 
   useEffect(() => {
-  const checkIfLocationMissing = async () => {
-    const storedLocation = await localforage.getItem("userLocation");
-    const storedAddress = await localforage.getItem("userAddress");
-    const storedExp = await localforage.getItem("AddressExp");
+    const checkIfLocationMissing = async () => {
+      const storedLocation = await localforage.getItem("userLocation");
+      const storedAddress = await localforage.getItem("userAddress");
+      const storedExp = await localforage.getItem("AddressExp");
 
-    const isMissing = !storedLocation || !storedAddress || !storedExp;
+      const isMissing = !storedLocation || !storedAddress || !storedExp;
 
-    if (isMissing && !hasTriggeredRef.current) {
-      hasTriggeredRef.current = true;
-      userCurrentLocation();
-    }
-  };
+      if (isMissing && !hasTriggeredRef.current) {
+        hasTriggeredRef.current = true;
+        userCurrentLocation();
+      }
+    };
 
-  checkIfLocationMissing();
-}, []);
+    checkIfLocationMissing();
+  }, []);
 
-
-  if (loadError) return <div>{isArabic ? "خطأ في تحميل الخريطة" : "Error loading maps"}</div>;
-  if (!isLoaded) return <div>{isArabic ? "جارٍ التحميل..." : "Loading..."}</div>;
+  if (loadError)
+    return <div>{isArabic ? "خطأ في تحميل الخريطة" : "Error loading maps"}</div>;
+  if (!isLoaded)
+    return <div>{isArabic ? "جارٍ التحميل..." : "Loading..."}</div>;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       dir={isArabic ? "rtl" : "ltr"}
     >
-      <div className="bg-zinc-900 rounded-2xl shadow-xl w-full max-w-3xl mx-4 overflow-hidden relative border border-zinc-700">
-        {location && locationName && (
-          <button
-            onClick={()=>{closeModal
-              window.location.reload();
-            }}
-            className="absolute top-4 right-4 p-2 rounded-full bg-zinc-800 text-gray-300 hover:text-red-500 border border-zinc-700 hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-110 active:scale-95"
-            aria-label="Close modal"
-          >
-            <X size={20} />
-          </button>
-        )}
+      <div className="bg-zinc-900 rounded-2xl shadow-xl w-full sm:max-w-xl max-w-lg h-[95vh] max-h-screen mx-2 sm:mx-4 overflow-hidden border border-zinc-700 flex flex-col">
+        <div className="flex-shrink-0 relative">
+          {location && locationName && (
+            <button
+              onClick={() => {
+                closeModal();
+                window.location.reload();
+              }}
+              className="absolute top-4 right-4 p-2 rounded-full bg-zinc-800 text-gray-300 hover:text-red-500 border border-zinc-700 hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-110 active:scale-95 z-10"
+              aria-label="Close modal"
+            >
+              <X size={20} />
+            </button>
+          )}
 
-        {locationName && (
-          <div className="p-3 bg-zinc-800 text-center text-sm font-medium italic text-zinc-300 border-b border-zinc-700">
-            {isArabic ? "العنوان المختار:" : "Selected Address:"}{" "}
-            <span className="font-semibold text-white">{locationName}</span>
-          </div>
-        )}
+          {locationName && (
+            <div className="p-3 bg-zinc-800 text-center text-sm font-medium italic text-zinc-300 border-b border-zinc-700">
+              {isArabic ? "العنوان المختار:" : "Selected Address:"}{" "}
+              <span className="font-semibold text-white">{locationName}</span>
+            </div>
+          )}
+        </div>
 
-        <h2 className="text-xl font-bold text-white px-4 pt-4 text-center pb-2 tracking-wide">
+        <h2 className="text-lg sm:text-xl font-bold text-white px-4 pt-4 text-center pb-2 tracking-wide">
           {isArabic ? "أين تريد التوصيل؟" : "Where Should We Deliver?"}
         </h2>
 
@@ -200,18 +201,18 @@ const DeliveryLocation = ({
           }}
           onPlaceChanged={handlePlaceChanged}
         >
-          <div className="p-4 border-b border-zinc-700 bg-transparent">
+          <div className="p-3 sm:p-4 border-b border-zinc-700 bg-transparent">
             <input
               type="text"
               placeholder={
                 isArabic ? "ابحث عن عنوان التوصيل" : "Search delivery address"
               }
-              className="w-full px-4 py-2 border bg-zinc-800 text-white placeholder-gray-400 border-zinc-700 rounded-md focus:outline-none focus:ring-0 text-sm"
+              className="w-full px-3 py-2 border bg-zinc-800 text-white placeholder-gray-400 border-zinc-700 rounded-md focus:outline-none focus:ring-0 text-sm"
             />
           </div>
         </Autocomplete>
 
-        <div className="w-full h-[60vh] bg-zinc-800 border-t border-zinc-700">
+        <div className="flex-1 w-full bg-zinc-800 border-t border-zinc-700">
           <GoogleMap
             onLoad={handleMapLoad}
             mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -226,20 +227,21 @@ const DeliveryLocation = ({
           </GoogleMap>
         </div>
 
-        <div className="p-4 flex justify-between sm:justify-end items-center gap-x-3 border-t border-zinc-700 bg-zinc-800">
+        <div className="p-3 sm:p-4 flex justify-between sm:justify-end items-center gap-x-3 border-t border-zinc-700 bg-zinc-800">
           <button
             onClick={userCurrentLocation}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 shadow-md"
           >
             {isArabic ? "استخدم موقعي الحالي" : "Use Current Location"}
           </button>
 
           {location && locationName && (
             <button
-               onClick={()=>{closeModal
-              window.location.reload();
-            }}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 shadow-md"
+              onClick={() => {
+                closeModal();
+                window.location.reload();
+              }}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 shadow-md"
             >
               {isArabic ? "تم" : "Done"}
             </button>

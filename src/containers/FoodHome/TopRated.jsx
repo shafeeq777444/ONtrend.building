@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import TopRatedCards from "../../components/foodHome/TopRatedCard";
 import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
 import SkeltonTopRated from "@/components/skeleton/SkeltonTopRated";
@@ -26,6 +26,19 @@ const TopRated = () => {
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 
+  // ✅ Add local state to manage skeleton visibility
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  // ✅ Delay hiding the skeleton for smooth transition
+  useEffect(() => {
+    if (!isLoading && vendors && vendors.length > 0) {
+      const timer = setTimeout(() => {
+        setShowSkeleton(false);
+      }, 300); // 300ms delay before removing skeleton
+      return () => clearTimeout(timer); // Cleanup on unmount or change
+    }
+  }, [isLoading, vendors]);
+
   const foodTopVendors = useMemo(
     () => vendors?.filter((v) => v.vendorType === "Food/Restaurant") || [],
     [vendors]
@@ -35,20 +48,20 @@ const TopRated = () => {
     return [...foodTopVendors].sort(() => 0.5 - Math.random()).slice(0, 8);
   }, [foodTopVendors]);
 
-  if (isLoading || randomVendors.length === 0) {
+  // ✅ Show skeleton if still loading or waiting for delayed hide
+  if (showSkeleton || isLoading || !vendors || vendors.length === 0) {
     return <SkeltonTopRated />;
   }
 
   return (
     <div className="px-4 py-6 relative w-full">
       {/* Heading */}
-        <div className={`mb-6 text-center ${isArabic ? "lg:text-right" : "lg:text-left"}`}>
-          <h2 className="text-2xl font-bold text-gray-800">
-            {isArabic ? "الأعلى تقييماً" : "Top Rated"}
-          </h2>
-          {/* Optional Subtitle */}
-          {/* <p className="text-sm text-gray-500">{isArabic ? "اكتشف المتاجر الشعبية القريبة منك" : "Explore popular stores near you"}</p> */}
-        </div>
+      <div className={`mb-6 text-center ${isArabic ? "lg:text-right" : "lg:text-left"}`}>
+        <h2 className="text-2xl font-bold text-gray-800">
+          {isArabic ? "الأعلى تقييماً" : "Top Rated"}
+        </h2>
+      </div>
+
       {/* Navigation Buttons */}
       <button
         className={`swiper-button-prev-toprated absolute top-4 ${
@@ -65,6 +78,7 @@ const TopRated = () => {
         <FiChevronRight size={22} />
       </button>
 
+      {/* Vendor Carousel */}
       <Swiper
         spaceBetween={12}
         slidesPerView={4}

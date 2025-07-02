@@ -1,14 +1,16 @@
 
-import { useSelector } from "react-redux"
-import CategoryBar from "../components/foodHome/CategoryBar"
-import FoodDiscountDeals from "../containers/FoodHome/FoodDiscountDeals"
-import FoodOffers from "../containers/FoodHome/FoodOffers"
-import TopRated from "../containers/FoodHome/TopRated"
-import NearByFood from "../containers/FoodHome/Category/NearByFoodVendors"
-import NewVendors from "../containers/FoodHome/Category/NewVendors"
-import TopPicks from "../containers/FoodHome/Category/TopPicks"
-import FoodHomeHIgliteCarousel from "@/containers/FoodHome/FoodHomeHIgliteCarousel"
-import FoodSearchVendors from "@/components/foodHome/FoodSearchVendors"
+import OntrendLoading from "@/components/common/OntrendLoading";
+import React, { Suspense, lazy } from "react";
+import { useSelector } from "react-redux";
+
+const CategoryBar = lazy(() => import("../components/foodHome/CategoryBar"));
+const FoodDiscountDeals = lazy(() => import("../containers/FoodHome/FoodDiscountDeals"));
+const FoodOffers = lazy(() => import("../containers/FoodHome/FoodOffers"));
+const TopRated = lazy(() => import("../containers/FoodHome/TopRated"));
+const NearByFood = lazy(() => import("../containers/FoodHome/Category/NearByFoodVendors"));
+const NewVendors = lazy(() => import("../containers/FoodHome/Category/NewVendors"));
+const TopPicks = lazy(() => import("../containers/FoodHome/Category/TopPicks"));
+const FoodSearchVendors = lazy(() => import("@/components/foodHome/FoodSearchVendors"));
 
 const RenderCategorySection = () => {
   const {categoryBar}=useSelector(state=>state.food)
@@ -38,6 +40,7 @@ const Food = () => {
   
  
   return (
+    <Suspense fallback={<OntrendLoading/>}>
     <div className="mt-14">
       <FoodSearchVendors/>
       {/* <FoodHomeHIgliteCarousel/> */}
@@ -49,6 +52,7 @@ const Food = () => {
      {/* <TopPicks/> */}
      <FoodDiscountDeals/>
     </div>
+    </Suspense>
   )
 }
 

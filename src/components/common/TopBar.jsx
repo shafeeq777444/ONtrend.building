@@ -96,9 +96,11 @@ export default function TopBar({ cartCount = 2 }) {
             const address = await localforage.getItem("userAddress");
             const location = await localforage.getItem("userLocation");
 
-            const isExpired = !addressExp || Date.now() - addressExp > EXPIRY_DURATION;
+            // const isExpired = !addressExp || Date.now() - addressExp > EXPIRY_DURATION;
 
-            if (!address || !location || isExpired) {
+            if (!address || !location 
+                // || isExpired
+            ) {
                 setShowLocationModal(true);
             }
         };
