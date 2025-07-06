@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.ontrendcustomer.app",
+            "sha256_cert_fingerprints": [
+                "F0:19:7C:C7:A2:18:55:6F:96:C3:C1:DE:A1:CA:62:B5:AA:E7:FB:F9:35:D4:A5:DD:7C:07:D6:FD:C5:E3:FF:30"
+            ]
+        }
+    }
+]

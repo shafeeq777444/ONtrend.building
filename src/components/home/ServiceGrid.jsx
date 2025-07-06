@@ -25,6 +25,7 @@ const ServiceGrid = () => {
       {/* Hotels & Apartments */}
       <div className="lg:row-span-2 bg-white text-white rounded-md flex items-center justify-center overflow-hidden">
         <GridCard
+        route={"rooms"}
           title={isArabic ? "فنادق وشقق" : "Hotels & Apartments"}
           description={
             isArabic

@@ -1,0 +1,44 @@
+:where(.css-dev-only-do-not-override-7ny38l).ant-table-wrapper .ant-table-cell,
+:where(.css-dev-only-do-not-override-7ny38l).ant-table-wrapper .ant-table-thead>tr>th,
+:where(.css-dev-only-do-not-override-7ny38l).ant-table-wrapper .ant-table-tbody>tr>th,
+:where(.css-dev-only-do-not-override-7ny38l).ant-table-wrapper .ant-table-tbody>tr>td,
+:where(.css-dev-only-do-not-override-7ny38l).ant-table-wrapper tfoot>tr>th,
+:where(.css-dev-only-do-not-override-7ny38l).ant-table-wrapper tfoot>tr>td {
+    padding: 3px !important;
+}
+
+.dev-buttons button {
+    width: 170px;
+}
+
+
+.table-ledger {
+    height: 100dvh;
+}
+
+:where(.css-dev-only-do-not-override-7ny38l).ant-layout {
+    background-color: transparent !important;
+}
+
+/* :where(.css-dev-only-do-not-override-1261szd).ant-modal .ant-modal-content{
+    background-color: transparent !important;
+} */
+
+
+:where(.css-dev-only-do-not-override-1261szd).ant-table-wrapper .ant-table-cell,
+:where(.css-dev-only-do-not-override-1261szd).ant-table-wrapper .ant-table-thead>tr>th,
+:where(.css-dev-only-do-not-override-1261szd).ant-table-wrapper .ant-table-tbody>tr>th,
+:where(.css-dev-only-do-not-override-1261szd).ant-table-wrapper .ant-table-tbody>tr>td,
+:where(.css-dev-only-do-not-override-1261szd).ant-table-wrapper tfoot>tr>th,
+:where(.css-dev-only-do-not-override-1261szd).ant-table-wrapper tfoot>tr>td {
+    padding: 2px !important;
+}
+
+.ant-tooltip-inner {
+    background-color: white !important;
+}
+
+.paid-row td {
+    background-color: #e6ffed !important;
+    /* light green */
+}

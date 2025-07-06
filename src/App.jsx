@@ -1,57 +1,20 @@
 
-// App.jsx
-// import { useRoutes } from 'react-router-dom';
-// import Home from './pages/Home';
-
-// import Food from './pages/Food';
-// import MainLayout from './layouts/MainLayout';
-// import FoodVender from './pages/FoodVender';
-// import Whishlist from './pages/Whishlist';
-// import Cart from './pages/Cart';
-// import Login from './components/auth/Login';
-// import AuthLayout from './components/auth/AuthLayout';
-// import Sign from './components/auth/Signup';
-// import Credential from './components/auth/Credential';
-// import UserProfileModal from './components/auth/UserProdileModal';
-// import FoodVendorDiscount from './pages/FoodVendorDiscount';
-
-
-
-// export default function App() {
-//   const routes = useRoutes([
-//     {
-//       path: '/',
-//       element: <MainLayout />, // Wrap all routes with Navbar
-//       children: [
-//         { index: true, element: <Home /> },
-//         { path: 'food', element: <Food /> },
-//         { path: 'food/:vendorId', element: <FoodVender /> },
-//         { path: 'food/foodDiscountVendor/:discountValue', element: <FoodVendorDiscount/> },
-//         { path: 'wishlist', element: <Whishlist /> },
-//         { path: 'cart', element: <Cart /> },
-//         { path: 'about', element: <UserProfileModal/> },
-//       ],
-//     },
-//     { path: 'auth', element: <AuthLayout /> ,
-//           children:[
-//             {index:true,element:<Login/>},
-//             {path:'signup',element:<Sign/>},
-//             {path:'credential',element:<Credential/>}
-//           ]
-//         },
-
-//   ]);
-//   return routes; // `useRoutes` returns the matching route component
-// }
-
 
 import {
   Routes,
   Route
 } from 'react-router-dom';
 import React, { lazy, Suspense } from 'react';
-import OntrendLoading from './components/common/OntrendLoading';
-const Home = lazy(() => import('./pages/Home'));
+import OntrendLoading from "./components/common/OntrendLoading";
+import ResponsePage from "./components/common/ResponsePage";
+import Failiure from "./components/common/Failiure";
+import ReferralDeepLinkHandler from "./components/common/ReferralDeepLinkHandler";
+import Careers from "./components/common/Careers";
+import DeepLinkHandler from "./components/common/DeepLinkHandler";
+import AppStoreRedirect from "./components/common/AppStoreRedirect";
+import Home from './pages/Home';
+import RoomDetails from './containers/Rooms/RoomDetails';
+const RoomHome =lazy(()=>import ('./pages/Rooms/RoomHome')) ;
 const Food = lazy(() => import('./pages/Food'));
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const FoodVender = lazy(() => import('./pages/FoodVender'));
@@ -71,12 +34,18 @@ export default function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
+
+        {/*######### food ######### */}
         <Route path="food" element={<Food />} />
         <Route path="food/:vendorId" element={<FoodVender />} />
         <Route path="food/foodDiscountVendor/:discountValue" element={<FoodVendorDiscount />} />
         <Route path="wishlist" element={<Whishlist />} />
         <Route path="cart" element={<Cart />} />
         <Route path="about" element={<OntrendLoading/>} />
+
+        {/*######### rooms ######### */}
+         <Route path="rooms" element={<RoomHome />} />
+         <Route path="rooms/:roomId" element={<RoomDetails />} />
       </Route>
 
       <Route path="/auth" element={<AuthLayout />}>
@@ -84,6 +53,15 @@ export default function App() {
         <Route path="signup" element={<Sign />} />
         <Route path="credential" element={<Credential />} />
       </Route>
+
+
+      {/* extra */}
+                <Route path="/success" element={<ResponsePage />} />
+                <Route path="/fail" element={<Failiure />} />
+                <Route path="/uvw/:referralCode" element={<ReferralDeepLinkHandler />} />
+                <Route path='/xyz/:vendorId' element={<DeepLinkHandler />} />
+                <Route path='/socials' element={<AppStoreRedirect />} />
+                <Route path="careers" element={<Careers />} />
     </Routes>
     </Suspense>
   );

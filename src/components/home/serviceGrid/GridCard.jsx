@@ -2,8 +2,10 @@ import LazyImage from "@/components/common/LazyImage";
 import { ArrowUpRight } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next"; // ✅ Add this
+import { useNavigate } from "react-router-dom";
 
-const GridCard = ({ title, description, image }) => {
+const GridCard = ({ title, description, image, route="" }) => {
+  const navigate=useNavigate()
     const { i18n } = useTranslation(); // ✅ Add this
     const isArabic = i18n.language === "ar"; // ✅ Detect Arabic
 
@@ -33,7 +35,7 @@ const GridCard = ({ title, description, image }) => {
                 </p>
 
                 {/* Arrow Button */}
-                <div className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                <div onClick={()=>navigate(`/${route}`)} className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                        <div className="bg-white text-black rounded-full p-2 w-[38px] flex items-center overflow-hidden group/arrow hover:bg-black hover:text-white transition-all duration-500 ease-in-out hover:w-28">
                          {/* Text appears only on arrow hover */}
                         <span

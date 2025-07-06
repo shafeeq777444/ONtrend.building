@@ -1,0 +1,22 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appIDs": [
+                    "TeamID.BundleID"
+                ],
+                "components": [
+                    {
+                        "/": "/promocode",
+                        "comment": "Matches /promocode path for Promocode Page"
+                    },
+                    {
+                        "/": "/vendor/*",
+                        "comment": "Matches all paths starting with /vendor/ for Vendor Profile Page"
+                    }
+                ]
+            }
+        ]
+    }
+}
