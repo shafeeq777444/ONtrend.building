@@ -8,12 +8,12 @@ import Careers from "./components/common/Careers";
 import DeepLinkHandler from "./components/common/DeepLinkHandler";
 import AppStoreRedirect from "./components/common/AppStoreRedirect";
 import Home from "./pages/Home";
-import BuildingDetails from "./containers/Rooms/RoomDetails";
+// import BuildingDetails from "./containers/Rooms/RoomDetails";
 import TermsAndConditions from "./components/common/TermsAndConditions";
 import PrivacyPolicy from "./components/common/PrivacyPolicy";
-import ApartmentDetails from "./pages/Rooms/BuildingPage";
+// import ApartmentDetails from "./pages/Rooms/BuildingPage";
 import BuildingCarouseImage from "./components/Building/BuildingCarouseImage";
-const RoomHome = lazy(() => import("./pages/Rooms/RoomHome"));
+// const RoomHome = lazy(() => import("./pages/Rooms/RoomHome"));
 const Food = lazy(() => import("./pages/Food"));
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 const FoodVender = lazy(() => import("./pages/FoodVender"));
@@ -42,9 +42,9 @@ export default function App() {
                     <Route path="about" element={<BuildingCarouseImage />} />
 
                     {/* -------------------------------- rooms ---------------------------- */}
-                    <Route path="stays" element={<RoomHome />} />
+                    {/* <Route path="stays" element={<RoomHome />} />
                     <Route path="building/:buildingId" element={<ApartmentDetails />} />
-                    <Route path="stays/:buildingId" element={<BuildingDetails />} />
+                    <Route path="stays/:buildingId" element={<BuildingDetails />} /> */}
                 </Route>
 
                 {/* ---------------------------------  Auth --------------------------------- */}
