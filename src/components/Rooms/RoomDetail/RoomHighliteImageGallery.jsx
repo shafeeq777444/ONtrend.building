@@ -1,15 +1,16 @@
 import React from "react";
 
-const images = [
-  "https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1558882224-dda166733046?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1600121848594-d8644e57abab?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-];
+// const images = [
+//   "https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//   "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//   "https://images.unsplash.com/photo-1558882224-dda166733046?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//   "https://images.unsplash.com/photo-1600121848594-d8644e57abab?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+// ];
 
-const RoomHighliteImageGallery = () => {
+const RoomHighliteImageGallery = ({images=[]}) => {
+  console.log(images ,"images")
   return (
-    <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[400px] rounded-xl overflow-hidden">
+    <div className="grid grid-cols-4 grid-rows-2 gap-3 h-[400px] rounded-md overflow-hidden mt-16">
       {/* Left Big Image */}
       <div className="col-span-2 row-span-2">
         <img
@@ -31,11 +32,11 @@ const RoomHighliteImageGallery = () => {
       {/* Bottom Right - Two Images */}
       <div className="grid grid-cols-2 gap-2 col-span-2 row-span-1">
         {images.slice(2).map((img, index) => (
-          <div key={index} className="relative group">
+          <div key={index} className="relative group h-48">
             <img
               src={img}
               alt={`Bottom Right ${index}`}
-              className="w-full h-full object-cover rounded-xl"
+              className="w-full h-full object-cover rounded-xl "
             />
             {index === 1 && (
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-xl hover:bg-black/40 transition-all cursor-pointer">

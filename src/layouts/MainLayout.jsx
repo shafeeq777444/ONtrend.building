@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useWishlist } from '@/hooksDemo/userMutation';
 import { useMemo, useEffect } from 'react';
 import { setWhishListIds } from '@/features/user/userSlice';
+import ONTRENDFooter from '@/containers/Footer/Footer';
+
 
 export default function MainLayout() {
   const { userId } = useSelector(state => state.user);
@@ -28,6 +30,7 @@ console.log()
     <>
       <TopBar />
       <Outlet />
+      <ONTRENDFooter/>
     </>
   );
 }

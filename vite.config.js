@@ -21,4 +21,13 @@ export default defineConfig({
   server: {
     host: true,
   },
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,   // removes console.log and others
+        drop_debugger: true,  // removes debugger;
+      },
+    },
+  },
 })

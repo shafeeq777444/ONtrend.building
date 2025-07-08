@@ -279,3 +279,21 @@ body {
   animation: blink 1s step-start infinite;
 }
 
+/* Google Maps */
+.gm-svpc{
+  border-radius: 20px !important;
+}
+.gm-control-active{
+  border-radius: 20px !important;
+}
+
+/* calender */
+/* Hide header (date preview above calendars) */
+.rdrDateDisplayWrapper {
+  display: none !important;
+}
+
+
+p{
+  cursor: default;
+}

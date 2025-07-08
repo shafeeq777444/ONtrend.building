@@ -8,7 +8,7 @@ import { auth } from "@/firebase/config";
 import { useNavigate } from "react-router-dom";
 // import { auth } from "@/firebaseDemo/democonfig";
 
-const FavoriteButton = ({ product, isLiked: initialLiked }) => {
+const FavoriteButton = ({ product, isLiked: initialLiked, unlikeIconColor="text-white/90" }) => {
     const currentUserId = auth.currentUser?.uid;
   const [localLiked, setLocalLiked] = useState(initialLiked);
   const { mutate: toggleWishlist, isPending } = useToggleWishlist(currentUserId);
@@ -37,12 +37,13 @@ const FavoriteButton = ({ product, isLiked: initialLiked }) => {
       onClick={handleClick}
       whileTap={{ scale: 0.85 }}
       whileHover={{ scale: 1.1 }} // 🔁 Subtle zoom on hover
+       transition={{ type: "spring", stiffness: 600, damping: 40 }}
       className={`absolute top-3 right-3 z-30 p-2 rounded-full shadow-md backdrop-blur
         transition-all duration-300 ease-in-out 
         ${
           localLiked
             ? "bg-white hover:bg-red-100"
-            : "bg-white/20 hover:bg-white/40"
+            : "bg-white/60 hover:bg-white/40"
         }`}
       title={localLiked ? "Remove from Wishlist" : "Add to Wishlist"}
     >
@@ -58,7 +59,7 @@ const FavoriteButton = ({ product, isLiked: initialLiked }) => {
         {localLiked ? (
           <FaHeart className="w-4 h-4 text-red-500" />
         ) : (
-          <Heart className="w-4 h-4 text-white" />
+          <FaHeart className={`w-4 h-4  ${unlikeIconColor}`} />
         )}
       </motion.span>
     </motion.button>

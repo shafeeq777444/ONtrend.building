@@ -1,0 +1,62 @@
+/* Font override */
+.rdrCalendarWrapper {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Make all date cells fully rounded */
+.rdrDay {
+  border-radius: 9999px !important;
+}
+
+/* Selected Start and End Dates */
+.rdrDay.rdrDayStartPreview,
+.rdrDay.rdrDayEndPreview,
+.rdrDay.rdrSelected,
+.rdrDay.rdrStartEdge,
+.rdrDay.rdrEndEdge {
+  background-color: #000 !important;
+  color: white !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+}
+
+/* Range background (in between) */
+.rdrDayInRange {
+  background-color: #f3f3f3 !important;
+  color: #000 !important;
+  border-radius: 9999px !important;
+}
+
+/* Hover state */
+.rdrDay:hover {
+  background-color: #e5e5e5 !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+}
+
+/* Remove blue preview borders on hover or preview selection */
+.rdrDayStartPreview,
+.rdrDayEndPreview,
+.rdrDayPreview {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure day numbers stay rounded */
+.rdrDayNumber span {
+  border-radius: 9999px !important;
+}
+
+/* Remove opacity on selected/in-range text */
+.rdrSelected span,
+.rdrInRange span {
+  opacity: 1 !important;
+  color: inherit !important;
+}
+
+/* Override default calendar cell hover or focus if needed */
+/* .rdrDayDisabled {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+  text-decoration: line-through;
+} */
