@@ -75,6 +75,7 @@
     "globals": "^16.0.0",
     "postcss": "^8.5.4",
     "tailwindcss": "^4.1.8",
+    "terser": "^5.43.1",
     "tw-animate-css": "^1.3.4",
     "vite": "^6.3.5",
     "vite-plugin-gh-pages": "^1.0.1"
