@@ -11,8 +11,6 @@ import Home from "./pages/Home";
 import BuildingDetails from "./containers/Rooms/RoomDetails";
 import TermsAndConditions from "./components/common/TermsAndConditions";
 import PrivacyPolicy from "./components/common/PrivacyPolicy";
-import Footer from "./containers/Footer/Footer";
-import BuildingRoomReviews from "./components/Rooms/RoomDetail/BuildingRoomReviews";
 import ApartmentDetails from "./pages/Rooms/BuildingPage";
 import BuildingCarouseImage from "./components/Building/BuildingCarouseImage";
 const RoomHome = lazy(() => import("./pages/Rooms/RoomHome"));
