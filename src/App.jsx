@@ -1,30 +1,37 @@
 import { Routes, Route } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
-import OntrendLoading from "./components/common/OntrendLoading";
-import ResponsePage from "./components/common/ResponsePage";
-import Failiure from "./components/common/Failiure";
-import ReferralDeepLinkHandler from "./components/common/ReferralDeepLinkHandler";
-import Careers from "./components/common/Careers";
-import DeepLinkHandler from "./components/common/DeepLinkHandler";
-import AppStoreRedirect from "./components/common/AppStoreRedirect";
-import Home from "./pages/Home";
+import OntrendLoading from "./shared/components/common/OntrendLoading";
+import ResponsePage from "./shared/components/common/ResponsePage";
+import Failiure from "./shared/components/common/Failiure";
+import ReferralDeepLinkHandler from "./shared/components/common/ReferralDeepLinkHandler";
+import Careers from "./shared/components/common/Careers";
+import DeepLinkHandler from "./shared/components/common/DeepLinkHandler";
+import AppStoreRedirect from "./shared/components/common/AppStoreRedirect";
+import TermsAndConditions from "./shared/components/common/TermsAndConditions";
+import PrivacyPolicy from "./shared/components/common/PrivacyPolicy";
+import BuildingCarouseImage from "./modules/building/components/BuildingCarouseImage";
+
+// commented-------------------------------------------------------------
 // import BuildingDetails from "./containers/Rooms/RoomDetails";
-import TermsAndConditions from "./components/common/TermsAndConditions";
-import PrivacyPolicy from "./components/common/PrivacyPolicy";
-// import ApartmentDetails from "./pages/Rooms/BuildingPage";
-import BuildingCarouseImage from "./components/Building/BuildingCarouseImage";
 // const RoomHome = lazy(() => import("./pages/Rooms/RoomHome"));
-const Food = lazy(() => import("./pages/Food"));
-const MainLayout = lazy(() => import("./layouts/MainLayout"));
-const FoodVender = lazy(() => import("./pages/FoodVender"));
-const Whishlist = lazy(() => import("./pages/Whishlist"));
-const Cart = lazy(() => import("./pages/Cart"));
-const Login = lazy(() => import("./components/auth/Login"));
-const AuthLayout = lazy(() => import("./components/auth/AuthLayout"));
-const Sign = lazy(() => import("./components/auth/Signup"));
-const Credential = lazy(() => import("./components/auth/Credential"));
-const UserProfileModal = lazy(() => import("./components/auth/UserProdileModal"));
-const FoodVendorDiscount = lazy(() => import("./pages/FoodVendorDiscount"));
+// import ApartmentDetails from "./pages/Rooms/BuildingPage";
+// -------------------------------------------------------------
+import Home from "./modules/home/pages/HomePage";
+const MainLayout = lazy(() => import("./shared/layouts/MainLayout"));
+// food-----------------------------------------------------
+const Food = lazy(() => import("./modules/food/pages/Food"));
+const FoodVender = lazy(() => import("./modules/food/pages/FoodVender"));
+const FoodVendorDiscount = lazy(() => import("./modules/food/pages/FoodVendorDiscount"));
+
+// login-----------------------------------------------------
+const AuthLayout = lazy(() => import("./modules/auth/layouts/AuthLayout"));
+const Login = lazy(() => import("./modules/auth/pages/Login"));
+const Sign = lazy(() => import("./modules/auth/pages/Signup"));
+const Credential = lazy(() => import("./modules/auth/pages/Credential"));
+
+
+const Whishlist = lazy(() => import("./modules/wishlist/pages/Whishlist"));
+const Cart = lazy(() => import("./modules/cart/pages/Cart"));
 
 export default function App() {
     return (
@@ -41,10 +48,11 @@ export default function App() {
                     <Route path="cart" element={<Cart />} />
                     <Route path="about" element={<BuildingCarouseImage />} />
 
-                    {/* -------------------------------- rooms ---------------------------- */}
+                    {/* -------------------------------- commented ---------------------------- */}
                     {/* <Route path="stays" element={<RoomHome />} />
                     <Route path="building/:buildingId" element={<ApartmentDetails />} />
                     <Route path="stays/:buildingId" element={<BuildingDetails />} /> */}
+                    {/* -------------------------------- commented ---------------------------- */}
                 </Route>
 
                 {/* ---------------------------------  Auth --------------------------------- */}

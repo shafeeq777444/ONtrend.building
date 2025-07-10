@@ -6,11 +6,11 @@ import "swiper/css/mousewheel";
 import "swiper/css/autoplay";
 import { Navigation, FreeMode, Mousewheel, Autoplay } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import PharmacyCard from "../../components/home/PharmacyCard";
-import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
-import SkeletonTopPharmacies from "../../components/skeleton/SkeletonTopPharmacies";
+import PharmacyCard from "../../shared/components/home/PharmacyCard";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+import SkeletonTopPharmacies from "@/shared/components/skeleton/SkeletonTopPharmacies";
 
 const TopPharmacies = () => {
   const { i18n } = useTranslation();

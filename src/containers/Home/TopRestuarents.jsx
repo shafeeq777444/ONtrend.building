@@ -5,15 +5,21 @@ import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import SkeltonTopRestuarent from "../../shared/components/skeleton/SkeltonNearRestuarent";
 
-import SkeltonTopRestuarent from "../../components/skeleton/SkeltonNearRestuarent";
-import RestuarentCard from "../../components/RestuarentCard";
-import { useGetAllTopVendors } from "../../hooks/queries/useVendors";
+import { useGetAllTopVendors } from "../../shared/services/queries/vendors.query";
 import { useSelector } from "react-redux";
-import { useWishlist } from "@/hooksDemo/userMutation";
+
 import { useTranslation } from "react-i18next";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { auth } from "@/lib/firebase/config";
+import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
+
+
+
+
+
 
 const TopRestaurants = () => {
     const currentUserId = auth.currentUser?.uid;
@@ -93,9 +99,9 @@ const TopRestaurants = () => {
         modules={[Navigation, FreeMode, Mousewheel]}
         dir={isArabic ? "rtl" : "ltr"} // optional RTL support
       >
-        {topRestaurants.map((restaurant) => (
+        {topRestaurants?.map((restaurant) => (
           <SwiperSlide key={restaurant.id} className="overflow-visible">
-            <RestuarentCard
+            <RestaurantCard
               restaurant={restaurant}
               topRestuarents={true}
               isLiked={wishlistIds.has(restaurant.id)}
