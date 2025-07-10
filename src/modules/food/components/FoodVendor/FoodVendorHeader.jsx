@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
 import { IoIosArrowBack, IoIosShareAlt } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
-import SkeletonFoodVendorHeader from "../skeleton/SkeletonFoodVendorHeader";
+
 import { useTranslation } from "react-i18next";
+import SkeletonFoodVendorHeader from "@/shared/components/skeleton/SkeletonFoodVendorHeader";
 
 const FoodVendorHeader = ({ currentVendor, isLoading }) => {
   const navigate = useNavigate();

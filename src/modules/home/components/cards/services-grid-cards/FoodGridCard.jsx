@@ -5,8 +5,7 @@ import { Autoplay } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "swiper/css";
-import LazyImage from "@/shared/components/LazyImage";
-
+import LazyImage from "@/shared/components/LazyImageBox";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
 

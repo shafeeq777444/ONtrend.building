@@ -2,11 +2,10 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-
-import { useGetAllOffers } from "../../shared/hooks/queries/usePromotions";
-import SkeltonFoodOffer from "../../components/skeleton/SkeltonFoodOffer";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useGetAllOffers } from "@/shared/services/queries/promotions.query";
+import SkeltonFoodOffer from "@/shared/components/skeleton/SkeltonFoodOffer";
 
 const FoodOffers = () => {
   const { i18n, } = useTranslation();

@@ -1,5 +1,6 @@
 
-import { getVendorFoodCategories, getVendorFoodsPaginated } from "@/firebase/fireStore/foodVendorsFireStore";
+
+import { getVendorFoodCategories, getVendorFoodsPaginated } from "@/lib/firebase/fireStore/foodVendorsFireStore";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 // vender included categories

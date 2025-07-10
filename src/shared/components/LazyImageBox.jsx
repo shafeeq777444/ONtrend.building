@@ -1,39 +1,8 @@
-// // export default LazyImage;
-// import React, { useState } from "react";
-
-// const LazyImage = ({
-//     src,
-//     alt = "",
-//     className = "",
-//     placeholder = "/extras/imageicon.png",
-// }) => {
-//     const [loaded, setLoaded] = useState(false);
-
-//     return (
-//         <div
-//             className={`relative w-full h-full overflow-hidden 
-
-//     ${className}`}
-//         >
-//             {!loaded && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md" />}
-
-//             {/* Actual image */}
-//             <img
-//                 src={src || placeholder}
-//                 alt={alt}
-//                 onLoad={() => setLoaded(true)}
-//                 className={`absolute inset-0 w-full h-full object-cover rounded-md transition duration-500 ease-in-out
-//           ${loaded ? "opacity-100 scale-100" : "opacity-0 scale-105"}
-//         `}
-//             />
-//         </div>
-//     );
-// };
 
 // export default LazyImage;
 import React, { useState } from "react";
 
-const LazyImage = ({
+const LazyImageBox = ({
   src,
   alt = "image",
   className = "",
@@ -81,4 +50,4 @@ const LazyImage = ({
   );
 };
 
-export default LazyImage;
+export default LazyImageBox;

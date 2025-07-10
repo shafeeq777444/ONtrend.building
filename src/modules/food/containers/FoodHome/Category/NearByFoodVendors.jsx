@@ -12,10 +12,11 @@ import { useGetAllFoodVendors } from "../../../shared/hooks/queries/useVendors";
 import SkeltonNearRestuarent from "../../../components/skeleton/SkeltonNearRestuarent";
 import RestuarentCard from "../../../components/cards/RestaurantCard";
 import { useSelector } from "react-redux";
-import { useWishlist } from "@/shared/services/queries/cart.query";
+
 import { useTranslation } from "react-i18next";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { auth } from "@/lib/firebase/config";
+
 
 const NewVendors = () => {
   const { i18n } = useTranslation();

@@ -4,7 +4,8 @@ import { Button } from "@/shared/components/ui/button";
 import { useSelector } from "react-redux";
 import { useAddToCart } from "@/shared/services/queries/cart.query";
 import { useNavigate } from "react-router-dom";
-import { auth } from "@/firebase/config";
+import { auth } from "@/lib/firebase/config";
+
 
 
 const FoodVendorDrawer = ({ item, onClose }) => {

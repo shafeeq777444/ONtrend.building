@@ -4,10 +4,11 @@ import { Search } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
-import VendorModal from "@/components/foodHome/FoodSearchCard";
+
 import { TypeAnimation } from "react-type-animation";
 import { useTranslation } from "react-i18next";
 import "swiper/css";
+import FoodSearchCard from "./FoodSearchCard";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
 
@@ -102,7 +103,7 @@ const FoodSearchVendors = () => {
         </div>
       </motion.div>
 
-      <VendorModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <FoodSearchCard isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </>
   );
 };

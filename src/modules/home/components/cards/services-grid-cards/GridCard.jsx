@@ -1,13 +1,13 @@
-import LazyImage from "@/shared/components/LazyImage";
+import LazyImage from "@/shared/components/LazyImageBox";
 import { ArrowUpRight } from "lucide-react";
 import React from "react";
-import { useTranslation } from "react-i18next"; // ✅ Add this
+import { useTranslation } from "react-i18next"; 
 import { useNavigate } from "react-router-dom";
 
 const GridCard = ({ title, description, image, route="" }) => {
   const navigate=useNavigate()
-    const { i18n } = useTranslation(); // ✅ Add this
-    const isArabic = i18n.language === "ar"; // ✅ Detect Arabic
+    const { i18n } = useTranslation();
+    const isArabic = i18n.language === "ar"; 
 
     return (
         <div className="relative group w-full h-full cursor-pointer overflow-hidden rounded-lg shadow-md">

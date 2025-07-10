@@ -10,12 +10,15 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 import { useGetAllFoodVendors } from "../../../services/queries/vendors.query";
 import SkeltonNearRestuarent from "../../../components/skeleton/SkeltonNearRestuarent";
-import RestuarentCard from "../../../shared/components/RestuarentCard";
+
 import { useSelector } from "react-redux";
-import { useWishlist } from "@/shared/services/queries/cart.query";
+
 import { useTranslation } from "react-i18next";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+import { auth } from "@/lib/firebase/config";
+import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+
+
 
 const NewVendors = () => {
   const { i18n } = useTranslation();
@@ -83,7 +86,7 @@ const NewVendors = () => {
       >
         {newVendors.map((restaurant) => (
           <SwiperSlide key={restaurant.id} className="overflow-visible">
-            <RestuarentCard
+            <RestaurantCard
               isLiked={wishlistIds.has(restaurant.id)}
               restaurant={restaurant}
             />

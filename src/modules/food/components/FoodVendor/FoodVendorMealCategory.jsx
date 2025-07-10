@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSearchTerm, setVendorMealCategory } from "@/shared/slices/food/foodSlice";
 import Filter from "../Filter";
 import { motion, AnimatePresence } from "framer-motion";
-import SkeletonCategoryTabs from "../skeleton/SkeltonVendorFoodCategories";
+import SkeletonCategoryTabs from "@/shared/components/skeleton/SkeltonVendorFoodCategories";
+
 
 const FoodVendorMealCategory = ({ categories, selectedCategory, isLoading, isOnline, setCurrentPageIndex }) => {
     const dispatch = useDispatch();

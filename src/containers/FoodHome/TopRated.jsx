@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
-import TopRatedCards from "../../shared/components/foodHome/TopRatedCard";
+
 import { useGetAllTopVendors } from "../../shared/services/queries/vendors.query";
-import SkeltonTopRated from "@/components/skeleton/SkeltonTopRated";
+
 import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -17,6 +17,8 @@ import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import "swiper/css/autoplay";
+import SkeltonTopRated from "@/shared/components/skeleton/SkeltonTopRated";
+import TopRatedCards from "@/modules/food/components/foodHome/TopRatedCard";
 
 const TopRated = () => {
   const {

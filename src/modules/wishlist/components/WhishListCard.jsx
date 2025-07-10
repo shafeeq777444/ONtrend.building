@@ -1,9 +1,11 @@
 import React from "react";
 import { ShoppingCart } from "lucide-react";
-import FavoriteButton from "../common/FavouriteButton";
+
 import { useNavigate } from "react-router-dom";
-import RatingStars from "../common/RatingStar";
+
 import { useTranslation } from "react-i18next";
+import RatingStars from "@/shared/components/common/RatingStar";
+import FavoriteButton from "@/shared/components/common/FavouriteButton";
 
 const WishlistCard = ({ item, isLiked }) => {
   const navigate = useNavigate();

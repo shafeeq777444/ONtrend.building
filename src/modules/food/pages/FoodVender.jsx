@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import FoodVendorMealCategory from "../components/FoodVendor/FoodVendorMealCategory";
-import FoodVendorHeader from "@/components/FoodVendor/FoodVendorHeader";
+
 import FoodVendorProducts from "@/modules/food/containers/FoodVendor/FoodVendorProducts";
 
 import { useGetAllFoodVendors} from "@/shared/services/queries/vendors.query";
@@ -11,6 +11,7 @@ import { useGetVendorFoodsAndCategories, useVendorFoodCategories } from "@/share
 
 import { useTranslation } from "react-i18next";
 import PaginationButtons from "@/shared/components/common/PaginationButtons";
+import FoodVendorHeader from "../components/FoodVendor/FoodVendorHeader";
 
 const getLocalizedField = (item, field, isArabic) => {
     return isArabic ? item?.[`${field}Arabic`] || item?.[field] : item?.[field];

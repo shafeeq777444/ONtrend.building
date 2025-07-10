@@ -5,8 +5,9 @@ import { Button } from "@/shared/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAddToCart } from "@/shared/services/queries/cart.query";
 import { useSelector } from "react-redux";
-import { auth } from "@/firebase/config";
+
 import { useNavigate } from "react-router-dom";
+import { auth } from "@/lib/firebase/config";
 
 // Animation configs
 const backdropVariants = {

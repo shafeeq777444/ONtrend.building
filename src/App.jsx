@@ -46,7 +46,7 @@ export default function App() {
                     <Route path="food/foodDiscountVendor/:discountValue" element={<FoodVendorDiscount />} />
                     <Route path="wishlist" element={<Whishlist />} />
                     <Route path="cart" element={<Cart />} />
-                    <Route path="about" element={<BuildingCarouseImage />} />
+                    {/* <Route path="about" element={<ArrowButton />} /> */}
 
                     {/* -------------------------------- commented ---------------------------- */}
                     {/* <Route path="stays" element={<RoomHome />} />

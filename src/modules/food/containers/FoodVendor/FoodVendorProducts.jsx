@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import FoodCardInVendor from "@/components/FoodVendor/FoodCardInVendor";
+
 import { Drawer, DrawerContent } from "@/shared/components/ui/drawer";
-import FoodVendorDrawer from "@/components/FoodVendor/FoodVendorDrawer";
+
 import { useDispatch } from "react-redux";
 import { setVendorMealCategory } from "@/shared/slices/food/foodSlice";
-import FoodOrderDetailModal from "@/components/FoodVendor/FoodOrderDetailModal";
+
 import ModalPortal from "@/shared/components/common/ModalPortal";
 import SkeltonFoodCard from "@/shared/components/skeleton/SkeltonFoodCard";
+import FoodCardInVendor from "../../components/FoodVendor/FoodCardInVendor";
+import FoodVendorDrawer from "../../components/FoodVendor/FoodVendorDrawer";
+import FoodOrderDetailModal from "../../components/FoodVendor/FoodOrderDetailModal";
 
 const FoodVendorProducts = ({ foodItems = [], venderLogo ,isLoading,isOnline}) => {
     // ****** states ******

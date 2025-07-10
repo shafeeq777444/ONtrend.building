@@ -8,8 +8,8 @@ import {
   PlusSquare,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFoodCategory } from "../../shared/slices/food/foodSlice";
 import { useTranslation } from "react-i18next";
+import { setFoodCategory } from "@/shared/slices/food/foodSlice";
 
 const CategoryBar = () => {
   const dispatch = useDispatch();

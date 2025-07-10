@@ -1,0 +1,20 @@
+/* Custom Swiper progressbar style */
+/* All bullets */
+.swiper-pagination-bullet {
+  background: #f87171; /* Tailwind red-400 or any red */
+  opacity: 0.4;
+  transition: all 0.3s ease;
+ position: relative;
+  /* bottom: -10px; */
+   z-index: 10000;
+}
+
+/* Active bullet */
+.swiper-pagination-bullet-active {
+  background: #ef4444; /* Tailwind red-500 */
+  opacity: 1;
+  transform: scale(1.2); /* Optional smooth scaling */
+position: relative;
+  /* bottom: -2px;  */
+  z-index: 10000;
+}

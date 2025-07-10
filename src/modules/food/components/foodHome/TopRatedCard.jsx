@@ -1,11 +1,13 @@
 import { Star, Clock, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import FavoriteButton from "../common/FavouriteButton";
-import { useWishlist } from "@/shared/services/queries/cart.query";
+
+
 import { useMemo } from "react";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+import { auth } from "@/lib/firebase/config";
+import FavoriteButton from "@/shared/components/common/FavouriteButton";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+
 
 // RatingStars Component
 const RatingStars = ({ rating }) => {

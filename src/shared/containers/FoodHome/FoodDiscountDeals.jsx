@@ -6,11 +6,13 @@ import "swiper/css/mousewheel";
 import "swiper/css/autoplay";
 import { Navigation, FreeMode, Mousewheel, Autoplay } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import DiscountDealsCard from "../../shared/components/foodHome/DiscountDealsCard";
+
 import { useGetAllFoodVendors } from "../../services/queries/vendors.query";
 import { useSelector } from "react-redux";
-import SkeletonFoodDiscountDeals from "@/components/skeleton/SkeletonFoodDiscountDeals";
+
 import { useTranslation } from "react-i18next";
+import DiscountDealsCard from "@/modules/food/components/foodHome/DiscountDealsCard";
+import SkeletonFoodDiscountDeals from "@/shared/components/skeleton/SkeletonFoodDiscountDeals";
 
 const FoodDiscountDeals = () => {
   const { i18n } = useTranslation();

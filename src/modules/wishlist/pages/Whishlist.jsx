@@ -1,11 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import WishlistCard from "@/components/whishlist/WhishListCard";
-import { useWishlist } from "@/shared/services/queries/cart.query";
-import WhishlistCategoryBar from "@/components/whishlist/WhishlistCategoryBar";
+
+
+
 import { useTranslation } from "react-i18next";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+import { auth } from "@/lib/firebase/config";
+import WishlistCard from "../components/WhishListCard";
+import WhishlistCategoryBar from "../components/WhishlistCategoryBar";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+
 
 const Whishlist = () => {
   const { t } = useTranslation();

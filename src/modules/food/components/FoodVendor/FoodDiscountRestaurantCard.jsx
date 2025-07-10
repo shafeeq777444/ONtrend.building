@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import FavoriteButton from "../common/FavouriteButton";
-import RatingStars from "../common/RatingStar";
+import FavoriteButton from "@/shared/components/common/FavouriteButton";
+import RatingStars from "@/shared/components/common/RatingStar";
+
+
 
 const FoodDiscountRestaurantCard = ({ restaurant = {}, isLiked }) => {
   const navigate = useNavigate();
