@@ -7,49 +7,55 @@ import "swiper/css/grid";
 
 import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { useGetAllTopVendors } from "../../../shared/services/queries/vendors.query";
-import SkeltonTopRestuarent from "../../../shared/components/skeleton/SkeltonNearRestuarent";
-import RestuarentCard from "../../../shared/components/RestuarentCard";
+
 import { useSelector } from "react-redux";
-import { useWishlist } from "@/shared/hooksDemo/userMutation";
 import { useTranslation } from "react-i18next";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+import { auth } from "@/lib/firebase/config";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import RestaurantCard from "../../components/cards/RestaurantCard";
+import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+import SkeltonRestuarent from "@/shared/components/skeleton/SkeltonNearRestuarent";
 
 const TopPicks = () => {
     const currentUserId = auth.currentUser?.uid;
     const { data: wishlist = [] } = useWishlist(currentUserId);
-     const { i18n } = useTranslation();
-      const isArabic = i18n.language === "ar";
+    const { i18n } = useTranslation();
+    const isArabic = i18n.language === "ar";
     const wishlistIds = useMemo(() => new Set(wishlist.map((item) => item.id)), [wishlist]);
     const {
         location: { lat, lng },
     } = useSelector((state) => state.user);
     const { data: vendors, isLoading } = useGetAllTopVendors(lat, lng);
 
-    const topRestaurants = vendors?.filter((vendor) => vendor.vendorType === "Food/Restaurant") || [];
+    const topRestaurants = useMemo(() => {
+        return vendors?.filter((vendor) => vendor.vendorType === "Food/Restaurant") || [];
+    }, [vendors]);
 
-    const shuffledTopRestaurants = useMemo(()=>topRestaurants.sort(() => 0.5 - Math.random()),[])
+    const shuffledTopRestaurants = useMemo(() => {
+        return [...topRestaurants].sort(() => 0.5 - Math.random());
+    }, [topRestaurants]);
 
     if (isLoading) {
-        return <SkeltonTopRestuarent />;
+        return <SkeltonRestuarent heading={false} />;
     }
-
+console.log("render check")
     return (
         <div className="px-4 py-6 relative w-full">
             {/* Navigation Buttons */}
-             <button
-                    className={`swiper-button-prev-restuarent absolute -top-12 ${
-                      isArabic ? "left-10" : "right-16"
-                    } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
-                  >
-                    <FiChevronLeft size={22} />
-                  </button>
-                  <button className={`swiper-button-next-restuarent absolute -top-12 ${
-                      isArabic ? "left-22" : "right-4"
-                    } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}>
-                    <FiChevronRight size={22} />
-                  </button>
+            <button
+                className={`swiper-button-prev-restuarent absolute -top-12 ${
+                    isArabic ? "left-10" : "right-16"
+                } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+            >
+                <FiChevronLeft size={22} />
+            </button>
+            <button
+                className={`swiper-button-next-restuarent absolute -top-12 ${
+                    isArabic ? "left-22" : "right-4"
+                } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+            >
+                <FiChevronRight size={22} />
+            </button>
 
             <Swiper
                 spaceBetween={1}
@@ -80,7 +86,7 @@ const TopPicks = () => {
             >
                 {shuffledTopRestaurants.map((restaurant) => (
                     <SwiperSlide key={restaurant.id} className="overflow-visible">
-                        <RestuarentCard isLiked={wishlistIds.has(restaurant.id)} restaurant={restaurant} />
+                        <RestaurantCard isLiked={wishlistIds.has(restaurant.id)} restaurant={restaurant} />
                     </SwiperSlide>
                 ))}
             </Swiper>

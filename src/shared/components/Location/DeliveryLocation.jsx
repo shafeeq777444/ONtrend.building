@@ -161,7 +161,7 @@ const DeliveryLocation = ({
   if (loadError)
     return <div>{isArabic ? "خطأ في تحميل الخريطة" : "Error loading maps"}</div>;
   if (!isLoaded)
-    return <div>{isArabic ? "جارٍ التحميل..." : "Loading..."}</div>;
+    return <div></div>;
 
   return (
     <div
@@ -174,7 +174,6 @@ const DeliveryLocation = ({
             <button
               onClick={() => {
                 closeModal();
-                window.location.reload();
               }}
               className="absolute top-4 right-4 p-2 rounded-full bg-zinc-800 text-gray-300 hover:text-red-500 border border-zinc-700 hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-110 active:scale-95 z-10"
               aria-label="Close modal"

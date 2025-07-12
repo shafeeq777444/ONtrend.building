@@ -7,13 +7,15 @@ import FooterAbove from "@/shared/components/Footer/FooterAbove";
 
 const ONTRENDFooter = () => {
     return (
-        <footer className="bg-[#1a1a1a] mt-4">
-            <AnimatePresence>
-                <FooterAbove />
-                <FooterMiddle />
-                <FooterBottom />
-            </AnimatePresence>
-        </footer>
+
+            <footer className="bg-[#1a1a1a] ">
+                <AnimatePresence>
+                    <FooterAbove />
+                    <FooterMiddle />
+                    <FooterBottom />
+                </AnimatePresence>
+            </footer>
+
     );
 };
 

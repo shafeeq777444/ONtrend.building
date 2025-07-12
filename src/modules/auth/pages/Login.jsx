@@ -9,8 +9,9 @@ import toast from "react-hot-toast";
 import { doc, getDoc } from "firebase/firestore";
 
 import { useTranslation } from "react-i18next";
-import { auth, db } from "@/lib/firebase/config";
+
 import { handleGoogleLogin } from "@/lib/firebase/auth";
+import { auth, db } from "@/lib/firebase/config";
 
 const LoginScreen = () => {
   const navigate = useNavigate();

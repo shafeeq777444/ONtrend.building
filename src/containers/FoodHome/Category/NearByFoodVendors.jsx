@@ -42,7 +42,7 @@ const NewVendors = () => {
       .slice(0, 20);
   }, [allFoodvendors]);
 
-  if (isLoading) return <SkeltonNearRestuarent />;
+  if (isLoading) return <SkeltonNearRestuarent heading={false}/>;
 
   return (
     <div className="px-4 py-6 relative w-full">

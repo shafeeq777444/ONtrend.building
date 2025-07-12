@@ -6,15 +6,11 @@ const SkeltonTopRated = () => {
   const isArabic = i18n.language === "ar";
 
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto">
-        {/* Heading */}
-        <div className={`mb-6 text-center ${isArabic ? "lg:text-right" : "lg:text-left"}`}>
-          <h2 className="text-2xl font-bold text-gray-800">
-            {isArabic ? "الأعلى تقييماً" : "Top Rated"}
-          </h2>
-        </div>
+    <section className="px-4 py-6 relative w-full">
 
+
+ {/* heading */}
+            <div className="h-6 w-40 ml-4 bg-gray-200 rounded mb-6 animate-pulse" />
         {/* Skeleton Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, index) => (
@@ -45,7 +41,7 @@ const SkeltonTopRated = () => {
             </div>
           ))}
         </div>
-      </div>
+
     </section>
   );
 };

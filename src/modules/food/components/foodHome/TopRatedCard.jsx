@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { auth } from "@/lib/firebase/config";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import LazyImg from "@/shared/components/LazyImg";
 
 
 // RatingStars Component
@@ -55,7 +56,7 @@ const TopRatedCards = ({ vendor }) => {
         >
             {/* Banner Image */}
             {vendor.bannerImage?.length > 0 && (
-                <img
+                <LazyImg
                     loading="lazy"
                     src={vendor.bannerImage[1]}
                     alt="Food Item"
@@ -80,7 +81,7 @@ const TopRatedCards = ({ vendor }) => {
                 <div className={`flex items-start gap-3 ${isArabic ? "flex-row-reverse text-right" : "text-left"}`}>
                     {/* Logo */}
                     <div className="rounded-lg w-12 h-12 shadow-md overflow-hidden bg-white shrink-0 z-20">
-                        <img
+                        <LazyImg
                             loading="lazy"
                             src={vendor.image}
                             alt={`${isArabic ? vendor.restaurantArabicName : vendor.restaurantName} Logo`}

@@ -5,13 +5,15 @@ import { useCartItems, useChangeCartQuantity, useRemoveFromCart } from "@/shared
 import { ClipLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 import DownloadModal from "@/shared/components/common/DownloadModal";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
     const { userId } = useSelector((state) => state.user);
     const [loadingItemId, setLoadingItemId] = React.useState(null);
-    const [downloadModal,setDownloadModal]=useState(false)
+    const [downloadModal, setDownloadModal] = useState(false);
     const { t, i18n } = useTranslation();
     const isArabic = i18n.language === "ar";
+    const navigate = useNavigate();
 
     const { data: cartItems = [] } = useCartItems(userId);
     const { mutateAsync: changeQuantity } = useChangeCartQuantity(userId);
@@ -26,9 +28,7 @@ const CartPage = () => {
             <div className="max-w-5xl mx-auto">
                 {/* Heading */}
                 <div className={`mb-8 ${isArabic ? "text-right" : ""}`}>
-                    <h1 className="text-3xl font-bold text-gray-800">
-                        {isArabic ? "سلة التسوق الخاصة بك" : "Your Cart"}
-                    </h1>
+                    <h1 className="text-3xl font-bold text-gray-800">{isArabic ? "سلة التسوق الخاصة بك" : "Your Cart"}</h1>
                     <p className="text-gray-500 mt-1">
                         {isArabic
                             ? `لديك ${cartItems.length} عنصر(عناصر) في سلتك.`
@@ -41,9 +41,20 @@ const CartPage = () => {
                     {/* Cart Items */}
                     <div className="lg:col-span-2 space-y-4">
                         {cartItems.length === 0 ? (
-                            <p className="text-center text-gray-500">
-                                {isArabic ? "سلتك فارغة." : "Your cart is empty."}
-                            </p>
+                            <div className="text-center text-gray-500 py-16 flex flex-col items-center justify-center">
+                                <p className="mb-4 text-md font-medium text-gray-600">
+                                    {isArabic
+                                        ? "سلة التسوق الخاصة بك فارغة. تصفح منتجاتنا وابدأ التسوق اليوم!"
+                                        : "Explore our products and start shopping today"}
+                                </p>
+                                <img src="/cart/cartEmpty.gif" alt="Empty Cart" className="w-80 h-80 mb-6" />
+                                <button
+                                    onClick={() => navigate("/")}
+                                    className="inline-block px-6 py-3 text-white bg-[#ff3131] rounded-lg shadow-md hover:bg-red-600 transition duration-200"
+                                >
+                                    {isArabic ? "العودة إلى الصفحة الرئيسية" : "Back to Shopping"}
+                                </button>
+                            </div>
                         ) : (
                             cartItems.map((item) => (
                                 <div
@@ -100,11 +111,7 @@ const CartPage = () => {
 
                                             {/* Quantity Display */}
                                             <span className="px-2 h-4 w-4 flex items-center justify-center">
-                                                {loadingItemId === item.id ? (
-                                                    <ClipLoader size={20} />
-                                                ) : (
-                                                    item.quantity
-                                                )}
+                                                {loadingItemId === item.id ? <ClipLoader size={20} /> : item.quantity}
                                             </span>
 
                                             {/* Plus Button */}
@@ -170,15 +177,18 @@ const CartPage = () => {
                         </div>
 
                         {/* Checkout Button */}
-                        <button onClick={()=>{
-                            setDownloadModal(true)
-                        }} className="mt-6 w-full bg-[#ff3131] text-white py-3 rounded-full font-semibold hover:opacity-90 transition-all">
+                        <button
+                            onClick={() => {
+                                setDownloadModal(true);
+                            }}
+                            className="mt-6 w-full bg-[#ff3131] text-white py-3 rounded-full font-semibold hover:opacity-90 transition-all"
+                        >
                             {isArabic ? "المتابعة إلى الدفع" : "Proceed to Payment"}
                         </button>
                     </div>
                 </div>
             </div>
-            {downloadModal && <DownloadModal setDownloadModal={setDownloadModal}/>}
+            {downloadModal && <DownloadModal setDownloadModal={setDownloadModal} />}
         </div>
     );
 };

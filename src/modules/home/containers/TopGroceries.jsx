@@ -12,6 +12,7 @@ import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
 import SkeletonTopGroceries from "@/shared/components/skeleton/SkeletonTopGroceries";
 import RatingStars from "@/shared/components/common/RatingStar";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
+import LazyImg from "@/shared/components/LazyImg";
 
 const TopGroceries = () => {
     const {
@@ -38,7 +39,7 @@ const TopGroceries = () => {
 
     return (
         <div className="px-4 relative" dir={isArabic ? "rtl" : "ltr"}>
-            <h2 className="text-xl font-bold mb-4">{isArabic ? "أفضل متاجر البقالة" : "Top Groceries"}</h2>
+            <h2 className="text-xl font-bold mb-4 pl-4">{isArabic ? "أفضل متاجر البقالة" : "Top Groceries"}</h2>
 
             {/* Navigation Buttons */}
             <button
@@ -100,7 +101,7 @@ const TopGroceries = () => {
                                                     isArabic ? "right-2" : "left-2"
                                                 } z-20 w-10 h-10 rounded-full overflow-hidden border border-white shadow-md`}
                                             >
-                                                <img
+                                                <LazyImg
                                                     src={item.image}
                                                     alt={`${
                                                         isArabic ? item.restaurantArabicName : item.restaurantName
@@ -111,7 +112,7 @@ const TopGroceries = () => {
                                         )}
 
                                         {/* Main Image */}
-                                        <img
+                                        <LazyImg
                                             src={item.bannerImage?.[0]}
                                             alt={isArabic ? item.restaurantArabicName : item.restaurantName}
                                             loading="lazy"

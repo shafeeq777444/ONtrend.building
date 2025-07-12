@@ -4,7 +4,8 @@ import {  FiShoppingBag } from "react-icons/fi";
 const SkeletonTopGroceries = () => {
   return (
     <div className="px-4 py-6">
-      <h2 className="text-xl font-bold mb-4">Top Groceries</h2>
+        {/* heading */}
+            <div className="h-6 w-40 ml-4 bg-gray-200 rounded mb-6 animate-pulse" />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {[...Array(5)].map((_, index) => (
           <div key={index} className="p-2">

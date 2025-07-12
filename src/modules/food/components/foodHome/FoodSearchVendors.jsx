@@ -9,6 +9,7 @@ import { TypeAnimation } from "react-type-animation";
 import { useTranslation } from "react-i18next";
 import "swiper/css";
 import FoodSearchCard from "./FoodSearchCard";
+import LazyImg from "@/shared/components/LazyImg";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
 
@@ -37,7 +38,7 @@ const FoodSearchVendors = () => {
           {images.map((img, i) => (
             <SwiperSlide key={i}>
               <div className="relative w-full h-full">
-                <img
+                <LazyImg
                   src={img}
                   alt={`food-${i}`}
                   className="w-full h-full object-cover"

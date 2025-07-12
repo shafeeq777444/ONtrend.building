@@ -6,7 +6,7 @@ import FoodVendorMealCategory from "../components/FoodVendor/FoodVendorMealCateg
 
 import FoodVendorProducts from "@/modules/food/containers/FoodVendor/FoodVendorProducts";
 
-import { useGetAllFoodVendors} from "@/shared/services/queries/vendors.query";
+import { useGetAllFoodVendors } from "@/shared/services/queries/vendors.query";
 import { useGetVendorFoodsAndCategories, useVendorFoodCategories } from "@/shared/services/queries/foodVendor.query";
 
 import { useTranslation } from "react-i18next";
@@ -27,18 +27,21 @@ const FoodVendor = () => {
     const { i18n } = useTranslation();
     const isArabic = i18n.language === "ar";
 
-    const { data: allFoodVendors,isLoading:getVendorLoading } = useGetAllFoodVendors(lat, lng);
+    const { data: allFoodVendors, isLoading: getVendorLoading } = useGetAllFoodVendors(lat, lng);
     const currentVendor = allFoodVendors?.find((vendor) => vendor.id === vendorId);
-    console.log(currentVendor,"busy checl")
+    console.log(currentVendor, "busy checl");
 
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage ,isLoading:allProductsLoading} = useGetVendorFoodsAndCategories(
-        currentVendor?.id,
-        selectedVendorMealCategory
-    );
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading: allProductsLoading,
+    } = useGetVendorFoodsAndCategories(currentVendor?.id, selectedVendorMealCategory);
 
-    const { data: vendorCategories,isLoading:vendorCategoryLoading } = useVendorFoodCategories(currentVendor?.id);
+    const { data: vendorCategories, isLoading: vendorCategoryLoading } = useVendorFoodCategories(currentVendor?.id);
 
     const productsRef = useRef(null);
 
@@ -99,19 +102,39 @@ const FoodVendor = () => {
     return (
         <div className="mt-14    min-h-screen bg-gradient-to-br" dir={isArabic ? "rtl" : "ltr"}>
             {/* Header */}
-            <FoodVendorHeader isLoading={vendorCategoryLoading || getVendorLoading}  currentVendor={currentVendor} />
+            <FoodVendorHeader isLoading={vendorCategoryLoading || getVendorLoading} currentVendor={currentVendor} />
 
             {/* Scrollable Content */}
-            <div className="overflow-y-hidden bg-white rounded-t-2xl z-30 mt-80  scrollbar-hide ">
+            <div className="overflow-y-hidden bg-white rounded-t-2xl z-30  -mt-4 scrollbar-hide ">
                 <div ref={productsRef} className="bg-white backdrop-blur-sm  shadow-xl p-4">
                     {/* Categories */}
-                    <FoodVendorMealCategory setCurrentPageIndex={setCurrentPageIndex} isOnline={currentVendor?.isOnline} isLoading={vendorCategoryLoading || getVendorLoading} categories={vendorCategories} selectedCategory={selectedVendorMealCategory} />
+                    <FoodVendorMealCategory
+                        setCurrentPageIndex={setCurrentPageIndex}
+                        isOnline={currentVendor?.isOnline}
+                        isLoading={vendorCategoryLoading || getVendorLoading}
+                        categories={vendorCategories}
+                        selectedCategory={selectedVendorMealCategory}
+                    />
 
                     {/* Products */}
-                    <FoodVendorProducts isLoading={allProductsLoading || getVendorLoading} isOnline={currentVendor?.isOnline} foodItems={filteredFoods} isArabic={isArabic} venderLogo={currentVendor?.image}/>
+                    <FoodVendorProducts
+                        isLoading={allProductsLoading || getVendorLoading}
+                        isOnline={currentVendor?.isOnline}
+                        foodItems={filteredFoods}
+                        isArabic={isArabic}
+                        venderLogo={currentVendor?.image}
+                    />
 
                     {/* Pagination */}
-                    <PaginationButtons isOnline={currentVendor?.isOnline} currentPageIndex={currentPageIndex} handleNext={handleNext} handlePrevious={handlePrevious} isArabic={isArabic} isFetchingNextPage={isFetchingNextPage} isNextDisabled={isNextDisabled} />
+                    <PaginationButtons
+                        isOnline={currentVendor?.isOnline}
+                        currentPageIndex={currentPageIndex}
+                        handleNext={handleNext}
+                        handlePrevious={handlePrevious}
+                        isArabic={isArabic}
+                        isFetchingNextPage={isFetchingNextPage}
+                        isNextDisabled={isNextDisabled}
+                    />
                 </div>
             </div>
         </div>

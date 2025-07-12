@@ -4,18 +4,17 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import "swiper/css/grid";
-
 import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
 import { useGetAllFoodVendors } from "../../../services/queries/vendors.query";
 import SkeltonTopRestuarent from "../../../components/skeleton/SkeltonNearRestuarent";
-import RestuarentCard from "../../../shared/components/RestuarentCard";
 import { useSelector } from "react-redux";
-import { useWishlist } from "@/shared/services/queries/cart.query";
+
 import { useTranslation } from "react-i18next";
-import { auth } from "@/firebase/config";
-// import { auth } from "@/firebaseDemo/democonfig";
+import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
+import { auth } from "@/lib/firebase/config";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+
 
 const NewVendors = () => {
       const currentUserId = auth.currentUser?.uid;
@@ -42,7 +41,7 @@ const NewVendors = () => {
     }, [allFoodvendors]);
     console.log(newVendors, "--new vendors");
     if (isLoading) {
-        return <SkeltonTopRestuarent />;
+        return <SkeltonTopRestuarent heading={false}/>;
     }
 
     return (
@@ -90,7 +89,7 @@ const NewVendors = () => {
             >
                 {newVendors.map((restaurant) => (
                     <SwiperSlide key={restaurant.id} className="overflow-visible">
-                        <RestuarentCard isLiked={wishlistIds.has(restaurant.id)} restaurant={restaurant} />
+                        <RestaurantCard isLiked={wishlistIds.has(restaurant.id)} restaurant={restaurant} />
                     </SwiperSlide>
                 ))}
             </Swiper>

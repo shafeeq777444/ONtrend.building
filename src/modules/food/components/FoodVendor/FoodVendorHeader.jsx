@@ -6,6 +6,7 @@ import { FaStar } from "react-icons/fa";
 
 import { useTranslation } from "react-i18next";
 import SkeletonFoodVendorHeader from "@/shared/components/skeleton/SkeletonFoodVendorHeader";
+import LazyImg from "@/shared/components/LazyImg";
 
 const FoodVendorHeader = ({ currentVendor, isLoading }) => {
   const navigate = useNavigate();
@@ -25,10 +26,10 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
   if (isLoading) return <SkeletonFoodVendorHeader />;
 
   return (
-    <div className="fixed top-14 right-0 w-full scrollbar-hide">
-      <div className="relative w-full h-[220px] md:h-[260px] overflow-hidden shadow-md">
+    <div className="sticky top-14 right-0 w-full scrollbar-hide">
+      <div className="relative w-full h-[220px] md:h-[270px] overflow-hidden shadow-md">
         {/* Banner Image */}
-        <img
+        <LazyImg
           src={currentVendor?.bannerImage?.[1]}
           alt="Food Vendor Banner"
           loading="lazy"
@@ -56,15 +57,6 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
               className={`w-5 h-5 text-gray-900 ${isArabic ? "rotate-180" : ""}`}
             />
           </button>
-
-          {/* Share Button */}
-          {/* <button
-            onClick={handleShare}
-            className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-md hover:bg-white transition-all duration-200"
-            aria-label="Share"
-          >
-            <IoIosShareAlt className="w-5 h-5 text-gray-900" />
-          </button> */}
         </div>
 
         {/* Vendor Info */}
@@ -72,7 +64,7 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
           <div className="flex items-end gap-4">
             {/* Vendor Image + Busy Badge */}
             <div className="relative">
-              <img
+              <LazyImg
                 src={currentVendor?.image}
                 alt={
                   isArabic

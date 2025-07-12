@@ -1,11 +1,8 @@
 import React from "react";
 import {
   MapPin,
-  Tag,
   UserPlus,
   Flame,
-  Star,
-  PlusSquare,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -21,39 +18,41 @@ const CategoryBar = () => {
     {
       label: isArabic ? "بالقرب منك" : "Nearby",
       value: "Nearby",
-      icon: <MapPin size={18} />,
+      icon: <MapPin size={16} />,
     },
     {
       label: isArabic ? "جديد في الترند" : "New OnTrend",
       value: "New OnTrend",
-      icon: <UserPlus size={18} />,
+      icon: <UserPlus size={16} />,
     },
     {
       label: isArabic ? "الأكثر مبيعًا" : "Best Sellers",
       value: "Best Sellers",
-      icon: <Flame size={18} />,
+      icon: <Flame size={16} />,
     },
-    // More categories can be added similarly...
   ];
 
   return (
-    <div className="flex overflow-x-auto bg-white px-6 sm:px-10 mt-6 py-3 space-x-4 sm:space-x-6 w-full no-scrollbar">
-      {categories.map((cat, idx) => {
-        const isActive = cat.value === categoryBar;
-        return (
-          <div
-            key={idx}
-            onClick={() => dispatch(setFoodCategory(cat.value))}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 cursor-pointer
-              ${isActive
-                ? "bg-onRed text-white font-medium shadow"
-                : "text-gray-600 hover:text-red-600 hover:bg-red-100"}`}
-          >
-            {cat.icon}
-            <span className="text-sm">{cat.label}</span>
-          </div>
-        );
-      })}
+    <div className="w-full bg-white py-3 mt-6 overflow-x-auto">
+      <div className="flex px-4 sm:px-6 gap-3 sm:gap-5 snap-x snap-mandatory scroll-smooth no-scrollbar">
+        {categories.map((cat, idx) => {
+          const isActive = cat.value === categoryBar;
+          return (
+            <div
+              key={idx}
+              onClick={() => dispatch(setFoodCategory(cat.value))}
+              className={`flex items-center gap-2 px-3 py-2 rounded-full whitespace-nowrap transition-all duration-200 cursor-pointer snap-start
+                ${isActive
+                  ? "bg-onRed text-white font-medium shadow"
+                  : "text-gray-600 hover:text-red-600 hover:bg-red-100"
+                }`}
+            >
+              {cat.icon}
+              <span className="text-sm sm:text-base">{cat.label}</span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

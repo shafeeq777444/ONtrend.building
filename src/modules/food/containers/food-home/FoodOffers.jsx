@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGetAllOffers } from "@/shared/services/queries/promotions.query";
 import SkeltonFoodOffer from "@/shared/components/skeleton/SkeltonFoodOffer";
+import LazyImg from "@/shared/components/LazyImg";
 
 const FoodOffers = () => {
   const { i18n, } = useTranslation();
@@ -27,7 +28,7 @@ const FoodOffers = () => {
 
   return (
     <div className="px-2 sm:px-4 lg:px-6 py-6 bg-gray-50">
-      <h2 className={`text-xl font-bold mb-4 ${isArabic ? "text-right" : "text-left"}`}>
+      <h2 className={`text-xl font-bold mb-4 pl-4 ${isArabic ? "text-right" : "text-left"}`}>
         {isArabic ? "عروض" : "Offers"}
       </h2>
 
@@ -49,7 +50,7 @@ const FoodOffers = () => {
       >
         {offers.map((offer, index) => (
           <SwiperSlide key={offer.id || index}>
-            <img
+            <LazyImg
               onClick={() =>
                 navigate(`/food/foodDiscountVendor/${offer?.discountValue}`)
               }

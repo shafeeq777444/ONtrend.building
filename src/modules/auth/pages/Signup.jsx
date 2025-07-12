@@ -6,10 +6,13 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { handleGoogleLogin } from "@/firebase/auth";
-import { auth, db } from "@/firebase/config";
+
+import { auth, db } from "@/lib/firebase/config";
+import { handleGoogleLogin } from "@/lib/firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
 
 const SignUP = () => {
   const { i18n } = useTranslation();

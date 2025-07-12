@@ -34,12 +34,12 @@ const TopRestaurants = () => {
     vendors?.filter((vendor) => vendor.vendorType === "Food/Restaurant") || [];
 
   if (isLoading) {
-    return <SkeltonRestuarent />;
+    return <SkeltonRestuarent rows={1}/>;
   }
 
   return (
     <div className="px-4 py-6 relative w-full">
-      <h2 className="text-xl font-bold mb-6 text-black">
+      <h2 className="text-xl font-bold mb-6 pl-4 text-black">
         {isArabic ? "أفضل المطاعم" : "Top Restaurants"}
       </h2>
 

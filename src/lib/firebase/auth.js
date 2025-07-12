@@ -7,8 +7,9 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
 } from "firebase/auth";
-import {  auth, db } from "./config";
+
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { auth, db } from "./config";
 // import { auth, dbDemo } from "@/firebaseDemo/democonfig";
 
 

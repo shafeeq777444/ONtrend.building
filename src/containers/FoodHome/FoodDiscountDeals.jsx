@@ -35,7 +35,7 @@ const FoodDiscountDeals = () => {
     <div className="px-4 py-6 relative bg-white">
       {/* Heading */}
       <h2
-        className={`text-xl font-bold mb-4 ${
+        className={`text-xl font-bold mb-4 pl-4 ${
           isArabic ? "text-right" : "text-left"
         }`}
       >
@@ -44,7 +44,7 @@ const FoodDiscountDeals = () => {
 
       {/* Swiper Buttons */}
       <button
-        className={`swiper-button-prev-food absolute top-0 ${
+        className={`hidden md:block swiper-button-prev-food absolute top-0 ${
           isArabic ? "left-8" : "right-14"
         } z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
       >
@@ -52,7 +52,7 @@ const FoodDiscountDeals = () => {
       </button>
 
       <button
-        className={`swiper-button-next-food absolute top-0 ${
+        className={`hidden md:block swiper-button-next-food absolute top-0 ${
           isArabic ? "left-20" : "right-4"
         } z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
       >

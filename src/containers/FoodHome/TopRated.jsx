@@ -51,7 +51,7 @@ const TopRated = () => {
   }, [foodTopVendors]);
 
   // ✅ Show skeleton if still loading or waiting for delayed hide
-  if (showSkeleton || isLoading || !vendors || vendors.length === 0) {
+  if (showSkeleton || isLoading || !vendors || randomVendors.length === 0) {
     return <SkeltonTopRated />;
   }
 
@@ -59,7 +59,7 @@ const TopRated = () => {
     <div className="px-4 py-6 relative w-full">
       {/* Heading */}
       <div className={`mb-6 text-center ${isArabic ? "lg:text-right" : "lg:text-left"}`}>
-        <h2 className="text-2xl font-bold text-gray-800">
+        <h2 className="text-2xl font-bold text-gray-800 pl-4">
           {isArabic ? "الأعلى تقييماً" : "Top Rated"}
         </h2>
       </div>

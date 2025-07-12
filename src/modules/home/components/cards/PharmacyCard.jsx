@@ -6,6 +6,7 @@ import { Star, Clock, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import RatingStars from "@/shared/components/common/RatingStar";
+import LazyImg from "@/shared/components/LazyImg";
 
 const PharmacyCard = ({ pharmacy }) => {
   const { i18n } = useTranslation();
@@ -31,7 +32,7 @@ const PharmacyCard = ({ pharmacy }) => {
       <div className="group relative rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 bg-white">
         {/* Image Section */}
         <div className="relative h-40 w-full">
-          <img
+          <LazyImg
             src={bannerImage?.[0]}
             alt={displayName}
             loading="lazy"
@@ -46,7 +47,7 @@ const PharmacyCard = ({ pharmacy }) => {
 
           {image && (
             <div className="absolute top-2 left-2 w-10 h-10 rounded-full border border-white overflow-hidden z-20 shadow">
-              <img
+              <LazyImg
                 src={image}
                 alt={`${displayName} logo`}
                 className="w-full h-full object-cover"

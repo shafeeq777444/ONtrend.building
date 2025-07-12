@@ -14,9 +14,11 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { getFriendlyFirebaseError } from "@/firebase/auth";
-import { app, db } from "@/firebase/config";
+import { createUserWithEmailAndPassword, getAuth,  } from "firebase/auth";
+
+import { app, db } from "@/lib/firebase/config";
+import { getFriendlyFirebaseError } from "@/lib/firebase/auth";
+
 
 const Credential = () => {
     const navigate = useNavigate();
