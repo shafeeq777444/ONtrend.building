@@ -17,8 +17,8 @@ import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import "swiper/css/autoplay";
-import SkeltonTopRated from "@/shared/components/skeleton/SkeltonTopRated";
 import TopRatedCards from "@/modules/food/components/foodHome/TopRatedCard";
+import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 
 const TopRated = () => {
   const {
@@ -52,7 +52,7 @@ const TopRated = () => {
 
   // ✅ Show skeleton if still loading or waiting for delayed hide
   if (showSkeleton || isLoading || !vendors || randomVendors.length === 0) {
-    return <SkeltonTopRated />;
+    return <SkeltonRestuarent rows={1} heading={true} />;
   }
 
   return (

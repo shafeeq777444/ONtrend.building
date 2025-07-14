@@ -8,17 +8,6 @@ const RoomGuestFavouriteBadge = () => {
         <div className=" mt-6 rounded-2xl border border-gray-200 pr-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm md: max-w-4xl">
             {/* Badge Section */}
             <div className="flex items-center gap-3">
-                {/* <motion.div
-          className="p-2 bg-orange-100 text-orange-600 rounded-full"
-          animate={{ opacity: [0.6, 1, 0.6] ,scale:[0.8,1,0.8]}}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <motion.img
-            className="w-10 h-10"
-            src="/extras/roomFavourite2.png"
-            alt="Guest Favourite"
-          />
-        </motion.div> */}
         <img src="/extras/shield.gif"></img>
                 <div>
                     <p className="text-sm font-semibold text-gray-800">Ontrend Guest Favourite</p>

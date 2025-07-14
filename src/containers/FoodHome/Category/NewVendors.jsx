@@ -7,7 +7,7 @@ import "swiper/css/grid";
 import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetAllFoodVendors } from "../../../shared/services/queries/vendors.query";
-import SkeltonTopRestuarent from "../../../shared/components/skeleton/SkeltonNearRestuarent";
+import SkeltonTopRestuarent from "../../../modules/food/components/skeltons/SkeltonRestuarent";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";

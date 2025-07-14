@@ -6,6 +6,7 @@ const BuildingPage = () => {
   return (
     <div>
       <BuildingDetails/>
+      
     </div>
   )
 }

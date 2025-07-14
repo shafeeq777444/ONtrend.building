@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 
-import SkeltonRestuarent from "@/shared/components/skeleton/SkeltonNearRestuarent";
+import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
 
 const TopRestaurants = () => {

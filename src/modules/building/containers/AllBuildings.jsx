@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React, { useMemo } from "react";
-import BuildingCard from "@/components/Rooms/Card/BuildingCard";
-import { useBuildings } from "@/shared/services/queries/building.query";
 
+import React, { useMemo } from "react";
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -10,10 +7,12 @@ import "swiper/css/free-mode";
 import "swiper/css/mousewheel";
 import "swiper/css/grid";
 import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
-
 import NavigationArrows from "@/shared/components/common/NavigationArrows";
-import { useWishlist } from "@/shared/services/queries/cart.query";
-import { auth } from "@/firebase/config";
+
+import { auth } from "@/lib/firebase/config";
+import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useBuildings } from "@/shared/services/queries/building.query";
+import BuildingCard from "../components/card/BuildingCard";
 
 const AllBuildings = () => {
     const { data = [] } = useBuildings();

@@ -9,7 +9,7 @@ import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 import { useGetAllFoodVendors } from "../../../services/queries/vendors.query";
-import SkeltonNearRestuarent from "../../../components/skeleton/SkeltonNearRestuarent";
+import SkeltonNearRestuarent from "../../../../modules/food/components/skeltons/SkeltonRestuarent";
 
 import { useSelector } from "react-redux";
 

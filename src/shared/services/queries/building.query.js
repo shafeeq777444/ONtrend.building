@@ -1,5 +1,5 @@
 // src/hooks/useBuildings.js
-import { getAllBuildings, getBuildingDetail } from '@/lib/supabase/ProductApi'
+import { getAllBuildings, getBuildingDetail, getRoomDetail } from '@/lib/supabase/ProductApi'
 import { useQuery } from '@tanstack/react-query'
 
 // ------------- getALlBuildigs----------------------------
@@ -15,6 +15,14 @@ export function useBuildingDetail(buildingId) {
   return useQuery({
     queryKey: ['building',buildingId],
     queryFn: ()=>getBuildingDetail(buildingId),
+    staleTime: 1000 * 60 * 5, // 5 mins cache
+  })
+}
+
+export function useRoomDetail(roomId) {
+  return useQuery({
+    queryKey: ['room',roomId],
+    queryFn: ()=>getRoomDetail(roomId),
     staleTime: 1000 * 60 * 5, // 5 mins cache
   })
 }

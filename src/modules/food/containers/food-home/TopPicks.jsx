@@ -14,7 +14,7 @@ import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 import RestaurantCard from "../../components/cards/RestaurantCard";
 import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
-import SkeltonRestuarent from "@/shared/components/skeleton/SkeltonNearRestuarent";
+import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 
 const TopPicks = () => {
     const currentUserId = auth.currentUser?.uid;

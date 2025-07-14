@@ -5,6 +5,7 @@ const BuildingAmenities = ({ amenities }) => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language;
   const isArabic = currentLang === "ar";
+  console.log(amenities,'amenities')
 
   return (
     <>
@@ -12,38 +13,33 @@ const BuildingAmenities = ({ amenities }) => {
         {isArabic ? "ما ستحصل عليه" : "What You'll Get"}
       </h2>
     
-    <div className={`space-y-4 ${isArabic ? "text-right" : "text-left"} mb-8 md:max-w-4xl p-6`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ${isArabic ? "text-right" : "text-left"} mb-8 md:max-w-4xl p-6`}>
       
-      {/* Section Title */}
-      
-
-      {amenities?.map((item, index) => {
-        const amenity = item.amenities;
-        const name = isArabic ? amenity.name_ar : amenity.name_en;
-        const description = amenity.description;
+      {amenities?.map((amenity, index) => {
+        const name = isArabic ? amenity.name_ar : amenity.name;
 
         return (
           <div
             key={index}
-            className={`flex items-start space-x-4 ${
-              isArabic ? "flex-row-reverse space-x-reverse" : ""
+            className={`flex items-center gap-3 p-3 bg-gray-50 rounded-lg ${
+              isArabic ? "flex-row-reverse" : ""
             }`}
           >
             {/* Icon */}
-            <div className="bg-gray-100 p-2 rounded-full">
+            <div className="bg-white p-2 rounded-full shadow-sm flex-shrink-0">
               <img
-                src={amenity.icon_url}
+                src={amenity.icon}
                 alt={name}
-                className="w-6 h-6 mt-1 object-contain"
+                className="w-5 h-5 object-contain"
+                onError={(e) => {
+                  e.target.src = '/extras/amanties.png';
+                }}
               />
             </div>
 
             {/* Text */}
-            <div>
-              <div className="font-semibold text-gray-800">{name}</div>
-              {description && (
-                <div className="text-sm text-gray-600">{description}</div>
-              )}
+            <div className="flex-1">
+              <div className="font-medium text-gray-800 text-sm">{name}</div>
             </div>
           </div>
         );

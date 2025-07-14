@@ -47,3 +47,4 @@ const SkeltonTopRated = () => {
 };
 
 export default SkeltonTopRated;
+ 

@@ -5,7 +5,7 @@ import { DateRange } from 'react-date-range';
 import { useState } from 'react';
 import 'react-date-range/dist/styles.css'; // Main CSS
 import 'react-date-range/dist/theme/default.css'; // Theme CSS
-import '@/utils/styles/custom-calender.css';
+import '@/shared/styles/custom-calender.css';
 
 import DateRangeSelectorDisplay from './DateRangeSelectorDisplay';
 
@@ -21,7 +21,7 @@ export default function DateRangeSelector() {
     const { startDate, endDate } = range[0];
 
   return (
-    <div className="max-w-xl mx-auto mt-8 fixed inset-0">
+    <div className="max-w-xl mx-auto mt-28 ">
       {/* Custom Display */}
       <DateRangeSelectorDisplay startDate={startDate} endDate={endDate}/>
 
