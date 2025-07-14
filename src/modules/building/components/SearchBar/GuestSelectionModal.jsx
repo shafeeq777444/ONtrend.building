@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 const GuestSelectionModal = ({ 
     showGuestSearch, 
     adultCount, 
     childrenCount, 
-    handleGuestChange 
+    handleGuestChange ,
+    isSearchBar=true,
+    setShowGuestSearch // <-- add this prop
 }) => {
+    const modalRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                setShowGuestSearch(false);
+            }
+        }
+        if (showGuestSearch) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showGuestSearch, setShowGuestSearch]);
+
     if (!showGuestSearch) return null;
 
     return (
-        <div className="absolute top-full left-162 right-84 mt-2 bg-white border border-gray-200 rounded-3xl shadow-lg px-5 py-4 z-50">
+        <div ref={modalRef} className={`absolute ${isSearchBar ? 'top-full left-162 right-84 mt-2' : ' left-0 right-0'}  bg-white border border-gray-200 rounded-3xl shadow-lg px-5 py-4 z-50`}>
             <div className="space-y-6">
                 {/* Adults */}
                 <div className="flex bg-gray-50 p-4 rounded-full items-center justify-between">

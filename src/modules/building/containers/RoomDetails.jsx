@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBuildingDetail, useRoomDetail } from "@/shared/services/queries/building.query";
 import { fallbackAdditional, fallbackCancellation } from "@/shared/utils/constants";
@@ -18,12 +18,36 @@ import BuildingOverallReview from "../components/RoomDetail/BuildingOverallRevie
 
 
 const RoomDetails = () => {
+    const [activeTab, setActiveTab] = useState("Overview");
     const { roomId } = useParams();
     console.log(roomId,'roomId');
     const { data: roomData } = useRoomDetail(roomId);
     const { data: buildingData } = useBuildingDetail(roomData?.building_id);
     console.log(roomData,"room da");
     console.log(buildingData,"building da");
+    // 🔗 Create refs for each section
+  const overviewRef = useRef(null);
+  const detailsRef = useRef(null);
+  const availabilityRef = useRef(null);
+  const amenitiesRef = useRef(null);
+  const rulesRef = useRef(null);
+  const reviewsRef = useRef(null);
+  const locationRef = useRef(null);
+    const handleTabClick = (tab) => {
+        const refMap = {
+          "Overview": overviewRef,
+          "Rooms & Details": detailsRef,
+          "Availability": availabilityRef,
+          "Amenities": amenitiesRef,
+          "House Rules": rulesRef,
+          "Reviews": reviewsRef,
+          "Location": locationRef,
+        };
+        const ref = refMap[tab];
+        if (ref?.current) {
+          ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      };
 
     // Fallback values for room data
     const fallbackData = {
@@ -75,6 +99,8 @@ console.log(roomData?.images,'roomData?.images')
                 {/* -------------------------- left side --------------------------*/}
                 <div className="flex-1 order-2 lg:order-1">
                     <div className="space-y-6">
+                        {/* Overview Section */}
+                        <div ref={overviewRef} />
                         <RoomTitle 
                             name_ar={roomData?.name || fallbackData.name_ar} 
                             name_en={roomData?.name || fallbackData.name_en} 
@@ -84,19 +110,29 @@ console.log(roomData?.images,'roomData?.images')
                             max_children={roomData?.max_children || fallbackData.max_children}
                         />
                         <RoomGuestFavouriteBadge />
-                        {/* <RoomDetailSwitchingTab /> */}
+                        <RoomDetailSwitchingTab activeTab={activeTab} setActiveTab={setActiveTab} onTabClick={handleTabClick}/>
+                        {/* Rooms & Details Section */}
+                        <div ref={detailsRef} />
                         <BuildingDescription 
                             description_ar={roomData?.description || fallbackData.description_ar} 
                             description_en={roomData?.description || fallbackData.description_en} 
                         />
+                        {/* Availability Section */}
+                        <div ref={availabilityRef} />
                         <AvailableSlotCalender/>
+                        {/* Amenities Section */}
+                        <div ref={amenitiesRef} />
                         <BuildingAmenities amenities={roomData?.amenities || fallbackData.building_amenities} />
+                        {/* House Rules Section */}
+                        <div ref={rulesRef} />
                         <BuildingStayPolicies
                             checkInTime={buildingData?.check_in_time || fallbackData.check_in_time}
                             checkOutTime={buildingData?.check_out_time || fallbackData.check_out_time}
                             cancellationPolicy={ fallbackCancellation}
                             additionalPolicy={ fallbackAdditional}
                         />
+                        {/* Reviews Section */}
+                        <div ref={reviewsRef} />
                         <BuildingOverallReview />
                     </div>
                 </div>
@@ -111,7 +147,10 @@ console.log(roomData?.images,'roomData?.images')
 
             {/* Bottom Sections */}
             <div className="mt-8 space-y-8">
+                {/* Reviews Section (continued) */}
                 <BuildingRoomReviews />
+                {/* Location Section */}
+                <div ref={locationRef}>
                 <BuildingLocationMap 
                     city={roomData?.city || fallbackData.city} 
                     state={roomData?.state || fallbackData.state} 
@@ -119,6 +158,7 @@ console.log(roomData?.images,'roomData?.images')
                     latitude={roomData?.latitude || fallbackData.latitude} 
                     longitude={roomData?.longitude || fallbackData.longitude} 
                 />
+                </div>
             </div>
         </div>
     );
