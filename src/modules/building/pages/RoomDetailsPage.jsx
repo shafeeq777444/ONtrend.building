@@ -14,14 +14,12 @@ import RoomTitle from "../components/RoomDetail/RoomTitle";
 import BuildingDescription from "../components/RoomDetail/BuildingDescription";
 import BuildingLocationMap from "../components/RoomDetail/BuildingLocationMap";
 import BuildingOverallReview from "../components/RoomDetail/BuildingOverallReview";
+import RoomDetailsSkeleton from "../components/skeltons/SkeltonsRoomDetails/RoomDetailsSkelton";
 const RoomDetails = () => {
     const [activeTab, setActiveTab] = useState("Overview");
     const { roomId } = useParams();
-    console.log(roomId, "roomId");
-    const { data: roomData } = useRoomDetail(roomId);
-    const { data: buildingData } = useBuildingDetail(roomData?.building_id);
-    console.log(roomData, "room da");
-    console.log(buildingData, "building da");
+    const { data: roomData,isLoading:isRoomLoading } = useRoomDetail(roomId);
+    const { data: buildingData,isLoading:isBuildingLoading } = useBuildingDetail(roomData?.building_id);
     // 🔗 Create refs for each section
     const overviewRef = useRef(null);
     const detailsRef = useRef(null);
@@ -52,6 +50,7 @@ const RoomDetails = () => {
             });
         }
     };
+
 
     // Fallback values for room data
     const fallbackData = {
@@ -84,7 +83,9 @@ const RoomDetails = () => {
         latitude: 23.588,
         longitude: 58.3829,
     };
-    console.log(roomData?.images, "roomData?.images");
+    if (isRoomLoading || isBuildingLoading || !roomData || !buildingData) {
+        return <RoomDetailsSkeleton />;
+      }
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-4 ">
             {/* -------------------------- TOP TITLE IMAGES --------------------------------------------------------*/}

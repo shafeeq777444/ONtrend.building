@@ -2,6 +2,7 @@ import { FaHeart, FaStar, FaMapMarkerAlt } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import {  useNavigate } from "react-router-dom";
+import LazyImg from "@/shared/components/LazyImg";
 
 const BuildingCard = ({ building,isLiked }) => {
   const { i18n } = useTranslation();
@@ -17,7 +18,7 @@ const BuildingCard = ({ building,isLiked }) => {
     }} className="bg-white rounded-2xl shadow-md overflow-hidden min-w-[200px]  relative transform transition-transform duration-300 hover:scale-[1.01]">
       {/* Image & Heart */}
       <div className="relative">
-        <img
+        <LazyImg
           src={building?.building_media[0]?.images[0]}
           alt="property"
           className="w-full h-56 object-cover rounded-t-2xl"

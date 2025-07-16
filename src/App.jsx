@@ -6,7 +6,7 @@ import MainLayout from "./shared/layouts/MainLayout";
 // extras-----------------------------------------------------
 import OntrendLoading from "./shared/components/common/OntrendLoading";
 const BuildingRoomCard = lazy(() => import("./modules/building/components/card/BuildingRoomCard"));
-import RoomDetails from "./modules/building/pages/RoomDetails";
+import RoomDetails from "./modules/building/pages/RoomDetailsPage";
 const ResponsePage = lazy(() => import("./shared/components/common/ResponsePage"));
 const Failiure = lazy(() => import("./shared/components/common/Failiure"));
 const ReferralDeepLinkHandler = lazy(() => import("./shared/components/common/ReferralDeepLinkHandler"));

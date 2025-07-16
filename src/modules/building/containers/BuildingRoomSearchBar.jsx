@@ -51,7 +51,7 @@ const BuildingRoomSearchBar = () => {
     return (
         <motion.div
     initial={{ y: 0, opacity: 1 }}
-    animate={{ y: isVisible ? 0 : -100, opacity: isVisible ? 1 : 0 }}
+    animate={{ y: isVisible ? 0 : 0, opacity: isVisible ? 1 : 0 }}
     transition={{ duration: 0.4 }}
     className="sticky top-16 z-50"
 >
