@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Home from "./modules/home/pages/HomePage";
-const MainLayout = lazy(() => import("./shared/layouts/MainLayout"));
+import MainLayout from "./shared/layouts/MainLayout";
 
 // extras-----------------------------------------------------
 import OntrendLoading from "./shared/components/common/OntrendLoading";
-import BuildingRoomCard from "./modules/building/components/card/BuildingRoomCard";
-import BuildingDetails from "./modules/building/containers/BuildingDetails";
-import RoomDetails from "./modules/building/containers/RoomDetails";
+const BuildingRoomCard = lazy(() => import("./modules/building/components/card/BuildingRoomCard"));
+import RoomDetails from "./modules/building/pages/RoomDetails";
 const ResponsePage = lazy(() => import("./shared/components/common/ResponsePage"));
 const Failiure = lazy(() => import("./shared/components/common/Failiure"));
 const ReferralDeepLinkHandler = lazy(() => import("./shared/components/common/ReferralDeepLinkHandler"));

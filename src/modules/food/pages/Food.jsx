@@ -32,7 +32,7 @@ const RenderCategorySection = () => {
 
 const Food = () => {
     return (
-        <div className="mt-14">
+        <div className="">
             <FoodSearchVendors />
             {/* <FoodHomeHIgliteCarousel/> */}
             <FoodOffers />

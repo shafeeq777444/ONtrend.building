@@ -7,7 +7,7 @@ import ServiceGrid from "../components/grids/ServiceGrid";
 
 const Home = () => {
     return (
-        <div className="mt-14">
+        <div className="">
             {/* <div className=" z-50"> */}
             <ServiceGrid />
             {/* <OurServices /> */}

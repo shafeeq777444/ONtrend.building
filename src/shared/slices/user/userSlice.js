@@ -6,7 +6,7 @@ const userSlice = createSlice({
     initialState: {
         location: { lat: "", lng: "" },
         locationName: "Tap Here to Set Location",
-        wishlistIds: [],
+        wishlistIds: new Set(),
         userId: null,
         language: "english",
     },

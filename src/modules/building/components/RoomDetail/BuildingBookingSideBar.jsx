@@ -5,7 +5,10 @@ import DateRangePickerSection from "../SearchBar/DateSections";
 import WhoSection from "../SearchBar/WhoSection";
 import GuestSelectionModal from "../SearchBar/GuestSelectionModal";
 
-const BuildingBookingSideBar = () => {
+const BuildingBookingSideBar = ({room}) => {
+
+    let totalPrice=0
+    console.log(room,"--room")
     const [showCalendar, setShowCalendar] = useState(false);
     const [showGuestSearch, setShowGuestSearch] = useState(false);
     const [adultCount, setAdultCount] = useState(1);
@@ -17,6 +20,17 @@ const BuildingBookingSideBar = () => {
             key: "selection",
         },
     ]);
+    const totalPricePerDay=()=>{
+        totalPrice=room?.price_per_night
+        
+        if(adultCount>room?.max_adults){
+            totalPrice+=(adultCount-room?.max_adults)*room?.extra_person_charge  
+        }
+        if(childrenCount>room?.max_children){
+            totalPrice+=(childrenCount-room?.max_children)*room?.extra_person_charge
+        }
+        return totalPrice
+    }
 
     const handleGuestChange = (type, operation) => {
         if (type === "adults") {
@@ -38,7 +52,7 @@ const BuildingBookingSideBar = () => {
     const checkOut = dateRange[0].endDate;
 
     return (
-        <div className="w-full max-w-sm p-4 rounded-xl border shadow-sm bg-white space-y-4 sticky h-100 top-30 relative">
+        <div className="w-full max-w-sm pb-14 px-2 pt-2 rounded-xl border shadow-sm bg-white space-y-4 sticky h-100 top-40 ">
             {/* Date Section */}
             <div className="relative">
                 <div
@@ -95,11 +109,10 @@ const BuildingBookingSideBar = () => {
                 </div>
                 <div className="text-sm font-medium">Lowest Regular Rate</div>
             </div>
-            {/* Pricing */}
             <div className="flex justify-between items-center text-sm font-semibold text-gray-700">
                 <span>Pricing</span>
                 <span>
-                    $600 <span className="text-sm font-normal text-gray-500">/night</span>
+                  OMR {totalPricePerDay()}<span className="text-sm font-normal text-gray-500">/night</span>
                 </span>
             </div>
             {/* Reserve Button */}

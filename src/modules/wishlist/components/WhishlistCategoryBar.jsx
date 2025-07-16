@@ -10,42 +10,16 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-export default function WhishlistCategoryBar() {
+export default function WhishlistCategoryBar({ active, setActive }) {
   const { t } = useTranslation();
   const categories = [
-    {
-      id: "food",
-      label: t("whishlist_category_labels.food"),
-      icon: Utensils,
-    },
-    {
-      id: "grocery",
-      label: t("whishlist_category_labels.grocery"),
-      icon: ShoppingCart,
-    },
-    {
-      id: "hotel",
-      label: t("whishlist_category_labels.hotel"),
-      icon: Building2,
-    },
-    {
-      id: "health",
-      label: t("whishlist_category_labels.health"),
-      icon: HeartPulse,
-    },
-    {
-      id: "eshop",
-      label: t("whishlist_category_labels.eshop"),
-      icon: ShoppingBag,
-    },
-    {
-      id: "rent",
-      label: t("whishlist_category_labels.rent"),
-      icon: Car,
-    },
+    { id: "Food/Restaurant", label: t("whishlist_category_labels.food"), icon: Utensils },
+    { id: "grocery", label: t("whishlist_category_labels.grocery"), icon: ShoppingCart },
+    { id: "building", label: t("whishlist_category_labels.hotel"), icon: Building2 },
+    { id: "health", label: t("whishlist_category_labels.health"), icon: HeartPulse },
+    { id: "eshop", label: t("whishlist_category_labels.eshop"), icon: ShoppingBag },
+    { id: "rent", label: t("whishlist_category_labels.rent"), icon: Car },
   ];
-
-  const [active, setActive] = useState("food");
 
   return (
     <div className="flex gap-2 bg-gray-100 p-2 rounded-sm mb-4 overflow-x-auto scrollbar-hide">

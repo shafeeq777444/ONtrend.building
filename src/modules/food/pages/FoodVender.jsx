@@ -100,7 +100,7 @@ const FoodVendor = () => {
     const filteredFoods = getFilteredFoods();
 
     return (
-        <div className="mt-14    min-h-screen bg-gradient-to-br" dir={isArabic ? "rtl" : "ltr"}>
+        <div className="    min-h-screen bg-gradient-to-br" dir={isArabic ? "rtl" : "ltr"}>
             {/* Header */}
             <FoodVendorHeader isLoading={vendorCategoryLoading || getVendorLoading} currentVendor={currentVendor} />
 

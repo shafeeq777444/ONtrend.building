@@ -13,9 +13,10 @@ import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 import { useBuildings } from "@/shared/services/queries/building.query";
 import BuildingCard from "../components/card/BuildingCard";
+import SkeltonHomeBuildingCards from "../components/skeltons/SkeltonHomeBuildingCards";
 
 const AllBuildings = () => {
-    const { data = [] } = useBuildings();
+    const { data = [],isLoading } = useBuildings();
     console.log(data);
     // Clone the data 3 times
     const repeatedData = [...data, ...data, ...data];
@@ -23,6 +24,14 @@ const AllBuildings = () => {
     const currentUserId = auth.currentUser?.uid;
     const { data: wishlist = [] } = useWishlist(currentUserId);
     const wishlistIds = useMemo(() => new Set(wishlist.map((item) => item.id)), [wishlist]);
+
+    if(isLoading){
+        return (
+            <div className="px-4 py-6 relative w-full">
+                <SkeltonHomeBuildingCards />
+            </div>
+        )
+    }
 
     return (
         <div className="px-4 py-6 relative w-full">

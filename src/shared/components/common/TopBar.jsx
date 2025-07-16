@@ -146,7 +146,7 @@ export default function TopBar({ cartCount = 2 }) {
                 initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className={`fixed top-0 left-0 w-full z-50 px-4 py-2 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 transition-all duration-300 ${
+                className={`sticky top-0 left-0 w-full z-50 px-4 py-2 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 transition-all duration-300 ${
                     scrolled
                         ? "bg-[rgba(24,24,27,0.95)] backdrop-blur-md shadow-md"
                         : "bg-[rgba(24,24,27,0.95)] backdrop-blur-sm"

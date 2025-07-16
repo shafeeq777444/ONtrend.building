@@ -6,13 +6,13 @@ const tabs = [
   "Availability",    // Date picker or calendar
   "Amenities",       
   "House Rules",     // Renamed from "Policies" for clarity
-  "Reviews",         
   "Location",        // Renamed from "Map" for natural feel
+  "Reviews",         
 ];
 
 const RoomDetailSwitchingTab = ({ activeTab, setActiveTab, onTabClick }) => {
   return (
-    <div className="border-b mt-8 md:max-w-4xl sticky top-16 bg-white z-30" role="tablist" aria-label="Room detail sections overflow-x-auto">
+    <div className=" mt-8 py-4 sticky top-14 bg-white z-30" role="tablist" aria-label="Room detail sections overflow-x-auto">
 
       <div className="flex space-x-6 px-4 gap-6">
         {tabs.map((tab) => (

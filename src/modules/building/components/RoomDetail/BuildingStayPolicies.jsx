@@ -23,11 +23,11 @@ const BuildingStayPolicies = ({
       {/* Check-in / Check-out */}
       <div className="space-y-1 text-sm text-gray-700">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-gray-500" />
+<img src="/extras/clock.png" className="w-5 h-5"></img>
           <span><strong>Check-in:</strong> {checkInTime || "2:00 PM"}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-gray-500" />
+        <img src="/extras/clock.png" className="w-5 h-5"></img>
           <span><strong>Check-out:</strong> {checkOutTime || "11:00 AM"}</span>
         </div>
       </div>
@@ -35,7 +35,7 @@ const BuildingStayPolicies = ({
       {/* Cancellation Policy */}
       <div>
         <div className="flex items-center gap-2 mb-1 text-sm text-gray-700 font-medium">
-          <Ban className="w-4 h-4 text-red-500" />
+        <img src="/extras/cancelled.png" className="w-5 h-5"></img>
           Cancellation Policy
         </div>
         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
@@ -70,7 +70,7 @@ const BuildingStayPolicies = ({
       {/* Additional Policies */}
       <div>
         <div className="flex items-center gap-2 mb-1 text-sm text-gray-700 font-medium">
-          <Info className="w-4 h-4 text-blue-500" />
+        <img src="/extras/warning-sign.png" className="w-5 h-5"></img>
           Additional Rules
         </div>
         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">

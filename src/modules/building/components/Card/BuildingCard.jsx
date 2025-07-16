@@ -9,6 +9,7 @@ const BuildingCard = ({ building,isLiked }) => {
   const isArabic = i18n.language === "ar";
 
   const displayName = isArabic ? building?.name_ar : building?.name_en;
+  console.log(building,"building card")
 
   return (
     <div onClick={()=>{
@@ -41,13 +42,13 @@ const BuildingCard = ({ building,isLiked }) => {
 
         <div className="flex items-center text-xs text-gray-500">
           <FaMapMarkerAlt className="mr-1 text-sm" />
-          {building.city}, {building.state}, {building.country}
+          {building?.city}, {building?.state}, {building?.country}
         </div>
 
         <div className="flex justify-between items-center pt-2">
           <div></div>
           <span className="text-gray-800 font-semibold">
-            ${building?.starting_amount ?? 0}{" "}
+            OMR {building?.starting_amount.toFixed(3)}
             {/* <span className="text-sm font-normal text-gray-600">/week</span> */}
           </span>
         </div>

@@ -1,54 +1,90 @@
 import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
-// const images = [
-//   "https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   "https://images.unsplash.com/photo-1558882224-dda166733046?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   "https://images.unsplash.com/photo-1600121848594-d8644e57abab?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-// ];
+const fallbackImg =
+  "https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?fm=jpg&q=60&w=3000";
 
-const RoomHighliteImageGallery = ({images=[]}) => {
-  console.log(images ,"images")
+const RoomHighliteImageGallery = ({ images = [] }) => {
+  const safeImage = (img) => (typeof img === "string" && img.trim() !== "" ? img : fallbackImg);
+
+  const handleImageError = (e) => {
+    if (e.target.src !== fallbackImg) {
+      e.target.src = fallbackImg;
+    }
+  };
+
   return (
-    <div className="grid grid-cols-4 grid-rows-2 gap-3 h-[400px] rounded-md overflow-hidden mt-16">
-      {/* Left Big Image */}
-      <div className="col-span-2 row-span-2">
-        <img
-          src={images[0]}
-          alt="Main"
-          className="w-full h-full object-cover rounded-xl"
-        />
+    <>
+      {/* 👉 Mobile View: Swiper with autoplay and pagination */}
+      <div className="block lg:hidden mt-10 relative pb-6">
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          spaceBetween={10}
+          slidesPerView={1}
+          loop
+          pagination={{ clickable: true }}
+        >
+          {images.map((img, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={safeImage(img)}
+                alt={`Image ${index}`}
+                className="w-full h-60 object-cover rounded-xl"
+                onError={handleImageError}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
 
-      {/* Top Right */}
-      <div className="col-span-2 row-span-1">
-        <img
-          src={images[1]}
-          alt="Top Right"
-          className="w-full h-full object-cover rounded-xl"
-        />
-      </div>
+      {/* 👉 Desktop View: Grid layout */}
+      <div className="hidden lg:grid mt-10 gap-3 grid-cols-4 grid-rows-2 h-[400px] rounded-md overflow-hidden">
+        {/* Left Big Image */}
+        <div className="col-span-2 row-span-2">
+          <img
+            src={safeImage(images[0])}
+            alt="Main"
+            className="w-full h-full object-cover rounded-xl"
+            onError={handleImageError}
+          />
+        </div>
 
-      {/* Bottom Right - Two Images */}
-      <div className="grid grid-cols-2 gap-2 col-span-2 row-span-1">
-        {images.slice(2).map((img, index) => (
-          <div key={index} className="relative group h-48">
-            <img
-              src={img}
-              alt={`Bottom Right ${index}`}
-              className="w-full h-full object-cover rounded-xl "
-            />
-            {index === 1 && (
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-xl hover:bg-black/40 transition-all cursor-pointer">
-                <span className="text-white text-sm font-medium px-4 py-2 bg-white/10 rounded-full backdrop-blur-md">
-                  Explore the Space
-                </span>
-              </div>
-            )}
-          </div>
-        ))}
+        {/* Top Right */}
+        <div className="col-span-2 row-span-1">
+          <img
+            src={safeImage(images[1])}
+            alt="Top Right"
+            className="w-full h-full object-cover rounded-xl"
+            onError={handleImageError}
+          />
+        </div>
+
+        {/* Bottom Right - Two Images */}
+        <div className="col-span-2 row-span-1 grid grid-cols-2 gap-2">
+          {images.slice(2, 4).map((img, index) => (
+            <div key={index} className="relative group">
+              <img
+                src={safeImage(img)}
+                alt={`Bottom Right ${index}`}
+                className="w-full h-full object-cover rounded-xl"
+                onError={handleImageError}
+              />
+              {index === 1 && (
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-xl hover:bg-black/40 transition-all cursor-pointer">
+                  <span className="text-white text-sm font-medium px-4 py-2 bg-white/10 rounded-full backdrop-blur-md">
+                    Explore the Space
+                  </span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

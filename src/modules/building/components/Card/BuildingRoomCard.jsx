@@ -41,7 +41,7 @@ const BuildingRoomCard = ({ room }) => {
               {room?.name || fallbackData.name}
             </h3>
             <p className="text-sm text-gray-600">
-              {room?.room_type || fallbackData.roomType}
+              {room?.room_type?.type || fallbackData.roomType}
             </p>
           </div>
           <div className="text-right">
@@ -60,7 +60,7 @@ const BuildingRoomCard = ({ room }) => {
         <div className="text-sm text-gray-600 space-y-1">
           <div className="flex items-center gap-2">
             <FaBed className="text-gray-400" />
-            <span>{room?.bed_count || fallbackData.bedCount} {room?.bed_type || fallbackData.bedType} Beds</span>
+            <span>{room?.bed_count || fallbackData.bedCount} {room?.bed_type?.type || fallbackData.bedType} Beds</span>
             <span className="text-gray-300">•</span>
             <FaUserFriends className="text-gray-400" />
             <span>{room?.max_adults || fallbackData.maxAdults} Adults</span>

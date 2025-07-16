@@ -1,84 +1,60 @@
-// File: BuildingRoomSearchBar.jsx
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import WhereSection from "../components/SearchBar/WhereSection";
-import DateSections from "../components/SearchBar/DateSections";
 import WhoSection from "../components/SearchBar/WhoSection";
 import SearchButton from "../components/SearchBar/SearchButton";
-import GuestSelectionModal from "../components/SearchBar/GuestSelectionModal";
-import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import DateRangePickerSection from "../components/SearchBar/DateSections";
 
 const BuildingRoomSearchBar = () => {
-    const [showLocationSearch, setShowLocationSearch] = useState(false);
+    // --------------------------------   states------------------------------------
+
     const [showGuestSearch, setShowGuestSearch] = useState(false);
     const [adultCount, setAdultCount] = useState(1);
     const [childrenCount, setChildrenCount] = useState(0);
-    const [showCalendar, setShowCalendar] = useState(false);
-    const calendarRef = useRef(null);
-    const locationRef = useRef(null);
-    const locationInputRef = useRef(null);
-
     const [dateRange, setDateRange] = useState([{ startDate: null, endDate: null, key: "selection" }]);
+    const [locationInputValue, setLocationInputValue] = useState('');
 
-    const handleGuestChange = (type, operation) => {
-        if (type === "adults") {
-            if (operation === "increase" && adultCount < 16) {
-                setAdultCount(adultCount + 1);
-            } else if (operation === "decrease" && adultCount > 1) {
-                setAdultCount(adultCount - 1);
-            }
-        } else if (type === "children") {
-            if (operation === "increase" && childrenCount < 10) {
-                setChildrenCount(childrenCount + 1);
-            } else if (operation === "decrease" && childrenCount > 0) {
-                setChildrenCount(childrenCount - 1);
-            }
-        }
+    const [isVisible, setIsVisible] = useState(true);
+    const lastScrollY = useRef(0);
+
+    // functions
+    const onClickSearch = () => {
+        console.log("dateRange :",dateRange, "adultCount:", adultCount, "childrenCount:", childrenCount, "LocationinputValue:", locationInputValue, "search");
     };
+     // ------------------ Scroll Handler ------------------
+     useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
 
-   
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                calendarRef.current &&
-                !locationInputRef.current.contains(event.target) &&
-                !calendarRef.current.contains(event.target)
-            ) {
-                setShowCalendar(false);
+            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+                // Scrolling down
+                setIsVisible(false);
+            } else {
+                // Scrolling up
+                setIsVisible(true);
             }
+
+            lastScrollY.current = currentScrollY;
         };
-        if (showCalendar) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
+
+        window.addEventListener("scroll", handleScroll);
+
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            window.removeEventListener("scroll", handleScroll);
         };
-    }, [showCalendar]);
+    }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (locationRef.current && !locationRef.current.contains(event.target)) {
-                setShowLocationSearch(false);
-            }
-        };
-
-        if (showLocationSearch) {
-            const timeout = setTimeout(() => {
-                document.addEventListener("mousedown", handleClickOutside);
-            }, 0);
-            return () => {
-                clearTimeout(timeout);
-                document.removeEventListener("mousedown", handleClickOutside);
-            };
-        }
-    }, [showLocationSearch]);
-
+    // --------------------------------  UI return------------------------------------
     return (
-        <div className="relative">
+        <motion.div
+    initial={{ y: 0, opacity: 1 }}
+    animate={{ y: isVisible ? 0 : -100, opacity: isVisible ? 1 : 0 }}
+    transition={{ duration: 0.4 }}
+    className="sticky top-16 z-50"
+>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -86,41 +62,25 @@ const BuildingRoomSearchBar = () => {
                 className="bg-white border border-gray-200 rounded-3xl shadow-lg p-2 max-w-4xl mx-auto"
             >
                 <div className="hidden lg:flex items-center justify-between">
-                    <WhereSection
-                        locationInputRef={locationInputRef}
-                        showLocationSearch={showLocationSearch}
-                        setShowLocationSearch={setShowLocationSearch}
-                        setShowGuestSearch={setShowGuestSearch}
-                        locationRef={locationRef}
-                        showCalendar={showCalendar}
-                    />
-                    {!showLocationSearch && !showGuestSearch && (
-                        <DateRangePickerSection
-                            dateRange={dateRange}
-                            setDateRange={setDateRange}
-                            showCalendar={showCalendar}
-                            setShowCalendar={setShowCalendar}
-                            isSearchBar={true}
-                        />
-                    )}
+                    {/* location section */}
+                    <WhereSection inputValue={locationInputValue} setInputValue={setLocationInputValue} />
+                    {/* Date section */}
+                    <DateRangePickerSection dateRange={dateRange} setDateRange={setDateRange} isSearchBar={true} />
+                    {/* guest amount section */}
                     <WhoSection
                         showGuestSearch={showGuestSearch}
                         setShowGuestSearch={setShowGuestSearch}
-                        setShowLocationSearch={setShowLocationSearch}
+                        setAdultCount={setAdultCount}
+                        setChildrenCount={setChildrenCount}
                         adultCount={adultCount}
                         childrenCount={childrenCount}
-                        showCalendar={showCalendar}
                     />
-                    <SearchButton />
+                    <SearchButton onClick={onClickSearch} />
                 </div>
             </motion.div>
-            <GuestSelectionModal
-                showGuestSearch={showGuestSearch}
-                adultCount={adultCount}
-                childrenCount={childrenCount}
-                handleGuestChange={handleGuestChange}
-            />
-        </div>
+
+            {/* guest selection modal */}
+        </motion.div>
     );
 };
 

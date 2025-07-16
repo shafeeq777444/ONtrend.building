@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useState } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
-import { airbnbMapStyle } from "@/shared/utils/constants"; // Airbnb theme here
+import { silverMapStyle } from "@/shared/utils/constants";
+
 
 const BuildingLocationMap = ({
   latitude = 17.0193,
@@ -62,16 +63,18 @@ const BuildingLocationMap = ({
   if (!isLoaded) return <div>Loading map...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center mt-12 px-4">
-      {/* Heading */}
-      <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+    <>
+    <h2 className="text-2xl pl-2 font-semibold text-gray-800 mb-2 mt-10">
         Where you'll be
       </h2>
-      <p className="text-gray-600 text-sm mb-4">
+      <p className="text-gray-600 pl-2 text-sm ">
         {city && `${city}, `}
         {state && `${state}, `}
         {country}
       </p>
+    <div className="flex flex-col items-center justify-center mt-6 px-4">
+      {/* Heading */}
+      
 
       {/* Map Container */}
       <div
@@ -88,7 +91,7 @@ const BuildingLocationMap = ({
             scrollwheel: false,
             mapTypeControl: false,
             zoomControl: false,
-            styles: airbnbMapStyle,
+            styles: silverMapStyle,
           }}
           onLoad={onLoad}
         >
@@ -130,6 +133,7 @@ const BuildingLocationMap = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 

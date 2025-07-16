@@ -23,7 +23,7 @@ const WishlistCard = ({ item, isLiked }) => {
   return (
     <div
       onClick={() => navigate(`/food/${item.id}`)}
-      className="group relative w-[220px] overflow-hidden rounded-xl shadow-md bg-white transition-transform hover:scale-[1.02]"
+      className="group relative max-w-[300px] overflow-hidden rounded-xl shadow-md bg-white transition-transform hover:scale-[1.02]"
     >
       {/* Banner Image */}
       <div
