@@ -5,7 +5,7 @@ import { auth } from "@/lib/firebase/config";
 import WishlistCard from "../components/WhishListCard";
 import WhishlistCategoryBar from "../components/WhishlistCategoryBar";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
-import BuildingCard from "@/modules/building/components/card/BuildingCard";
+
 
 
 const Whishlist = () => {
@@ -46,11 +46,12 @@ const Whishlist = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 my-8">
           {finalWishlist.map((item) =>
             activeCategory === "building" ? (
-              <BuildingCard
-                key={item.id}
-                building={item}
-                isLiked={wishlistIds?.has?.(item.id)}
-              />
+              // <BuildingCard
+              //   key={item.id}
+              //   building={item}
+              //   isLiked={wishlistIds?.has?.(item.id)}
+              // />
+              <div></div>
             ) : (
               <WishlistCard
                 key={item.id}
