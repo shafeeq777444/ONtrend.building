@@ -41,7 +41,7 @@
 
 .tile-bg {
     position: relative;
-    background: url('/images/tile_background.png') center/cover no-repeat;
+
     z-index: 0;
     min-height: 100dvh;
     overflow-x: hidden;

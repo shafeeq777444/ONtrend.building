@@ -7,14 +7,7 @@ import MainLayout from "./shared/layouts/MainLayout";
 import OntrendLoading from "./shared/components/common/OntrendLoading";
 
 import RoomDetails from "./modules/building/pages/RoomDetailsPage";
-const ResponsePage = lazy(() => import("./shared/components/common/ResponsePage"));
-const Failiure = lazy(() => import("./shared/components/common/Failiure"));
-const ReferralDeepLinkHandler = lazy(() => import("./shared/components/common/ReferralDeepLinkHandler"));
-const DeepLinkHandler = lazy(() => import("./shared/components/common/DeepLinkHandler"));
-const AppStoreRedirect = lazy(() => import("./shared/components/common/AppStoreRedirect"));
-const Careers = lazy(() => import("./shared/components/common/Careers"));
-const TermsAndConditions = lazy(() => import("./shared/components/common/TermsAndConditions"));
-const PrivacyPolicy = lazy(() => import("./shared/components/common/PrivacyPolicy"));
+
 
 
 // Rooms-------------------------------------------------------------
@@ -69,14 +62,14 @@ export default function App() {
                 </Route>
 
                 {/* extra */}
-                <Route path="/success" element={<ResponsePage />} />
+                {/* <Route path="/success" element={<ResponsePage />} />
                 <Route path="/fail" element={<Failiure />} />
                 <Route path="/uvw/:referralCode" element={<ReferralDeepLinkHandler />} />
                 <Route path="/xyz/:vendorId" element={<DeepLinkHandler />} />
                 <Route path="/socials" element={<AppStoreRedirect />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
-                <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+                <Route path='/privacy-policy' element={<PrivacyPolicy />} /> */}
 
             </Routes>
         </Suspense>
