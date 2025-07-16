@@ -7,6 +7,7 @@ import WhishlistCategoryBar from "../components/WhishlistCategoryBar";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 import BuildingCard from "@/modules/building/components/card/BuildingCard";
 
+
 const Whishlist = () => {
   const { t } = useTranslation();
   const currentUserId = auth.currentUser?.uid;
