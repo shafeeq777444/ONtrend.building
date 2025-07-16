@@ -52,7 +52,7 @@ export default function App() {
                     <Route path="food/foodDiscountVendor/:discountValue" element={<FoodVendorDiscount />} />
                     <Route path="wishlist" element={<Whishlist />} />
                     <Route path="cart" element={<Cart />} />
-                    <Route path="about" element={<BuildingRoomCard/>} />
+                    {/* <Route path="about" element={<BuildingRoomCard/>} /> */}
 
                     {/* -------------------------------- Building & apartments ---------------------------- */}
                     <Route path="building" element={<BuildingHomePage />} />

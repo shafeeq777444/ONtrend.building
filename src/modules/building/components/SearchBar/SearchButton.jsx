@@ -11,7 +11,7 @@ const SearchButton = ({
     return (
         <button
             type="button"
-            className={`relative bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full ml-0 sm:ml-2 shadow-md hover:from-red-600 hover:to-red-800 transition-all flex items-center justify-center font-semibold text-base sm:text-base text-sm w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
+            className={`relative bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white px-5 py-3 sm:px-6 sm:py-3 rounded-full ml-0 sm:ml-2 shadow-md hover:from-red-600 hover:to-red-800 transition-all flex items-center justify-center font-semibold  sm:text-base text-sm w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
             onClick={onClick}
             aria-label={ariaLabel}
             disabled={loading}

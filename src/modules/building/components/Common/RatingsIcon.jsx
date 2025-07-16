@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { AiFillStar } from "react-icons/ai"; // You can change to any other star icon
 
