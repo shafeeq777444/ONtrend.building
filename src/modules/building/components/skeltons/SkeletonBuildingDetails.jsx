@@ -34,7 +34,7 @@ export const BuildingCarouselSkeleton = () => {
   export const BuildingDetailsCardSkeleton = () => {
     return (
       <div className="bg-white rounded-3xl shadow-xl p-4 max-w-sm w-full space-y-4">
-        <div className="h-5 w-40 bg-gray-200 rounded animate-pulse" />
+        <div className="h-40 w-full bg-gray-200 rounded-xl animate-pulse" />
         <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
         <div className="h-3 w-full bg-gray-200 rounded animate-pulse" />
         <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse" />
@@ -65,7 +65,7 @@ export const BuildingCarouselSkeleton = () => {
           <div className="w-full lg:w-[72%] flex flex-col gap-6 order-1 lg:order-2 h-auto overflow-y-auto pr-1 scrollbar-hide">
             <BuildingCarouselSkeleton />
   
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2  gap-4">
               {[...Array(4)].map((_, i) => (
                 <BuildingRoomCardSkeleton key={i} />
               ))}

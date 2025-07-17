@@ -5,7 +5,7 @@ const LazyImg = ({
   src,
   alt = "image",
   className = "",
-  placeholder = "/extras/imageicon.png",
+  placeholder = "/extras/Loading.lottie",
   onClick,
   onLoad,
   onError,
@@ -33,7 +33,8 @@ const LazyImg = ({
       onClick={onClick}
       className={`transition duration-500 ease-in-out
         ${loaded ? "opacity-100 scale-100" : "opacity-0 scale-105"}
-        ${className}
+         ${className}
+
       `}
     />
   );

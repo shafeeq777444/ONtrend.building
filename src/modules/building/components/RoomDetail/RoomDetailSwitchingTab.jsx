@@ -1,20 +1,25 @@
 import React from "react";
 
+// Tab labels
 const tabs = [
-  "Overview",       // General summary
-  "Rooms & Details", // Room types, capacity, pricing info
-  "Availability",    // Date picker or calendar
-  "Amenities",       
-  "House Rules",     // Renamed from "Policies" for clarity
-  "Location",        // Renamed from "Map" for natural feel
-  "Reviews",         
+  "Overview",
+  "Rooms & Details",
+  "Availability",
+  "Amenities",
+  "House Rules",
+  "Location",
+  "Reviews",
 ];
 
 const RoomDetailSwitchingTab = ({ activeTab, setActiveTab, onTabClick }) => {
   return (
-    <div className=" mt-8 py-4 sticky top-14 bg-white z-30" role="tablist" aria-label="Room detail sections overflow-x-auto">
-
-      <div className="flex space-x-6 px-4 gap-6">
+    <div
+      className="mt-8 sticky top-20 md:top-14 z-30 backdrop-blur-3xl bg-white/50 rounded-b-2xl p-4  "
+      role="tablist"
+      aria-label="Room detail sections"
+    >
+      {/* Scrollable tab container */}
+      <div className="flex px-4 gap-6 overflow-x-auto scrollbar-hide">
         {tabs.map((tab) => (
           <button
             type="button"
@@ -28,7 +33,7 @@ const RoomDetailSwitchingTab = ({ activeTab, setActiveTab, onTabClick }) => {
                 if (onTabClick) onTabClick(tab);
               }
             }}
-            className={`relative pb-3 text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
+            className={`relative pb-3 shrink-0 text-sm font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
               activeTab === tab ? "text-black" : "text-gray-500 hover:text-black"
             }`}
           >

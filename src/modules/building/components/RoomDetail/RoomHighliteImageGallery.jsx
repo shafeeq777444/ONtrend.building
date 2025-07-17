@@ -19,7 +19,7 @@ const RoomHighliteImageGallery = ({ images = [] }) => {
   return (
     <>
       {/* 👉 Mobile View: Swiper with autoplay and pagination */}
-      <div className="block lg:hidden mt-10 relative pb-6">
+      <div className="block lg:hidden  relative pb-6">
         <Swiper
           modules={[Autoplay, Pagination]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}

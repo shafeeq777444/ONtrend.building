@@ -1,3 +1,4 @@
+import LazyImg from "@/shared/components/LazyImg";
 import React from "react";
 import { FaBed, FaUserFriends, FaChild, FaRulerCombined } from "react-icons/fa";
 import { MdLayers, MdCurrencyRupee } from "react-icons/md";
@@ -24,7 +25,7 @@ const BuildingRoomCard = ({ room }) => {
     <div onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)} className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px]">
        {/* Image */}
        <div className="px-4 pb-3">
-        <img
+        <LazyImg
           src={
             room?.images?.[0] ||
             "https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?fm=jpg&q=60&w=3000"

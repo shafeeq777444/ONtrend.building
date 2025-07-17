@@ -103,37 +103,41 @@ export default function BuildingRoomReviews() {
     ];
     const ratings = [
         { label: "Cleanliness", value: 5.0, icon: "/reviews/cleaning.png" },
-        { label: "Accuracy", value: 4.9, icon: "/reviews/accurancy.png" },
-        { label: "Check-in", value: 4.9, icon: "/reviews/checkin.png" },
-        { label: "Communication", value: 5.0, icon: "/reviews/communication.png" },
-        { label: "Location", value: 4.9, icon: "/reviews/location.png" },
+        { label: "Check-in", value: 4.2, icon: "/reviews/checkin.png" },
+        { label: "Accuracy", value: 3.5, icon: "/reviews/accurancy.png" },
+        { label: "Communication", value: 3.0, icon: "/reviews/communication.png" },
+        { label: "Location", value: 3.2, icon: "/reviews/location.png" },
     ];
 
     return (
-        <div className="flex h-screen overflow-hidden mt-18">
-            {/* Left Sticky Panel */}
-            <div className="w-1/3 p-6 bg-white sticky h-fit self-start">
-                <RatingIcon />
-                <p className="text-gray-600 font-medium mb-4 mt-10">Guest favourite</p>
-                <div className="space-y-3 text-sm">
-                    {ratings.map((r, i) => (
-                        <RoomRatingIndividual key={i} label={r.label} value={r.value} icon={r.icon} />
-                    ))}
-                </div>
-            </div>
-
-            {/* Right Scrollable Panel */}
-            <div className="w-2/3 overflow-y-auto p-6 space-y-6 scrollbar-hide">
-                <h2 className="text-2xl font-semibold mb-4">Guest Reviews</h2>
-                {reviews.map((r, i) => (
-                    <RoomReviewCustomerCard r={r} i={i} />
+        <div className="flex flex-col lg:flex-row gap-6 mt-10">
+          {/* Left Sticky Panel */}
+          <div className="lg:w-1/3 w-full bg-white px-4 sm:px-6 lg:px-0">
+            <div className="lg:sticky top-20 lg:top-24">
+              <div className="hidden md:block">
+                  <RatingIcon />
+              </div>
+              <p className="text-gray-600 font-medium mb-4 mt-10">Guest favourite</p>
+              <div className="space-y-3 text-sm">
+                {ratings.map((r, i) => (
+                  <RoomRatingIndividual key={i} label={r.label} value={r.value} icon={r.icon} />
                 ))}
-                <div className="flex justify-center pt-4">
-                    <button className="px-5 py-2 text-sm font-medium cursor-pointer text-white bg-black rounded-full hover:bg-gray-800 transition">
-                        See more reviews
-                    </button>
-                </div>
+              </div>
             </div>
+          </div>
+    
+          {/* Right Scrollable Panel */}
+          <div className="lg:w-2/3 w-full px-4 sm:px-6 space-y-6">
+            <h2 className="text-2xl font-semibold mb-4">Guest Reviews</h2>
+            {reviews.map((r, i) => (
+              <RoomReviewCustomerCard key={i} r={r} i={i} />
+            ))}
+            <div className="flex justify-center pt-4">
+              <button className="px-5 py-2 text-sm font-medium cursor-pointer text-white bg-black rounded-full hover:bg-gray-800 transition">
+                See more reviews
+              </button>
+            </div>
+          </div>
         </div>
-    );
-}
+      );
+    }

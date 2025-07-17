@@ -1,3 +1,4 @@
+import LazyImg from "@/shared/components/LazyImg";
 import React, { useState } from "react";
 
 const BuildingRoomTypeCard = ({ roomType, selected }) => {
@@ -11,22 +12,26 @@ const BuildingRoomTypeCard = ({ roomType, selected }) => {
 
   return (
     <div
-      className={`w-[340px] rounded-2xl overflow-hidden relative transition-transform duration-300 mx-4
-        ${selected ? "scale-105 shadow-2xl" : "scale-100 shadow-md  hover:scale-[1.02]"}
-       
+      className={`rounded-2xl overflow-hidden relative transition-transform duration-300 
+        mx-2 sm:mx-4 
+        w-[140px] sm:w-[220px] lg:w-[340px]
+        ${selected ? "scale-105 shadow-2xl" : "scale-100 shadow-md hover:scale-[1.02]"}
       `}
     >
       <div className="aspect-[4/3] w-full overflow-hidden">
-        <img
+        <LazyImg
           src={imgSrc}
           alt={roomType?.type || fallback.type}
           className="w-full h-full object-cover"
           onError={() => setImgSrc(fallback.icon)}
         />
       </div>
-      <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent px-4 py-3 text-white">
-        <h3 className="text-xl font-bold">{roomType?.type || fallback.type}</h3>
-        <div className="flex justify-between items-center mt-1 text-sm">
+
+      <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-white">
+        <h3 className="text-sm sm:text-base lg:text-xl font-bold truncate">
+          {roomType?.type || fallback.type}
+        </h3>
+        <div className="flex justify-between items-center mt-1 text-xs sm:text-sm">
           <p>
             Start Price{" "}
             <span className="font-medium">
@@ -35,7 +40,7 @@ const BuildingRoomTypeCard = ({ roomType, selected }) => {
                 : fallback.price.toFixed(3)}
             </span>
           </p>
-          <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+          <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px] sm:text-xs hidden md:block">
             {roomType?.count || fallback.count} Rooms
           </span>
         </div>

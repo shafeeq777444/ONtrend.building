@@ -2,6 +2,7 @@ import React from "react";
 import { Star, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { handleOpenInGoogleMaps } from "@/shared/utils/handleOpenInGoogleMaps";
+import LazyImg from "@/shared/components/LazyImg";
 
 export default function BuildingDetailsCard({ building }) {
   const { i18n } = useTranslation();
@@ -34,7 +35,7 @@ export default function BuildingDetailsCard({ building }) {
   return (
     <div className="bg-white rounded-3xl shadow-xl p-4 max-w-sm w-full mx-auto">
       {/* Image */}
-      <img
+      <LazyImg
         src={imageSrc}
         alt={buildingName}
         className="w-full h-40 object-cover rounded-2xl mb-3"
