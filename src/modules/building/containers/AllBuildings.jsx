@@ -13,7 +13,7 @@ import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 import { useBuildings } from "@/shared/services/queries/building.query";
 import SkeltonHomeBuildingCards from "../components/skeltons/SkeltonHomeBuildingCards";
-import BuildingHomeCard from "../components/card/BuildingHomeCard";
+import BuildingHomeCard from "@/modules/building/components/card/BuildingHomeCard";
 
 const AllBuildings = () => {
     const { data = [],isLoading } = useBuildings();
