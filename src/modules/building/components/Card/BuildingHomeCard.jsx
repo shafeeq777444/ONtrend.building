@@ -4,7 +4,7 @@ import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import {  useNavigate } from "react-router-dom";
 import LazyImg from "@/shared/components/LazyImg";
 
-const BuildingCard = ({ building,isLiked }) => {
+const BuildingHomeCard = ({ building,isLiked }) => {
   const { i18n } = useTranslation();
   const navigate=useNavigate()
   const isArabic = i18n.language === "ar";
@@ -58,4 +58,4 @@ const BuildingCard = ({ building,isLiked }) => {
   );
 };
 
-export default BuildingCard;
+export default BuildingHomeCard;

@@ -12,8 +12,8 @@ import NavigationArrows from "@/shared/components/common/NavigationArrows";
 import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 import { useBuildings } from "@/shared/services/queries/building.query";
-import BuildingCard from "../components/card/BuildingCard";
 import SkeltonHomeBuildingCards from "../components/skeltons/SkeltonHomeBuildingCards";
+import BuildingHomeCard from "../components/card/BuildingHomeCard";
 
 const AllBuildings = () => {
     const { data = [],isLoading } = useBuildings();
@@ -66,7 +66,7 @@ const AllBuildings = () => {
             >
                 {repeatedData.map((building) => (
                     <SwiperSlide key={building.id} className="overflow-visible py-2 px-1.5">
-                        <BuildingCard
+                        <BuildingHomeCard
                             isLiked={wishlistIds.has(building.id)}
                             building={building}
                         />
