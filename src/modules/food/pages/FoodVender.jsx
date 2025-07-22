@@ -97,6 +97,10 @@ const FoodVendor = () => {
 
   const limitedFoods = useMemo(() => filteredFoods.slice(0, 12), [filteredFoods]);
 
+  const memoizedLimitedFoods = useMemo(() => limitedFoods, [limitedFoods]);
+  const memoizedLogo = useMemo(() => currentVendor?.image, [currentVendor?.image]);
+  const memoizedIsOnline = useMemo(() => currentVendor?.isOnline, [currentVendor?.isOnline]);
+
   const isHeaderLoading = isCategoryLoading || isVendorsLoading;
   const isProductsLoading = isFoodsLoading || isVendorsLoading;
 
@@ -108,7 +112,7 @@ const FoodVendor = () => {
         <div ref={productsRef} className="bg-white shadow-xl p-4">
           <FoodVendorMealCategory
             setCurrentPageIndex={setCurrentPageIndex}
-            isOnline={currentVendor?.isOnline}
+            isOnline={memoizedIsOnline}
             isLoading={isHeaderLoading}
             categories={vendorCategories}
             selectedCategory={selectedVendorMealCategory}
@@ -116,15 +120,15 @@ const FoodVendor = () => {
 
           <FoodVendorProducts
             isLoading={isProductsLoading}
-            isOnline={currentVendor?.isOnline}
-            foodItems={limitedFoods}
+            isOnline={memoizedIsOnline}
+            foodItems={memoizedLimitedFoods}
             isArabic={isArabic}
-            venderLogo={currentVendor?.image}
+            venderLogo={memoizedLogo}
           />
 
           {!isProductsLoading && (
             <PaginationButtons
-              isOnline={currentVendor?.isOnline}
+              isOnline={memoizedIsOnline}
               currentPageIndex={currentPageIndex}
               handleNext={handleNext}
               handlePrevious={handlePrevious}

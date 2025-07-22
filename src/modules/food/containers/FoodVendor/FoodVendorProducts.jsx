@@ -1,6 +1,7 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setVendorMealCategory } from "@/shared/slices/food/foodSlice";
+import isEqual from "fast-deep-equal"; // ✅ added deep comparison
 // import SkeltonFoodCard from "@/shared/components/skeleton/SkeltonFoodCard";
 import FoodCardInVendor from "../../components/FoodVendor/FoodCardInVendor";
 import FoodOrderDetailModal from "../../components/FoodVendor/FoodOrderDetailModal";
@@ -16,58 +17,59 @@ function useIsMobile(breakpoint = 768) {
   return isMobile;
 }
 
-const FoodVendorProducts = React.memo(({ foodItems = [], venderLogo, isLoading, isOnline }) => {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const isMobile = useIsMobile();
-  const dispatch = useDispatch();
+const FoodVendorProducts = React.memo(
+  ({ foodItems = [], venderLogo, isLoading, isOnline }) => {
+    const [selectedItem, setSelectedItem] = useState(null);
+    const isMobile = useIsMobile();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setVendorMealCategory("All"));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [dispatch]);
+    useEffect(() => {
+      dispatch(setVendorMealCategory("All"));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [dispatch]);
 
-  const handleItemClick = useCallback((item) => {
-    setSelectedItem(item);
-  }, []);
+    const handleItemClick = useCallback((item) => {
+      setSelectedItem(item);
+    }, []);
 
-  const handleClose = useCallback(() => {
-    setSelectedItem(null);
-  }, []);
+    const handleClose = useCallback(() => {
+      setSelectedItem(null);
+    }, []);
 
-  const foodCards = useMemo(
-    () =>
-      foodItems.map((item) => (
-        <FoodCardInVendor
-          key={item.id}
-          item={item}
-          isOnline={isOnline}
-          venderLogo={venderLogo}
-          onClick={() => handleItemClick(item)}
-        />
-      )),
-    [foodItems, isOnline, venderLogo, handleItemClick]
-  );
+    // if (isLoading) return <SkeltonFoodCard />;
 
-  // if (isLoading) return <SkeltonFoodCard />;
+    return (
+      <div className="py-2 px-2 scrollbar-hide">
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-white">
+          {foodItems?.map((item) => (
+            <FoodCardInVendor
+              key={item.id}
+              item={item}
+              isOnline={isOnline}
+              venderLogo={venderLogo}
+              onClick={() => handleItemClick(item)}
+            />
+          ))}
+        </div>
 
-  return (
-    <div className="py-2 px-2 scrollbar-hide">
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-white">
-        {foodCards}
+        {selectedItem && (
+          <ModalPortal>
+            <FoodOrderDetailModal
+              onClose={handleClose}
+              item={selectedItem}
+              venderLogo={venderLogo}
+              isMobile={isMobile}
+            />
+          </ModalPortal>
+        )}
       </div>
-
-      {selectedItem && (
-        <ModalPortal>
-          <FoodOrderDetailModal
-            onClose={handleClose}
-            item={selectedItem}
-            venderLogo={venderLogo}
-            isMobile={isMobile}
-          />
-        </ModalPortal>
-      )}
-    </div>
-  );
-});
+    );
+  },
+  (prev, next) =>
+    prev.isLoading === next.isLoading &&
+    prev.isOnline === next.isOnline &&
+    prev.venderLogo === next.venderLogo &&
+    isEqual(prev.foodItems, next.foodItems)
+);
 
 export default FoodVendorProducts;
