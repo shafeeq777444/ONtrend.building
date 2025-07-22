@@ -35,7 +35,9 @@ const GridCard = ({ title, description, image, route="" }) => {
                 </p>
 
                 {/* Arrow Button */}
-                <div onClick={()=>navigate(`/${route}`)} className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                <div
+                //  onClick={()=>navigate(`/${route}`)}
+                className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                        <div className="bg-white text-black rounded-full p-2 w-[38px] flex items-center overflow-hidden group/arrow hover:bg-black hover:text-white transition-all duration-500 ease-in-out hover:w-28">
                          {/* Text appears only on arrow hover */}
                         <span

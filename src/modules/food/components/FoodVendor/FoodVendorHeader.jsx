@@ -26,21 +26,16 @@ const FoodVendorHeader = ({ currentVendor, isLoading }) => {
   if (isLoading) return <SkeletonFoodVendorHeader />;
 
   return (
-    <div className="sticky top-14 right-0 w-full scrollbar-hide">
+    <div className=" top-14 right-0 w-full scrollbar-hide">
       <div className="relative w-full h-[220px] md:h-[270px] overflow-hidden shadow-md">
-        {/* Banner Image */}
-        <LazyImg
-          src={currentVendor?.bannerImage?.[1]}
-          alt="Food Vendor Banner"
-          loading="lazy"
-          className={`w-full h-full object-cover ${
-            currentVendor?.isOnline === false ? "grayscale" : ""
-          }`}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = currentVendor?.bannerImage?.[0];
-          }}
-        />
+        {/* Banner Gradient with Vendor Name */}
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+          <h1 className="text-white text-3xl md:text-4xl font-extrabold drop-shadow-lg text-center">
+            {isArabic
+              ? currentVendor?.restaurantArabicName
+              : currentVendor?.restaurantName}
+          </h1>
+        </div>
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

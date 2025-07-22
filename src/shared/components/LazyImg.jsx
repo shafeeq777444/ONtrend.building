@@ -39,4 +39,4 @@ const LazyImg = ({
   );
 };
 
-export default LazyImg;
+export default React.memo(LazyImg);

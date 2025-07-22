@@ -1,7 +1,7 @@
 import React from "react";
 
 // Skeleton card component
-const FoodCardSkeleton = () => (
+const FoodCardSkeleton = React.memo(() => (
   <div className="relative rounded-xl overflow-hidden shadow-md bg-white animate-pulse">
     <div className="w-full h-40 sm:h-48 bg-gray-200" />
     <div className="p-2 pb-14 space-y-2">
@@ -15,10 +15,10 @@ const FoodCardSkeleton = () => (
       <div className="h-8 w-16 bg-gray-300 rounded-tl-xl rounded-br-xl" />
     </div>
   </div>
-);
+));
 
 // Main skeleton grid component
-const SkeltonFoodCard = () => {
+const SkeltonFoodCard = React.memo(() => {
   return (
     <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {Array.from({ length: 12 }).map((_, i) => (
@@ -26,6 +26,6 @@ const SkeltonFoodCard = () => {
       ))}
     </div>
   );
-};
+});
 
 export default SkeltonFoodCard;

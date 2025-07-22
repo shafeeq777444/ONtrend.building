@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import { DrawerTrigger } from "@/shared/components/ui/drawer";
-import FoodVendorDrawer from './FoodVendorDrawer';
+
 import LazyImg from '@/shared/components/LazyImg';
 
 const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
@@ -114,4 +113,4 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
   );
 };
 
-export default FoodCardInVendor;
+export default React.memo(FoodCardInVendor);

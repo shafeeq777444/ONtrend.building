@@ -199,4 +199,4 @@ const FoodVendorDrawer = ({ item, onClose }) => {
   );
 };
 
-export default FoodVendorDrawer;
+export default React.memo(FoodVendorDrawer);

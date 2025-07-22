@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase/config";
+import LazyImg from "@/shared/components/LazyImg";
 
 // Animation configs
 const backdropVariants = {
@@ -100,7 +101,7 @@ const FoodOrderDetailModal = ({ item, onClose }) => {
 
                     {/* Image */}
                     <div className="w-full h-64">
-                        <img src={item.imageUrl} alt={item.name} className="object-cover h-full w-full rounded-t-2xl" />
+                        <LazyImg src={item.imageUrl} alt={item.name} className="object-cover h-full w-full rounded-t-2xl" />
                     </div>
 
                     {/* Scrollable content */}
@@ -211,4 +212,5 @@ const FoodOrderDetailModal = ({ item, onClose }) => {
     );
 };
 
-export default FoodOrderDetailModal;
+export default React.memo(FoodOrderDetailModal);
+
