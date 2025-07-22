@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setVendorMealCategory } from "@/shared/slices/food/foodSlice";
 import isEqual from "fast-deep-equal"; // ✅ added deep comparison
-// import SkeltonFoodCard from "@/shared/components/skeleton/SkeltonFoodCard";
+import SkeltonFoodCard from "@/shared/components/skeleton/SkeltonFoodCard";
 import FoodCardInVendor from "../../components/FoodVendor/FoodCardInVendor";
 import FoodOrderDetailModal from "../../components/FoodVendor/FoodOrderDetailModal";
 import ModalPortal from "@/shared/components/common/ModalPortal";
@@ -36,7 +36,7 @@ const FoodVendorProducts = React.memo(
       setSelectedItem(null);
     }, []);
 
-    // if (isLoading) return <SkeltonFoodCard />;
+    if (isLoading) return <SkeltonFoodCard />;
 
     return (
       <div className="py-2 px-2 scrollbar-hide">
