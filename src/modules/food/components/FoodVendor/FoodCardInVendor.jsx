@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import { FaHeart } from "react-icons/fa";
+import React from 'react';
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-
 import LazyImg from '@/shared/components/LazyImg';
 
 const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
-  const [isImageError, setIsImageError] = useState(false);
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 
   const description = item.description ||
     `A delicious ${item.category?.toLowerCase() || "dish"} prepared with care at ${item.restaurantName || "our restaurant"}.`;
 
-  const shortDesc =
-    description.length > 30 ? description.slice(0, 30) + (isArabic ? '... المزيد' : '... more') : description;
+  const shortDesc = description.length > 30
+    ? description.slice(0, 30) + (isArabic ? '... المزيد' : '... more')
+    : description;
 
   const hasDiscount = item.discountPercentage > 0;
 
@@ -28,17 +26,17 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
     <div
       onClick={isOnline ? onClick : undefined}
       className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01] ${
-        !isOnline ? 'grayscale  pointer-events-none' : ''
+        !isOnline ? 'grayscale pointer-events-none' : ''
       }`}
     >
       {/* Image */}
       <div className="relative">
         <LazyImg
-          src={isImageError ? venderLogo : item.imageUrl}
+          src={item.imageUrl}
           alt={item.name}
+          placeholder={venderLogo}
           loading="lazy"
-          className={`w-full h-40 sm:h-48 ${isImageError ? "object-contain p-4" : "object-cover"}`}
-          onError={() => setIsImageError(true)}
+          className="w-full h-40 sm:h-48 object-cover"
         />
 
         {/* Discount Badge */}
@@ -72,7 +70,7 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
       {/* Price Display */}
       <div className={`absolute bottom-0 ${isArabic ? 'right-0' : 'left-0'} p-2`}>
         {hasDiscount ? (
-          <div className={`${isArabic ? 'text-right' : 'text-left'}`}>
+          <div className={isArabic ? 'text-right' : 'text-left'}>
             <span className="text-sm font-bold text-red-600">
               {isArabic
                 ? `ريال ${formatPrice(item.price)}`
@@ -100,15 +98,6 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
           {isArabic ? "أضف" : "Add"}
         </button>
       </div>
-
-      {/* Offline Overlay */}
-      {/* {!isOnline && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-30">
-          <span className="text-white text-sm font-semibold">
-            {isArabic ? 'غير متصل' : 'Offline'}
-          </span>
-        </div>
-      )} */}
     </div>
   );
 };

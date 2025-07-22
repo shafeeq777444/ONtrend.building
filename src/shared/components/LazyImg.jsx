@@ -1,4 +1,3 @@
-// LazyImg.jsx
 import React, { useState } from "react";
 
 const LazyImg = ({
@@ -11,28 +10,24 @@ const LazyImg = ({
   onError,
 }) => {
   const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-
-  const handleLoad = (e) => {
-    setLoaded(true);
-    onLoad?.(e);
-  };
-
-  const handleError = (e) => {
-    setError(true);
-    onError?.(e);
-  };
+  const [errorSrc, setErrorSrc] = useState(null);
 
   return (
     <img
-      src={error ? placeholder : src}
+      src={errorSrc || src}
       alt={alt}
       loading="lazy"
-      onLoad={handleLoad}
-      onError={handleError}
+      onLoad={(e) => {
+        setLoaded(true);
+        onLoad?.(e);
+      }}
+      onError={(e) => {
+        setErrorSrc(placeholder);
+        onError?.(e);
+      }}
       onClick={onClick}
-      className={`transition duration-500 ease-in-out
-        ${loaded ? "opacity-100 scale-100" : "opacity-0 scale-105"}
+      className={`transition-opacity duration-300 ease-in-out
+        ${loaded ? "opacity-100" : "opacity-0"}
         ${className}
       `}
     />
