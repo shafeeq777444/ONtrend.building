@@ -48,13 +48,13 @@ const NewVendors = () => {
         <div className="px-4 py-6 relative w-full">
             {/* Navigation Buttons */}
             <button
-                    className={`swiper-button-prev-restuarent absolute -top-12 ${
+                    className={` hidden md:block swiper-button-prev-restuarent absolute -top-12 ${
                       isArabic ? "left-10" : "right-16"
                     } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
                   >
                     <FiChevronLeft size={22} />
                   </button>
-                  <button className={`swiper-button-next-restuarent absolute -top-12 ${
+                  <button className={`hidden md:block swiper-button-next-restuarent absolute -top-12 ${
                        isArabic ? "left-22" : "right-4"
                     } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}>
                     <FiChevronRight size={22} />

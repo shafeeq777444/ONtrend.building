@@ -43,14 +43,14 @@ const TopGroceries = () => {
 
             {/* Navigation Buttons */}
             <button
-                className={`swiper-button-prev-grocery absolute top-0  ${
+                className={`swiper-button-prev-grocery absolute hidden md:block top-0  ${
                     isArabic ? "left-10" : "right-14"
                 }  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
             >
                 <FiChevronLeft size={20} />
             </button>
             <button
-                className={`swiper-button-next-grocery absolute top-0 ${
+                className={`swiper-button-next-grocery absolute  hidden md:block top-0 ${
                     isArabic ? "left-20" : "right-4"
                 }  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}
             >

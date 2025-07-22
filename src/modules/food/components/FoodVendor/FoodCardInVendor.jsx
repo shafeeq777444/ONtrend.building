@@ -25,77 +25,77 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
   return (
     <div
       onClick={isOnline ? onClick : undefined}
-      className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01] ${
-        !isOnline ? 'grayscale pointer-events-none' : ''
+      tabIndex={isOnline ? 0 : -1}
+      className={`w-full max-w-xs sm:max-w-sm md:max-w-xs bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transition hover:shadow-xl focus:ring-2 focus:ring-onRed outline-none ${
+        !isOnline ? 'grayscale pointer-events-none opacity-70' : 'cursor-pointer'
       }`}
+      aria-disabled={!isOnline}
     >
-      {/* Image */}
-      <div className="relative">
+      {/* Image Section */}
+      <div className="relative aspect-[4/3] w-full bg-gray-100">
         <LazyImg
           src={item.imageUrl}
           alt={item.name}
           placeholder={venderLogo}
           loading="lazy"
-          className="w-full h-40 sm:h-48 object-cover"
+          className="w-full h-full object-cover rounded-t-2xl"
         />
-
         {/* Discount Badge */}
         {hasDiscount && (
-          <div className={`absolute top-2 ${isArabic ? 'left-2' : 'right-2'} z-20`}>
-            <div className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+          <div className={`absolute top-3 ${isArabic ? 'left-3' : 'right-3'} z-20`}> 
+            <span className="bg-red-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white">
               {isArabic ? `% خصم ${item.discountPercentage}` : `${item.discountPercentage}% OFF`}
-            </div>
+            </span>
           </div>
         )}
-
-        {/* Gradient + Local Name */}
-        <div
-          className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-2 group-hover:opacity-0 transition-opacity duration-300 ${isArabic ? 'text-start' : 'text-end'}`}
-        >
-          <p className="text-white text-xs sm:text-sm font-semibold">
-            {item?.localName}
-          </p>
-          <p className="text-white text-xs sm:text-sm font-semibold">
-            {item?.localTag}
-          </p>
-        </div>
       </div>
 
       {/* Card Content */}
-      <div className={`p-2 pb-14 ${isArabic ? 'text-right' : 'text-left'}`}>
-        <h3 className="text-sm font-semibold truncate">{item.name}</h3>
-        <p className="text-xs text-gray-500 mt-1 truncate">{shortDesc}</p>
+      <div className="flex flex-col flex-1 px-3 py-2 gap-1 sm:gap-2">
+        <h3 className="text-base sm:text-lg font-semibold truncate" title={item.name}>{item.name}</h3>
+        <p className="text-xs sm:text-sm text-gray-500 truncate" title={description}>{shortDesc}</p>
+        {/* Local Name/Tag */}
+        {(item?.localName || item?.localTag) && (
+          <div className={`flex flex-col ${isArabic ? 'items-start' : 'items-end'} mt-1`}>
+            {item?.localName && <span className="text-xs text-gray-700 font-medium">{item.localName}</span>}
+            {item?.localTag && <span className="text-xs text-gray-400">{item.localTag}</span>}
+          </div>
+        )}
       </div>
 
-      {/* Price Display */}
-      <div className={`absolute bottom-0 ${isArabic ? 'right-0' : 'left-0'} p-2`}>
-        {hasDiscount ? (
-          <div className={isArabic ? 'text-right' : 'text-left'}>
-            <span className="text-sm font-bold text-red-600">
-              {isArabic
-                ? `ريال ${formatPrice(item.price)}`
-                : `OMR ${formatPrice(item.price)}`}
-            </span>
-            <span className="text-xs text-gray-400 line-through ml-2">
+      {/* Price & Add Button Row */}
+      <div className={`flex items-center justify-between px-3 py-2 border-t border-gray-100 bg-white ${isArabic ? 'flex-row-reverse' : ''}`}>
+        {/* Price Display */}
+        <div className="flex flex-col items-start">
+          {hasDiscount ? (
+            <>
+              <span className="text-base font-bold text-red-600">
+                {isArabic
+                  ? `ريال ${formatPrice(item.price)}`
+                  : `OMR ${formatPrice(item.price)}`}
+              </span>
+              <span className="text-xs text-gray-400 line-through">
+                {isArabic
+                  ? `ريال ${formatPrice(item.itemPrice)}`
+                  : `OMR ${formatPrice(item.itemPrice)}`}
+              </span>
+            </>
+          ) : (
+            <span className="text-base font-bold text-gray-800">
               {isArabic
                 ? `ريال ${formatPrice(item.itemPrice)}`
                 : `OMR ${formatPrice(item.itemPrice)}`}
             </span>
-          </div>
-        ) : (
-          <span className="text-sm font-bold text-gray-800">
-            {isArabic
-              ? `ريال ${formatPrice(item.itemPrice)}`
-              : `OMR ${formatPrice(item.itemPrice)}`}
-          </span>
-        )}
-      </div>
-
-      {/* Add Button */}
-      <div className={`absolute bottom-0 ${isArabic ? 'left-0' : 'right-0'}`}>
-        <button className="bg-onRed text-white px-2 py-1 md:px-5 md:py-2 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
-          <MdOutlineShoppingBag className="text-base" />
-          {isArabic ? "أضف" : "Add"}
+          )}
+        </div>
+        {/* Add Button */}
+        <button
+          className="bg-onRed text-white px-4 py-2 text-sm rounded-xl flex items-center gap-2 hover:bg-green-600 transition focus:outline-none focus:ring-2 focus:ring-green-400"
+          aria-label={isArabic ? 'أضف إلى السلة' : 'Add to cart'}
+          disabled={!isOnline}
+        >
+          <MdOutlineShoppingBag className="text-lg" />
+          <span className="font-semibold">{isArabic ? "أضف" : "Add"}</span>
         </button>
       </div>
     </div>

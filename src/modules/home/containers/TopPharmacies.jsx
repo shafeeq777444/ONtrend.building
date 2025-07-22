@@ -35,11 +35,11 @@ const TopPharmacies = () => {
         {isArabic ? "أفضل الصيدليات" : "Top Pharmacies"}
       </h2>
 
-      <button className={`swiper-button-prev-pharmacy ${isArabic?"left-10":"right-14"} custom-nav absolute top-0  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}>
+      <button className={`swiper-button-prev-pharmacy hidden md:block ${isArabic?"left-10":"right-14"} custom-nav absolute top-0  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}>
         <FiChevronLeft size={20} />
       </button>
 
-      <button className={`swiper-button-next-pharmacy custom-nav absolute top-0 ${isArabic?"left-20":"right-4"}  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}>
+      <button className={`swiper-button-next-pharmacy hidden md:block custom-nav absolute top-0 ${isArabic?"left-20":"right-4"}  z-10 bg-white p-2 rounded-full shadow mt-4 hover:bg-gray-100 transition`}>
         <FiChevronRight size={20} />
       </button>
 

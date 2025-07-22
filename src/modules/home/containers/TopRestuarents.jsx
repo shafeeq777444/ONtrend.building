@@ -49,7 +49,7 @@ const TopRestaurants = () => {
           isArabic
             ? "swiper-button-next-restuarent left-10"
             : "swiper-button-prev-restuarent right-14"
-        } absolute top-1 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+        } absolute top-1 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 hidden md:block transition`}
       >
         <FiChevronLeft size={22} />
       </button>
@@ -59,7 +59,7 @@ const TopRestaurants = () => {
           isArabic
             ? "swiper-button-prev-restuarent left-20"
             : "swiper-button-next-restuarent right-4"
-        } absolute top-1 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+        } absolute top-1 z-10 bg-white p-2 rounded-full shadow hidden md:block hover:bg-gray-100 transition`}
       >
         <FiChevronRight size={22} />
       </button>

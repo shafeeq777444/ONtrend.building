@@ -58,7 +58,7 @@ const TopRated = () => {
   return (
     <div className="px-4 py-6 relative w-full">
       {/* Heading */}
-      <div className={`mb-6 text-center ${isArabic ? "lg:text-right" : "lg:text-left"}`}>
+      <div className={`mb-6 text-start ${isArabic ? "lg:text-right" : "lg:text-left"}`}>
         <h2 className="text-2xl font-bold text-gray-800 pl-4">
           {isArabic ? "الأعلى تقييماً" : "Top Rated"}
         </h2>
@@ -66,14 +66,14 @@ const TopRated = () => {
 
       {/* Navigation Buttons */}
       <button
-        className={`swiper-button-prev-toprated absolute top-4 ${
+        className={`hidden md:block swiper-button-prev-toprated absolute top-4 ${
           isArabic ? "left-10" : "right-16"
         } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
       >
         <FiChevronLeft size={22} />
       </button>
       <button
-        className={`swiper-button-next-toprated absolute top-4 ${
+        className={`hidden md:block swiper-button-next-toprated absolute top-4 ${
           isArabic ? "left-22" : "right-4"
         } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
       >
