@@ -21,7 +21,7 @@ const BuildingRoomCard = ({ room }) => {
   };
 
   return (
-    <div onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)} className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px]">
+    <div onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)} className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px] hover:scale-[1.02] duration-300 ease-in-out transition-all cursor-pointer">
        {/* Image */}
        <div className="px-4 pb-3">
         <img

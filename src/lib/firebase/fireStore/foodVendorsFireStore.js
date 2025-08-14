@@ -1,4 +1,4 @@
-import { collection, collectionGroup, getDocs, limit, query, startAfter, where } from "firebase/firestore";
+import {  collectionGroup, getDocs, limit, query, startAfter, where } from "firebase/firestore";
 import { db } from "../config";
 
 // each vendors foods(parallel version---------------------------------------------------

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useBuildingDetail, useRoomDetail } from "@/shared/services/queries/building.query";
 import { fallbackAdditional, fallbackCancellation } from "@/shared/utils/constants";
 import AvailableSlotCalender from "../components/Common/AvailableSlotCalender";
@@ -16,6 +16,8 @@ import BuildingLocationMap from "../components/RoomDetail/BuildingLocationMap";
 import BuildingOverallReview from "../components/RoomDetail/BuildingOverallReview";
 import RoomDetailsSkeleton from "../components/skeltons/SkeltonsRoomDetails/RoomDetailsSkelton";
 const RoomDetails = () => {
+    const navigate = useNavigate();
+  const location = useLocation();
     const [activeTab, setActiveTab] = useState("Overview");
     const { roomId } = useParams();
     const { data: roomData,isLoading:isRoomLoading } = useRoomDetail(roomId);
@@ -50,6 +52,18 @@ const RoomDetails = () => {
             });
         }
     };
+    const handleBack = () => {
+    const currentPath = location.pathname; // e.g., /c/689d6337-200c-832c-9a7c-1b618ef1f974
+    const segments = currentPath.split("/").filter(Boolean); // split into ["c", "689d6337-200c-832c-9a7c-1b618ef1f974"]
+
+    // remove last segment
+
+  segments.pop();
+  segments.pop();
+
+    const newPath = "/" + segments.join("/") + "/"; // reconstruct path with trailing slash
+    navigate(newPath);
+  };
 
 
     // Fallback values for room data
@@ -88,6 +102,15 @@ const RoomDetails = () => {
       }
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-4 ">
+             <button 
+                    onClick={handleBack}
+                    className="flex items-center justify-center w-10 h-10  rounded-full bg-white shadow-md hover:bg-gray-100 text-gray-700   transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    aria-label="Go back"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                    </svg>
+                </button>
             {/* -------------------------- TOP TITLE IMAGES --------------------------------------------------------*/}
             <div className="mb-6">
                 <RoomHighliteImageGallery

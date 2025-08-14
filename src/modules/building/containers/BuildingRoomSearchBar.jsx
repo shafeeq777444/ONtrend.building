@@ -53,7 +53,7 @@ const BuildingRoomSearchBar = () => {
     initial={{ y: 0, opacity: 1 }}
     animate={{ y: isVisible ? 0 : 0, opacity: isVisible ? 1 : 0 }}
     transition={{ duration: 0.4 }}
-    className="sticky top-16 z-50"
+    className="sticky top-16 z-20"
 >
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

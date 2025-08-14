@@ -5,10 +5,10 @@ const BuildingRoomTypeCard = ({ roomType, selected }) => {
     icon: "https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bGl2aW5nJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D",
     type: "Room Type",
     count: 0,
-    price: 50,
+    price: 50, //starting price have no data so fix a solutuion
   };
   const [imgSrc, setImgSrc] = useState(roomType?.icon || fallback.icon);
-
+  console.log(roomType,"jnncc");
   return (
     <div
       className={`w-[340px] rounded-2xl overflow-hidden relative transition-transform duration-300 mx-4

@@ -16,7 +16,7 @@ const libraries = ["places"];
 
 const DeliveryLocation = ({
   closeModal,
-  addressExpiry,
+  // addressExpiry,
   location,
   locationName,
   setAddressExpiry,
@@ -158,8 +158,9 @@ const DeliveryLocation = ({
     checkIfLocationMissing();
   }, []);
 
-  if (loadError)
+  if (loadError){
     return <div>{isArabic ? "خطأ في تحميل الخريطة" : "Error loading maps"}</div>;
+  }
   if (!isLoaded)
     return <div></div>;
 
