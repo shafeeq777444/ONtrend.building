@@ -7,6 +7,10 @@ import SearchButton from "../components/SearchBar/SearchButton";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import DateRangePickerSection from "../components/SearchBar/DateSections";
+import { useDispatch } from "react-redux";
+import { setWhereSlice,setCheckInSlice,setCheckOutSlice,setAdultCountSlice,setChildrenCountSlice } from "../slices/buildingSlice";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const BuildingRoomSearchBar = () => {
     // --------------------------------   states------------------------------------
@@ -15,17 +19,34 @@ const BuildingRoomSearchBar = () => {
     const [adultCount, setAdultCount] = useState(1);
     const [childrenCount, setChildrenCount] = useState(0);
     const [dateRange, setDateRange] = useState([{ startDate: null, endDate: null, key: "selection" }]);
-    const [locationInputValue, setLocationInputValue] = useState('');
+    const [locationInputValue, setLocationInputValue] = useState("");
 
     const [isVisible, setIsVisible] = useState(true);
     const lastScrollY = useRef(0);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // functions
     const onClickSearch = () => {
-        console.log("dateRange :",dateRange, "adultCount:", adultCount, "childrenCount:", childrenCount, "LocationinputValue:", locationInputValue, "search");
+        dispatch(setWhereSlice(locationInputValue));
+        dispatch(setCheckInSlice(dateRange[0].startDate?.getTime() || ""));
+        dispatch(setCheckOutSlice(dateRange[0].endDate?.getTime() || ""));
+        dispatch(setAdultCountSlice(adultCount || 0));
+        dispatch(setChildrenCountSlice(childrenCount || 0));
+        console.log("dateRange:", dateRange, "adultCount:", adultCount, "childrenCount:", childrenCount, "LocationinputValue:", locationInputValue, "search");
+        const params = {};
+        if (locationInputValue) params.location = locationInputValue;
+        if (dateRange[0]?.startDate) params.checkIn = dateRange[0].startDate.toISOString();
+        if (dateRange[0]?.endDate) params.checkOut = dateRange[0].endDate.toISOString();
+        if (adultCount) params.adults = adultCount;
+        if (childrenCount) params.children = childrenCount;
+
+        const queryParams = new URLSearchParams(params).toString();
+        navigate(`/building/search${queryParams ? `?${queryParams}` : ''}`);
+        toast.success("search Completed");
     };
-     // ------------------ Scroll Handler ------------------
-     useEffect(() => {
+    // ------------------ Scroll Handler ------------------
+    useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
 
@@ -50,11 +71,11 @@ const BuildingRoomSearchBar = () => {
     // --------------------------------  UI return------------------------------------
     return (
         <motion.div
-    initial={{ y: 0, opacity: 1 }}
-    animate={{ y: isVisible ? 0 : 0, opacity: isVisible ? 1 : 0 }}
-    transition={{ duration: 0.4 }}
-    className="sticky top-16 z-20"
->
+            initial={{ y: 0, opacity: 1 }}
+            animate={{ y: isVisible ? 0 : 0, opacity: isVisible ? 1 : 0 }}
+            transition={{ duration: 0.4 }}
+            className="sticky top-16 z-20"
+        >
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

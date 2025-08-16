@@ -23,13 +23,15 @@ export async function getAllBuildings() {
 export async function getBuildingDetail(id) {
     const { data, error } = await supabase
         .from("buildings")
-        .select(`
+        .select(
+            `
             *,
             building_media(images),
             building_amenities(
                 amenities(*)
             )
-        `)
+        `
+        )
         .eq("id", id)
         .single();
 
@@ -45,11 +47,13 @@ export async function getBuildingDetail(id) {
 export async function getRoomsBasedOnBuildingId(buildingId) {
     const { data: rooms, error } = await supabase
         .from("rooms")
-        .select(`
+        .select(
+            `
             *,
             room_type(*),
             bed_type(*)
-        `)
+        `
+        )
         .eq("building_id", buildingId)
         .order("room_number", { ascending: true });
 
@@ -79,17 +83,18 @@ export async function getRoomsBasedOnBuildingId(buildingId) {
     };
 }
 
-
 //---------------------------------------------------------------- Room Details Page--------------------------------
 export async function getRoomDetail(id) {
     // Step 1: Fetch room details
     const { data: room, error } = await supabase
         .from("rooms")
-        .select(`
+        .select(
+            `
             *,
             room_type(*),
             bed_type(*)
-        `)
+        `
+        )
         .eq("id", id)
         .single();
 
@@ -119,20 +124,6 @@ export async function getRoomDetail(id) {
         amenities, // full amenity objects here
     };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

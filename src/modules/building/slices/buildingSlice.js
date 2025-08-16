@@ -4,32 +4,32 @@ import { createSlice } from "@reduxjs/toolkit";
 const buildingSlice = createSlice({
     name: "building",
     initialState: {
-       LocationinputValue:"",
+       where:"",
        checkIn:null,
        checkOut:null,
-       adultCount:null,
-       childrenCount:null
+       adultCount:1,
+       childrenCount:0
     },
 
     reducers: {
-        setLocationinputValue:(state,action)=>{
-            state.LocationinputValue=action.payload
+        setWhereSlice:(state,action)=>{
+            state.where=action.payload
         },
-        setCheckIn:(state,action)=>{
+        setCheckInSlice:(state,action)=>{
             state.checkIn=action.payload
         },
-        setCheckOut:(state,action)=>{
+        setCheckOutSlice:(state,action)=>{
             state.checkOut=action.payload
         },
-        setAdultCount:(state,action)=>{
+        setAdultCountSlice:(state,action)=>{
             state.adultCount=action.payload
         },
-        setChildrenCount:(state,action)=>{
+        setChildrenCountSlice:(state,action)=>{
             state.childrenCount=action.payload
         }
 
     },
 });
 
-export const { setLocationinputValue,setCheckIn,setCheckOut,setAdultCount,setChildrenCount } = buildingSlice.actions;
+export const { setAdultCountSlice,setCheckInSlice,setCheckOutSlice,setChildrenCountSlice,setWhereSlice } = buildingSlice.actions;
 export default buildingSlice.reducer;

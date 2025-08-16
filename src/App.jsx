@@ -7,6 +7,7 @@ import MainLayout from "./shared/layouts/MainLayout";
 import OntrendLoading from "./shared/components/common/OntrendLoading";
 
 import RoomDetails from "./modules/building/pages/RoomDetailsPage";
+import BuildingRoomSearchedPage from "./modules/building/pages/BuildingRoomSearchedPage";
 
 
 
@@ -51,6 +52,7 @@ export default function App() {
                     <Route path="building" element={<BuildingHomePage />} />
                     <Route path="building/:buildingId" element={<BuildingDetailPage />} />
                     <Route path="building/:buildingId/room/:roomId" element={<RoomDetails />} />
+                    <Route path="/building/search" element={<BuildingRoomSearchedPage />} />
                     {/* -------------------------------- commented ---------------------------- */}
                 </Route>
 
