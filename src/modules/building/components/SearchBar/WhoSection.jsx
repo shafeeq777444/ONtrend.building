@@ -4,28 +4,11 @@ import GuestSelectionModal from "./GuestSelectionModal";
 const WhoSection = ({
     showGuestSearch,
     setShowGuestSearch,
-    setAdultCount,
-    setChildrenCount,
+    handleGuestChange,
     adultCount,
     childrenCount,
     showCalendar,
 }) => {
-    // --------------------------------   functions--------------------------------
-    const handleGuestChange = (type, operation) => {
-        if (type === "adults") {
-            if (operation === "increase" && adultCount < 16) {
-                setAdultCount(adultCount + 1);
-            } else if (operation === "decrease" && adultCount > 1) {
-                setAdultCount(adultCount - 1);
-            }
-        } else if (type === "children") {
-            if (operation === "increase" && childrenCount < 10) {
-                setChildrenCount(childrenCount + 1);
-            } else if (operation === "decrease" && childrenCount > 0) {
-                setChildrenCount(childrenCount - 1);
-            }
-        }
-    };
 
     // -------------------------------- UI --------------------------------
     return (

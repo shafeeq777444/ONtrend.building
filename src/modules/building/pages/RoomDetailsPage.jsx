@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useBuildingDetail, useRoomDetail } from "@/shared/services/queries/building.query";
 import { fallbackAdditional, fallbackCancellation } from "@/shared/utils/constants";
@@ -16,13 +16,16 @@ import BuildingLocationMap from "../components/RoomDetail/BuildingLocationMap";
 import BuildingOverallReview from "../components/RoomDetail/BuildingOverallReview";
 import RoomDetailsSkeleton from "../components/skeltons/SkeltonsRoomDetails/RoomDetailsSkelton";
 import BackButton from "../components/Common/BackButton";
+import ExploreSpaceImagesBuilding from "../containers/ExploreSpaceImagesBuilding";
 const RoomDetails = () => {
     const navigate = useNavigate();
-  const location = useLocation();
+    const location = useLocation();
     const [activeTab, setActiveTab] = useState("Overview");
+    const [exploreSpcae, setExploreSpace] = useState(false);
     const { roomId } = useParams();
-    const { data: roomData,isLoading:isRoomLoading } = useRoomDetail(roomId);
-    const { data: buildingData,isLoading:isBuildingLoading } = useBuildingDetail(roomData?.building_id);
+    const { data: roomData, isLoading: isRoomLoading } = useRoomDetail(roomId);
+    const { data: buildingData, isLoading: isBuildingLoading } = useBuildingDetail(roomData?.building_id);
+    
     // 🔗 Create refs for each section
     const overviewRef = useRef(null);
     const detailsRef = useRef(null);
@@ -31,6 +34,59 @@ const RoomDetails = () => {
     const rulesRef = useRef(null);
     const reviewsRef = useRef(null);
     const locationRef = useRef(null);
+
+    // 🔍 Intersection Observer for automatic tab activation
+    useEffect(() => {
+        const refMap = {
+            Overview: overviewRef,
+            "Rooms & Details": detailsRef,
+            Availability: availabilityRef,
+            Amenities: amenitiesRef,
+            "House Rules": rulesRef,
+            Reviews: reviewsRef,
+            Location: locationRef,
+        };
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-120px 0px -50% 0px', // Adjust based on header height and when to trigger
+            threshold: 0.1
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    // Find which tab corresponds to this ref
+                    const tabName = Object.keys(refMap).find(
+                        tab => refMap[tab].current === entry.target
+                    );
+                    if (tabName) {
+                        setActiveTab(tabName);
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        // Observe all section refs
+        Object.values(refMap).forEach(ref => {
+            if (ref.current) {
+                observer.observe(ref.current);
+            }
+        });
+
+        // Cleanup observer on unmount
+        return () => {
+            Object.values(refMap).forEach(ref => {
+                if (ref.current) {
+                    observer.unobserve(ref.current);
+                }
+            });
+            observer.disconnect();
+        };
+    }, [roomData, buildingData]); // Re-run when data loads
+
     const handleTabClick = (tab) => {
         const refMap = {
             Overview: overviewRef,
@@ -47,25 +103,30 @@ const RoomDetails = () => {
             const elementPosition = ref.current.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
+            // Update active tab state
+            setActiveTab(tab);
+
             window.scrollTo({
                 top: offsetPosition,
                 behavior: "smooth",
             });
         }
     };
+    const handleExplore = () => {
+        setExploreSpace(true);
+    };
     const handleBack = () => {
-    const currentPath = location.pathname; // e.g., /c/689d6337-200c-832c-9a7c-1b618ef1f974
-    const segments = currentPath.split("/").filter(Boolean); // split into ["c", "689d6337-200c-832c-9a7c-1b618ef1f974"]
+        const currentPath = location.pathname; // e.g., /c/689d6337-200c-832c-9a7c-1b618ef1f974
+        const segments = currentPath.split("/").filter(Boolean); // split into ["c", "689d6337-200c-832c-9a7c-1b618ef1f974"]
 
-    // remove last segment
+        // remove last segment
 
-  segments.pop();
-  segments.pop();
+        segments.pop();
+        segments.pop();
 
-    const newPath = "/" + segments.join("/") + "/"; // reconstruct path with trailing slash
-    navigate(newPath);
-  };
-
+        const newPath = "/" + segments.join("/") + "/"; // reconstruct path with trailing slash
+        navigate(newPath);
+    };
 
     // Fallback values for room data
     const fallbackData = {
@@ -100,13 +161,14 @@ const RoomDetails = () => {
     };
     if (isRoomLoading || isBuildingLoading || !roomData || !buildingData) {
         return <RoomDetailsSkeleton />;
-      }
+    }
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-4 ">
-             <BackButton handleBack={handleBack} indicateText="Building" />
+            <BackButton handleBack={handleBack} indicateText="Building" />
             {/* -------------------------- TOP TITLE IMAGES --------------------------------------------------------*/}
-            <div className="mb-6">
+            <div className="mb-6 h-100">
                 <RoomHighliteImageGallery
+                    handleExplore={handleExplore}
                     images={
                         Array.isArray(roomData?.images) && roomData.images.length > 0
                             ? roomData.images
@@ -172,9 +234,9 @@ const RoomDetails = () => {
                 </div>
 
                 {/*--------------------------  right side -------------------------- */}
-                <div className="order-1 lg:order-2 lg:w-80 xl:w-96">
-                    <div className="sticky top-16">
-                        <BuildingBookingSideBar room={roomData} />
+                <div className="order-1 lg:order-2 lg:w-80 xl:w-96 mt-24">
+                    <div className="sticky top-40">
+                        <BuildingBookingSideBar room={roomData} setActiveTab={setActiveTab} onTabClick={handleTabClick}/>
                     </div>
                 </div>
             </div>
@@ -185,6 +247,17 @@ const RoomDetails = () => {
                 <BuildingRoomReviews />
                 {/* Location Section */}
             </div>
+            {exploreSpcae && (
+                <ExploreSpaceImagesBuilding
+                    isOpen={exploreSpcae}
+                    images={
+                        Array.isArray(roomData?.images) && roomData.images.length > 0
+                            ? roomData.images
+                            : fallbackData.images
+                    }
+                    onClose={() => setExploreSpace(false)}
+                />
+            )}
         </div>
     );
 };

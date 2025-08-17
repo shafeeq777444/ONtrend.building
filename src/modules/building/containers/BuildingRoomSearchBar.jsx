@@ -7,26 +7,87 @@ import SearchButton from "../components/SearchBar/SearchButton";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import DateRangePickerSection from "../components/SearchBar/DateSections";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setWhereSlice,setCheckInSlice,setCheckOutSlice,setAdultCountSlice,setChildrenCountSlice } from "../slices/buildingSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const BuildingRoomSearchBar = () => {
     // --------------------------------   states------------------------------------
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { where, checkIn, checkOut, adultCount, childrenCount } = useSelector(state => state.building);
 
     const [showGuestSearch, setShowGuestSearch] = useState(false);
-    const [adultCount, setAdultCount] = useState(1);
-    const [childrenCount, setChildrenCount] = useState(0);
-    const [dateRange, setDateRange] = useState([{ startDate: null, endDate: null, key: "selection" }]);
-    const [locationInputValue, setLocationInputValue] = useState("");
+    const [hasUserChangedGuests, setHasUserChangedGuests] = useState(false);
+    
+    // Get URL parameters
+    const urlParams = new URLSearchParams(location.search);
+    const urlCheckIn = urlParams.get('checkIn');
+    const urlCheckOut = urlParams.get('checkOut');
+    const urlAdults = urlParams.get('adults');
+    const urlChildren = urlParams.get('children');
+    const urlLocation = urlParams.get('location');
+    
+    // Initialize state from URL params first, then Redux, then defaults
+    const [locationInputValue, setLocationInputValue] = useState(urlLocation || where || "");
+    
+    // Initialize dateRange from URL params first, then Redux state, then default values
+    const [dateRange, setDateRange] = useState([
+        {
+            startDate: urlCheckIn ? new Date(urlCheckIn) : (checkIn ? new Date(checkIn) : null),
+            endDate: urlCheckOut ? new Date(urlCheckOut) : (checkOut ? new Date(checkOut) : null),
+            key: "selection",
+        },
+    ]);
+    
+    // Initialize Redux state from URL params if they exist
+    useEffect(() => {
+        if (urlLocation) dispatch(setWhereSlice(urlLocation));
+        if (urlCheckIn) dispatch(setCheckInSlice(new Date(urlCheckIn).getTime()));
+        if (urlCheckOut) dispatch(setCheckOutSlice(new Date(urlCheckOut).getTime()));
+        if (urlAdults) dispatch(setAdultCountSlice(parseInt(urlAdults)));
+        if (urlChildren) dispatch(setChildrenCountSlice(parseInt(urlChildren)));
+    }, [dispatch, urlLocation, urlCheckIn, urlCheckOut, urlAdults, urlChildren]);
 
     const [isVisible, setIsVisible] = useState(true);
     const lastScrollY = useRef(0);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     // functions
+    const handleGuestChange = (type, operation) => {
+        setHasUserChangedGuests(true);
+        const currentAdultCount = hasUserChangedGuests ? adultCount : (urlAdults ? parseInt(urlAdults) : adultCount);
+        const currentChildrenCount = hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount);
+        
+        if (type === "adults") {
+            if (operation === "increase" && currentAdultCount < 16) {
+                dispatch(setAdultCountSlice(currentAdultCount + 1));
+            } else if (operation === "decrease" && currentAdultCount > 1) {
+                dispatch(setAdultCountSlice(currentAdultCount - 1));
+            }
+        } else if (type === "children") {
+            if (operation === "increase" && currentChildrenCount < 10) {
+                dispatch(setChildrenCountSlice(currentChildrenCount + 1));
+            } else if (operation === "decrease" && currentChildrenCount > 0) {
+                dispatch(setChildrenCountSlice(currentChildrenCount - 1));
+            }
+        }
+    };
+
+    // Update Redux state when dateRange changes
+    const handleDateRangeChange = (newDateRange) => {
+        setDateRange(newDateRange);
+        dispatch(setCheckInSlice(newDateRange[0].startDate?.getTime() || ""));
+        dispatch(setCheckOutSlice(newDateRange[0].endDate?.getTime() || ""));
+    };
+
+    // Update Redux state when location changes
+    const handleLocationChange = (value) => {
+        setLocationInputValue(value);
+        dispatch(setWhereSlice(value));
+    };
+
     const onClickSearch = () => {
         dispatch(setWhereSlice(locationInputValue));
         dispatch(setCheckInSlice(dateRange[0].startDate?.getTime() || ""));
@@ -84,17 +145,16 @@ const BuildingRoomSearchBar = () => {
             >
                 <div className="hidden lg:flex items-center justify-between">
                     {/* location section */}
-                    <WhereSection inputValue={locationInputValue} setInputValue={setLocationInputValue} />
+                    <WhereSection inputValue={locationInputValue} setInputValue={handleLocationChange} />
                     {/* Date section */}
-                    <DateRangePickerSection dateRange={dateRange} setDateRange={setDateRange} isSearchBar={true} />
+                    <DateRangePickerSection dateRange={dateRange} setDateRange={handleDateRangeChange} isSearchBar={true} />
                     {/* guest amount section */}
                     <WhoSection
                         showGuestSearch={showGuestSearch}
                         setShowGuestSearch={setShowGuestSearch}
-                        setAdultCount={setAdultCount}
-                        setChildrenCount={setChildrenCount}
-                        adultCount={adultCount}
-                        childrenCount={childrenCount}
+                        handleGuestChange={handleGuestChange}
+                        adultCount={hasUserChangedGuests ? adultCount : (urlAdults ? parseInt(urlAdults) : adultCount)}
+                        childrenCount={hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount)}
                     />
                     <SearchButton onClick={onClickSearch} />
                 </div>
