@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useBuildingDetail, useRoomDetail } from "@/shared/services/queries/building.query";
+import {  useRoomDetail } from "@/shared/services/queries/building.query";
 import { fallbackAdditional, fallbackCancellation } from "@/shared/utils/constants";
 import AvailableSlotCalender from "../components/Common/AvailableSlotCalender";
 import BuildingStayPolicies from "../components/RoomDetail/BuildingStayPolicies";
@@ -17,6 +17,7 @@ import BuildingOverallReview from "../components/RoomDetail/BuildingOverallRevie
 import RoomDetailsSkeleton from "../components/skeltons/SkeltonsRoomDetails/RoomDetailsSkelton";
 import BackButton from "../components/Common/BackButton";
 import ExploreSpaceImagesBuilding from "../containers/ExploreSpaceImagesBuilding";
+import { useBuildingDetail } from "../services/hooks/useBuildingDetail";
 const RoomDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();

@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import PharmacyCard from "../components/cards/PharmacyCard";
 import SkeletonTopPharmacies from "@/shared/components/skeleton/SkeletonTopPharmacies";
-import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 
 
 const TopPharmacies = () => {

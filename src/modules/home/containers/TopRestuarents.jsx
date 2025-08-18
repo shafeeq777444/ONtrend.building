@@ -8,7 +8,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";
 import { useSelector } from "react-redux";
-import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";

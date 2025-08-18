@@ -1,35 +1,35 @@
-import { fetchAllFoodVendors, fetchAllTopVendors } from "@/lib/firebase/fireStore/vendorsFirestore";
-import { useQuery } from "@tanstack/react-query";
+// import { fetchAllFoodVendors,  } from "@/lib/firebase/fireStore/vendorsFirestore";
+// import { useQuery } from "@tanstack/react-query";
 
-// import { useEffect } from "react";
+// // import { useEffect } from "react";
 // import { collection, onSnapshot, query, where } from "firebase/firestore";
 // import { db } from "../../firebase/config";
 
 //getAllVendors(food,pharmcy,grocery,...)
 
 //getAllTopVendors--(Top).....(food,pharmcy,grocery,...) [used://home page //foodpage-firstHalf]
-export function useGetAllTopVendors(lat, lng) {
-    return useQuery({
-        queryKey: ["topVendors"],
-        queryFn: fetchAllTopVendors,
-        staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: false,
-        enabled: !!lat && !!lng,
-    });
-}
+// export function useGetAllTopVendors(lat, lng) {
+//     return useQuery({
+//         queryKey: ["topVendors"],
+//         queryFn: fetchAllTopVendors,
+//         staleTime: 5 * 60 * 1000,
+//         cacheTime: 10 * 60 * 1000,
+//         refetchOnWindowFocus: false,
+//         enabled: !!lat && !!lng,
+//     });
+// }
 
 //getAllFood/RestuarentVendors [use://fode last component,food inside]
-export function useGetAllFoodVendors(lat, lng) {
-    return useQuery({
-        queryKey: ["foodVendors"],
-        queryFn: fetchAllFoodVendors,
-        staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: false,
-        enabled: !!lat && !!lng,
-    });
-}
+// export function useGetAllFoodVendors(lat, lng) {
+//     return useQuery({
+//         queryKey: ["foodVendors"],
+//         queryFn: fetchAllFoodVendors,
+//         staleTime: 5 * 60 * 1000,
+//         cacheTime: 10 * 60 * 1000,
+//         refetchOnWindowFocus: false,
+//         enabled: !!lat && !!lng,
+//     });
+// }
 
 
 // getNearest Discount Provided Vendors

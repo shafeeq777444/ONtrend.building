@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import TopRatedCards from "../../components/foodHome/TopRatedCard";
-import { useGetAllTopVendors } from "../../shared/hooks/queries/useVendors";
+import { useGetAllTopVendors } from "../../services/queries/useGetAllTopVendors";
 import SkeltonTopRated from "@/shared/components/skeleton/SkeltonTopRated";
 import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";

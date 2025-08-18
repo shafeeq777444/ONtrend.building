@@ -11,12 +11,13 @@ import NavigationArrows from "@/shared/components/common/NavigationArrows";
 
 import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
-import { useBuildings } from "@/shared/services/queries/building.query";
+
 import SkeltonHomeBuildingCards from "../components/skeltons/SkeltonHomeBuildingCards";
 import BuildingHomeCard from "@/modules/building/components/card/BuildingHomeCard";
+import { useBuildingsWithRealtime } from "../services/hooks/useBuildingsWithRealtime";
 
 const AllBuildings = () => {
-    const { data = [],isLoading } = useBuildings();
+    const { data = [],isLoading } = useBuildingsWithRealtime();
     console.log(data);
     // Clone the data 3 times
     const repeatedData = [...data, ...data, ...data];
@@ -64,8 +65,8 @@ const AllBuildings = () => {
                 }}
                 modules={[Navigation, FreeMode, Mousewheel, Grid]}
             >
-                {repeatedData.map((building) => (
-                    <SwiperSlide key={building.id} className="overflow-visible py-2 px-1.5">
+                {repeatedData.map((building, index) => (
+                    <SwiperSlide key={`${building.id}-${index}`} className="overflow-visible py-2 px-1.5">
                         <BuildingHomeCard
                             isLiked={wishlistIds.has(building.id)}
                             building={building}

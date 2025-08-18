@@ -8,7 +8,7 @@ import { FiChevronLeft, FiChevronRight, FiShoppingBag } from "react-icons/fi";
 import { MapPin, Clock } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 import SkeletonTopGroceries from "@/shared/components/skeleton/SkeletonTopGroceries";
 import RatingStars from "@/shared/components/common/RatingStar";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";

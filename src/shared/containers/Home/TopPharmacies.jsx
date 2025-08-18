@@ -7,10 +7,11 @@ import "swiper/css/autoplay";
 import { Navigation, FreeMode, Mousewheel, Autoplay } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import PharmacyCard from "../../shared/components/home/PharmacyCard";
-import { useGetAllTopVendors } from "../../services/queries/vendors.query";
+
 import SkeletonTopPharmacies from "../../components/skeleton/SkeletonTopPharmacies";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 
 const TopPharmacies = () => {
   const { i18n } = useTranslation();

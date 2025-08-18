@@ -1,10 +1,11 @@
 
 import SkeltonDiscountedFoodCards from '@/shared/components/skeleton/SkeltonDiscountedFoodCards';
-import { useGetAllFoodVendors } from '@/shared/services/queries/vendors.query';
+
 
 import React from 'react';
 import { useSelector } from 'react-redux';
 import FoodDiscountRestaurantCard from '../../components/FoodVendor/FoodDiscountRestaurantCard';
+import { useGetAllFoodVendors } from '../../services/queries/useGetAllFoodVendors';
 
 
 const FoodDiscountedVednorsList = ({ discountValue }) => {

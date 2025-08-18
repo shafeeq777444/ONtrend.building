@@ -7,7 +7,7 @@ import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import SkeltonTopRestuarent from "../../modules/food/components/skeltons/SkeltonRestuarent";
 
-import { useGetAllTopVendors } from "../../shared/services/queries/vendors.query";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 import { useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";

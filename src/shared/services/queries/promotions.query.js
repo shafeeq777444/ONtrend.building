@@ -1,24 +1,49 @@
-import { fetchAllDocuments } from "@/lib/firebase/fireStore/commonFirestore";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { subscribeAllBanners, subscribeAllOffers } from "@/shared/services/firestore/PromotionalFirestore";
 
-
+// banners hook
 export function useGetAllBanners() {
-    return useQuery({
+    const queryClient = useQueryClient();
+
+    const query = useQuery({
         queryKey: ["banners"],
-        queryFn: () => fetchAllDocuments("banners"),
-        staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: false,
+        queryFn: () => new Promise(() => {}), // subscription will update data
+        staleTime: Infinity,
+        cacheTime: Infinity,
     });
+
+    useEffect(() => {
+        const unsubscribe = subscribeAllBanners(
+            (docs) => queryClient.setQueryData(["banners"], docs),
+            () => queryClient.setQueryData(["banners"], [])
+        );
+
+        return () => unsubscribe();
+    }, [queryClient]);
+
+    return query;
 }
 
-
+// offers hook (only active)
 export function useGetAllOffers() {
-    return useQuery({
-        queryKey: ["offers"],
-        queryFn: () => fetchAllDocuments("offers"),
-        staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: false,
+    const queryClient = useQueryClient();
+
+    const query = useQuery({
+        queryKey: ["offers", "active"],
+        queryFn: () => new Promise(() => {}), // subscription will update data
+        staleTime: Infinity,
+        cacheTime: Infinity,
     });
+
+    useEffect(() => {
+        const unsubscribe = subscribeAllOffers(
+            (docs) => queryClient.setQueryData(["offers", "active"], docs),
+            () => queryClient.setQueryData(["offers", "active"], [])
+        );
+
+        return () => unsubscribe();
+    }, [queryClient]);
+
+    return query;
 }

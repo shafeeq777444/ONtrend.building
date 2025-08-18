@@ -2,13 +2,14 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
 import { FaStar } from "react-icons/fa";
-import { useGetAllFoodVendors } from "@/shared/services/queries/vendors.query";
+
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import localforage from "localforage";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useGetAllFoodVendors } from "../../services/queries/useGetAllFoodVendors";
 
 const HISTORY_KEY = "vendorSearchHistory";
 const MAX_HISTORY = 8;

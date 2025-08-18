@@ -9,8 +9,9 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import PharmacyCard from "../../shared/components/home/PharmacyCard";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+
 import SkeletonTopPharmacies from "@/shared/components/skeleton/SkeletonTopPharmacies";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 
 const TopPharmacies = () => {
   const { i18n } = useTranslation();

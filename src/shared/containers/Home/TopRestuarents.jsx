@@ -8,11 +8,12 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 import SkeltonTopRestuarent from "../../../modules/food/components/skeltons/SkeltonRestuarent";
 import RestuarentCard from "../../shared/components/RestuarentCard";
-import { useGetAllTopVendors } from "../../services/queries/vendors.query";
+
 import { useSelector } from "react-redux";
 import { useWishlist } from "@/shared/services/queries/cart.query";
 import { useTranslation } from "react-i18next";
 import { auth } from "@/firebase/config";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 // import { auth } from "@/firebaseDemo/democonfig";
 
 const TopRestaurants = () => {

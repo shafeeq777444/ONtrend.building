@@ -7,13 +7,13 @@ import FoodVendorProducts from "@/modules/food/containers/FoodVendor/FoodVendorP
 import FoodVendorHeader from "../components/FoodVendor/FoodVendorHeader";
 import PaginationButtons from "@/shared/components/common/PaginationButtons";
 
-import { useGetAllFoodVendors } from "@/shared/services/queries/vendors.query";
 import {
   useGetVendorFoodsAndCategories,
   useVendorFoodCategories,
 } from "@/shared/services/queries/foodVendor.query";
 
 import { useTranslation } from "react-i18next";
+import { useGetAllFoodVendors } from "../services/queries/useGetAllFoodVendors";
 
 const getLocalizedField = (item, field, isArabic) =>
   isArabic ? item?.[`${field}Arabic`] || item?.[field] : item?.[field];

@@ -8,13 +8,14 @@ import "swiper/css/grid";
 import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-import { useGetAllFoodVendors } from "../../../shared/hooks/queries/useVendors";
+
 import SkeltonTopRestuarent from "../../../components/skeleton/SkeltonNearRestuarent";
 import RestuarentCard from "../../../components/cards/RestaurantCard";
 import { useSelector } from "react-redux";
 import { useWishlist } from "@/shared/services/queries/cart.query";
 import { useTranslation } from "react-i18next";
 import { auth } from "@/firebase/config";
+import { useGetAllFoodVendors } from "@/modules/food/services/queries/useGetAllFoodVendors";
 // import { auth } from "@/firebaseDemo/democonfig";
 
 const NewVendors = () => {

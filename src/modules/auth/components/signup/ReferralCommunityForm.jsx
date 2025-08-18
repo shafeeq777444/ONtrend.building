@@ -19,7 +19,7 @@ export default function ReferralCommunityForm() {
     }
   };
   
-   const onSubmit = async (formData) => {
+   const onSubmit = async () => {
   const decryptedData = {};
 
   // Decrypt all localforage data

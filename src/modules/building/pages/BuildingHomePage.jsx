@@ -7,8 +7,8 @@ const RoomHome = () => {
         <div className="ml-2 mt-10">
             <BuildingRoomSearchBar />
             <AllBuildings />
-            <AllBuildings />
-            <AllBuildings />
+            {/* <AllBuildings /> */}
+            {/* <AllBuildings /> */}
         </div>
     );
 };

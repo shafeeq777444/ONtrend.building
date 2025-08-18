@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useBuildingDetail, useRoomsBasedOnBuildingId } from "@/shared/services/queries/building.query";
+import {  useRoomsBasedOnBuildingId } from "@/shared/services/queries/building.query";
 
 import BuildingCarouseImageCard from "@/modules/building/components/card/BuildingCarouseImageCard";
 import BuildingDetailsCard from "../components/card/BuildingDetailsCard";
@@ -9,6 +9,7 @@ import BuildingRoomTypeCard from "../components/card/BuildingRoomTypeCard";
 import BuildingDetailsSkeleton from "../components/skeltons/SkeletonBuildingDetails";
 import BuildingRoomTypeCardMobile from "../components/Card/BuildingRoomTypeCardMobile";
 import BackButton from "../components/Common/BackButton";
+import { useBuildingDetail } from "../services/hooks/useBuildingDetail";
 
 const BuildingDetails = () => {
     // -----------------states-----------------------------
@@ -19,6 +20,8 @@ const BuildingDetails = () => {
     const { buildingId } = useParams();
     const { data: buildingDetail, isLoading: isBuildingLoading } = useBuildingDetail(buildingId);
     const { data: roomsData, isLoading: isRoomsLoading } = useRoomsBasedOnBuildingId(buildingId);
+
+    console.log(buildingDetail,"buildingDetail");
 
     // -----------------functions----------------------------
     const rooms = roomsData?.rooms || [];

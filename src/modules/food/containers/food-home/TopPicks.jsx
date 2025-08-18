@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/shared/services/queries/wishlist.query";
 import RestaurantCard from "../../components/cards/RestaurantCard";
-import { useGetAllTopVendors } from "@/shared/services/queries/vendors.query";
+import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 
 const TopPicks = () => {
