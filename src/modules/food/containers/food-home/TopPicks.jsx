@@ -11,7 +11,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import RestaurantCard from "../../components/cards/RestaurantCard";
 import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";

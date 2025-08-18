@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";
 import WishlistCard from "../components/WhishListCard";
 import WhishlistCategoryBar from "../components/WhishlistCategoryBar";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import BuildingHomeCard from "@/modules/building/components/card/BuildingHomeCard";
 
 

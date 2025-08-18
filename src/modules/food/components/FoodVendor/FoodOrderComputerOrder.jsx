@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
-import { useCartItems, useChangeCartQuantity, useRemoveFromCart } from "@/shared/services/queries/cart.query";
+import { useCartItems, useChangeCartQuantity, useRemoveFromCart } from "@/modules/cart/services/queries/cart.query";
 import { useTranslation } from "react-i18next";
 
 const CartItem = ({ name, desc, price, img, id, quantity, isArabic }) => {

@@ -5,7 +5,7 @@ import { serverTimestamp } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 import localforage from "localforage";
-import { db } from "../firebase/config";
+import { db } from "../../../lib/firebase/config";
 
 //************************ utils ***********************************************************************
 const generateCartItemId = (productId, variant, addons, pricePerQunatity) => {

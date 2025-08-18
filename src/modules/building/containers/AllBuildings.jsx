@@ -10,7 +10,7 @@ import { Navigation, FreeMode, Mousewheel, Grid } from "swiper/modules";
 import NavigationArrows from "@/shared/components/common/NavigationArrows";
 
 import { auth } from "@/lib/firebase/config";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 
 import SkeltonHomeBuildingCards from "../components/skeltons/SkeltonHomeBuildingCards";
 import BuildingHomeCard from "@/modules/building/components/card/BuildingHomeCard";

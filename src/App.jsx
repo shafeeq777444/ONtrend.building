@@ -9,8 +9,6 @@ import OntrendLoading from "./shared/components/common/OntrendLoading";
 import RoomDetails from "./modules/building/pages/RoomDetailsPage";
 import BuildingRoomSearchedPage from "./modules/building/pages/BuildingRoomSearchedPage";
 
-
-
 // Rooms-------------------------------------------------------------
 const BuildingHomePage = lazy(() => import("@/modules/building/pages/BuildingHomePage.jsx"));
 const BuildingDetailPage = lazy(() => import("@/modules/building/pages/BuildingDetailPage.jsx"));

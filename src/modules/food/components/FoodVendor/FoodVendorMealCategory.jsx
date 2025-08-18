@@ -4,16 +4,21 @@ import { Input } from "@/shared/components/ui/input";
 import { SlidersHorizontal, Search } from "lucide-react";
 import { setSearchTerm, setVendorMealCategory } from "@/shared/slices/food/foodSlice";
 import SkeletonCategoryTabs from "@/shared/components/skeleton/SkeltonVendorFoodCategories";
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import Filter from "../Filter";
 
 const FoodVendorMealCategory = ({
-  categories = [],
+  categories = { tags: [], localTags: [] }, // tags for English, localTags for Arabic
   selectedCategory,
   isLoading,
   isOnline,
-  setCurrentPageIndex
+  setCurrentPageIndex,
+  language = "en" // "en" or "ar"
 }) => {
+  const { i18n } = useTranslation();
+   const isArabic = i18n.language === "ar";
   const dispatch = useDispatch();
   const { searchTerm, sortOption } = useSelector((state) => state.food);
   const [localSearch, setLocalSearch] = useState(searchTerm);
@@ -25,6 +30,7 @@ const FoodVendorMealCategory = ({
   const scrollRef = useRef(null);
   const searchInputRef = useRef(null);
 
+  // Sync localSearch with Redux after debounce
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (localSearch !== searchTerm) {
@@ -35,6 +41,7 @@ const FoodVendorMealCategory = ({
     return () => clearTimeout(timeout);
   }, [localSearch, searchTerm, dispatch, setCurrentPageIndex]);
 
+  // Click outside filter to close
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!filterRef.current?.contains(e.target) && !filterButtonRef.current?.contains(e.target)) {
@@ -62,33 +69,41 @@ const FoodVendorMealCategory = ({
     }
   };
 
-  const handleCategoryClick = useCallback((category) => {
-    dispatch(setVendorMealCategory(category));
-    setCurrentPageIndex(0);
-  }, [dispatch, setCurrentPageIndex]);
+  const handleCategoryClick = useCallback(
+    (category) => {
+      dispatch(setVendorMealCategory(category));
+      setCurrentPageIndex(0);
+    },
+    [dispatch, setCurrentPageIndex]
+  );
+console.log(categories,"categories arabicc check")
+  // Choose categories based on language
+  const displayCategories = isArabic ? categories.localTags : categories.tags;
 
-  const categoryButtons = useMemo(() =>
-    categories.map((category, i) => {
-      const isSelected = selectedCategory === category;
-      return (
-        <button
-          key={category + i}
-          onClick={() => handleCategoryClick(category)}
-          className={`snap-start flex-shrink-0 px-6 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-all duration-200
+  const categoryButtons = useMemo(
+    () =>
+      displayCategories?.map((category, i) => {
+        const isSelected = selectedCategory === category;
+        return (
+          <button
+            key={category + i}
+            onClick={() => handleCategoryClick(category)}
+            className={`snap-start flex-shrink-0 px-6 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-all duration-200
             ${isSelected ? "text-white bg-black shadow-lg" : "text-gray-700 bg-gray-100 hover:bg-gray-200"}
             ${!isOnline ? "opacity-60 grayscale" : ""}
           `}
-        >
-          {category}
-        </button>
-      );
-    }), [categories, selectedCategory, handleCategoryClick, isOnline]
+          >
+            {category}
+          </button>
+        );
+      }),
+    [displayCategories, selectedCategory, handleCategoryClick, isOnline]
   );
 
   if (isLoading) return <SkeletonCategoryTabs />;
 
   return (
-    <div className="relative p-4 rounded-2xl bg-white">
+    <div className={`relative p-4 rounded-2xl bg-white ${language === "ar" ? "rtl" : "ltr"}`}>
       {/* Top Bar */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800">Menu</h2>

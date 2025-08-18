@@ -1,4 +1,4 @@
-import { toggleToWishlist, fetchWishlist } from "@/lib/firebaseDemo/demofirestore";
+import { toggleToWishlist, fetchWishlist } from "@/shared/services/firestore/cartAndWhishlist.Firestore";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";

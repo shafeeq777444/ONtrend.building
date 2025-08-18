@@ -1,5 +1,5 @@
 
-import {  addToCart, getAllCartItems, removeFromCart, changeCartQuantity } from "@/lib/firebaseDemo/demofirestore";
+import {  addToCart, getAllCartItems, removeFromCart, changeCartQuantity } from "@/shared/services/firestore/cartAndWhishlist.Firestore";
 import { useMutation, useQuery, useQueryClient, } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 

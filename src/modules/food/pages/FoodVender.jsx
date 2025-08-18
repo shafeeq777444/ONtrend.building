@@ -7,13 +7,11 @@ import FoodVendorProducts from "@/modules/food/containers/FoodVendor/FoodVendorP
 import FoodVendorHeader from "../components/FoodVendor/FoodVendorHeader";
 import PaginationButtons from "@/shared/components/common/PaginationButtons";
 
-import {
-  useGetVendorFoodsAndCategories,
-  useVendorFoodCategories,
-} from "@/shared/services/queries/foodVendor.query";
 
 import { useTranslation } from "react-i18next";
 import { useGetAllFoodVendors } from "../services/queries/useGetAllFoodVendors";
+import { useVendorFoodCategories } from "../services/queries/useVendorFoodCategories";
+import { useLiveVendorFoods } from "../services/queries/useLiveVendorFoods";
 
 const getLocalizedField = (item, field, isArabic) =>
   isArabic ? item?.[`${field}Arabic`] || item?.[field] : item?.[field];
@@ -22,6 +20,7 @@ const FoodVendor = () => {
   const { vendorId } = useParams();
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
+  console.log(vendorId, "vendorId on categories");
 
   const {
     location: { lat, lng },
@@ -33,6 +32,8 @@ const FoodVendor = () => {
 
   const { data: allVendors, isLoading: isVendorsLoading } = useGetAllFoodVendors(lat, lng);
   const currentVendor = useMemo(() => allVendors?.find((v) => v.id === vendorId), [allVendors, vendorId]);
+  console.log(allVendors, "all vendors");
+
 
   const {
     data,
@@ -40,9 +41,10 @@ const FoodVendor = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading: isFoodsLoading,
-  } = useGetVendorFoodsAndCategories(currentVendor?.id, selectedVendorMealCategory);
+  } = useLiveVendorFoods(currentVendor?.id, selectedVendorMealCategory);
 
   const { data: vendorCategories, isLoading: isCategoryLoading } = useVendorFoodCategories(currentVendor?.id);
+  console.log(vendorCategories,"vendorCategories")
 
   const scrollToProducts = () =>
     productsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAddToCart } from "@/shared/services/queries/cart.query";
+import { useAddToCart } from "@/modules/cart/services/queries/cart.query";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";

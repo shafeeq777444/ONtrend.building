@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { useSelector } from "react-redux";
-import { useAddToCart } from "@/shared/services/queries/cart.query";
+import { useAddToCart } from "@/modules/cart/services/queries/cart.query";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase/config";
 

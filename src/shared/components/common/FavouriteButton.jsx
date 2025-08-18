@@ -5,7 +5,7 @@ import { Heart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase/config";
-import { useToggleWishlist } from "@/shared/services/queries/wishlist.query";
+import { useToggleWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 const FavoriteButton = ({ product, isLiked: initialLiked, unlikeIconColor="text-white/90" }) => {
     const currentUserId = auth.currentUser?.uid;
   const [localLiked, setLocalLiked] = useState(initialLiked);

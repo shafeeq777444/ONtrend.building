@@ -27,6 +27,7 @@ export function useGetAllFoodVendors(lat, lng) {
       },
       (error) => {
         queryClient.setQueryData(["foodVendors", lat, lng], []);
+        console.error("Firestore subscription error:", error);
       }
     );
 

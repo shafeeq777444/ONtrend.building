@@ -14,7 +14,7 @@ import RestuarentCard from "../../../components/cards/RestaurantCard";
 import { useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import { auth } from "@/lib/firebase/config";
 import { useGetAllFoodVendors } from "@/modules/food/services/queries/useGetAllFoodVendors";
 

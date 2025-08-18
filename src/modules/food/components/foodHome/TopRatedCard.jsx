@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { auth } from "@/lib/firebase/config";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import LazyImg from "@/shared/components/LazyImg";
 
 

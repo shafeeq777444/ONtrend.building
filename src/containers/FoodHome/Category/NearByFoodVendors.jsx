@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";
 
 import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import { useGetAllFoodVendors } from "@/modules/food/services/queries/useGetAllFoodVendors";
 
 

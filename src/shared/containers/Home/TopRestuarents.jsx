@@ -10,7 +10,7 @@ import SkeltonTopRestuarent from "../../../modules/food/components/skeltons/Skel
 import RestuarentCard from "../../shared/components/RestuarentCard";
 
 import { useSelector } from "react-redux";
-import { useWishlist } from "@/shared/services/queries/cart.query";
+import { useWishlist } from "@/modules/cart/services/queries/cart.query";
 import { useTranslation } from "react-i18next";
 import { auth } from "@/firebase/config";
 import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";

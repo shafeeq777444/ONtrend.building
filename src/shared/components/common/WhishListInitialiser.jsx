@@ -1,5 +1,5 @@
 // src/components/common/WishlistInitializer.jsx
-import { useWishlist } from '@/shared/services/queries/wishlist.query';
+import { useWishlist } from '@/modules/wishlist/services/queries/wishlist.query';
 import { setWhishListIds } from '@/shared/slices/user/userSlice';
 import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

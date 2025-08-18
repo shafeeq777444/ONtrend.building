@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { auth } from "@/lib/firebase/config";
 import { useSelector } from "react-redux";
 import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";

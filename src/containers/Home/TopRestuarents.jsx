@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";
 
-import { useWishlist } from "@/shared/services/queries/wishlist.query";
+import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import { auth } from "@/lib/firebase/config";
 import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
 
