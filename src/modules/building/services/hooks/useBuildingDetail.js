@@ -38,9 +38,54 @@ export function useBuildingDetail(buildingId) {
       )
       .subscribe();
 
+      // Subscribe to building_media table
+    const mediaChannel = supabase
+      .channel(`building-media-${buildingId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "building_media",
+          filter: `building_id=eq.${buildingId}`,
+        },
+        (payload) => {
+          queryClient.setQueryData(["building", buildingId], (oldData) => {
+            if (!oldData) return oldData;
+
+            switch (payload.eventType) {
+              // case "INSERT":
+              //   return {
+              //     ...oldData,
+              //     building_media: [...(oldData.building_media || []), payload.new],
+              //   };
+              case "UPDATE":
+                return {
+                  ...oldData,
+                  building_media: (oldData.building_media || []).map((img) =>
+                    img === payload.new ? payload.new : img
+                  ),
+                };
+              case "DELETE":
+                return {
+                  ...oldData,
+                  building_media: (oldData.building_media || []).filter(
+                    (img) => img.id !== payload.old.id
+                  ),
+                };
+              default:
+                return oldData;
+            }
+          });
+        }
+      )
+      .subscribe();
+
+
     // Cleanup on unmount
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(mediaChannel);
     };
   }, [buildingId, queryClient]);
 

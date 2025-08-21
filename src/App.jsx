@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import Home from "./modules/home/pages/HomePage";
 import MainLayout from "./shared/layouts/MainLayout";
 
@@ -8,6 +8,8 @@ import OntrendLoading from "./shared/components/common/OntrendLoading";
 
 import RoomDetails from "./modules/building/pages/RoomDetailsPage";
 import BuildingRoomSearchedPage from "./modules/building/pages/BuildingRoomSearchedPage";
+import useOnlineStatus from "./shared/hooks/useOnlineStatus";
+import toast from "react-hot-toast";
 
 // Rooms-------------------------------------------------------------
 const BuildingHomePage = lazy(() => import("@/modules/building/pages/BuildingHomePage.jsx"));
@@ -32,6 +34,23 @@ const Whishlist = lazy(() => import("./modules/wishlist/pages/Whishlist"));
 const Cart = lazy(() => import("./modules/cart/pages/Cart"));
 
 export default function App() {
+    const isOnline = useOnlineStatus();
+
+    useEffect(() => {
+        const toastId = "network-status"; // unique ID for this toast
+
+        if (!isOnline) {
+            toast.error("No internet connection", {
+                id: toastId, // same ID -> replaces instead of stacking
+                duration: 10000,
+            });
+        } else {
+            toast.success("Back to Shoppy!", {
+                id: toastId,
+                duration: 2000,
+            });
+        }
+    }, [isOnline]);
     return (
         <Suspense fallback={<OntrendLoading />}>
             <Routes>
@@ -70,7 +89,6 @@ export default function App() {
                 <Route path="/careers" element={<Careers />} />
                 <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
                 <Route path='/privacy-policy' element={<PrivacyPolicy />} /> */}
-
             </Routes>
         </Suspense>
     );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -21,7 +21,8 @@ const TopPharmacies = () => {
     location: { lat, lng },
   } = useSelector((state) => state.user);
 
-  const { data: vendors, isLoading } = useGetAllTopVendors(lat, lng);
+  const { data, isLoading } = useGetAllTopVendors(lat, lng);
+  const vendors = useMemo(() => data?.vendors || [], [data?.vendors]);
   const topPharmacies =
     vendors?.filter((vendor) => vendor.vendorType === "Health & Beauty") || [];
 

@@ -36,7 +36,8 @@ const TopRestaurants = () => {
     location: { lat, lng },
   } = useSelector((state) => state.user);
 
-  const { data: vendors, isLoading } = useGetAllTopVendors(lat, lng);
+  const { data, isLoading } = useGetAllTopVendors(lat, lng);
+  const vendors = useMemo(() => data?.vendors || [], [data?.vendors]);
   const topRestaurants =
     vendors?.filter((vendor) => vendor.vendorType === "Food/Restaurant") || [];
 

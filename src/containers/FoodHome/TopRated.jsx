@@ -25,7 +25,8 @@ const TopRated = () => {
   const {
     location: { lat, lng },
   } = useSelector((state) => state.user);
-  const { data: vendors, isLoading } = useGetAllTopVendors(lat, lng);
+const { data, isLoading } = useGetAllTopVendors(lat, lng);
+const vendors = useMemo(() => data?.vendors || [], [data?.vendors]);
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 

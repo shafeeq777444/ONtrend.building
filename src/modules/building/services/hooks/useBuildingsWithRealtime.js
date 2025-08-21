@@ -44,7 +44,7 @@ export function useBuildingsWithRealtime() {
             })
             .subscribe();
 
-        //   building media
+        //   building media (change)
         const mediaChannel = supabase
             .channel("building-media-realtime")
             .on("postgres_changes", { event: "*", schema: "public", table: "building_media" }, (payload) => {

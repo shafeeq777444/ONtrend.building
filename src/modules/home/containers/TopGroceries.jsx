@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,29 +14,26 @@ import RatingStars from "@/shared/components/common/RatingStar";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import LazyImg from "@/shared/components/LazyImg";
 
-const TopGroceries = () => {
+const TopGroceries = ({setBannerON}) => {
     const {
         location: { lat, lng },
     } = useSelector((state) => state.user);
 
-    const { data: vendors, isLoading, error } = useGetAllTopVendors(lat, lng);
+    const { data, isLoading, error } = useGetAllTopVendors(lat, lng);
+    console.log(data,"topGroceries");
+    const vendors = useMemo(() => data?.vendors || [], [data?.vendors]);
+    const message = useMemo(() => data?.message || null, [data?.message]);
     const { i18n } = useTranslation();
     const isArabic = i18n.language === "ar";
 
     const topGroceries = vendors?.filter((vendor) => vendor.vendorType === "Grocery") || [];
 
-    if (isLoading) return <SkeletonTopGroceries />;
-    if (error)
-        return (
-            <div className="px-4 py-6 text-center">
-                <p className="text-red-600 font-semibold">
-                    {isArabic
-                        ? "فشل تحميل المتاجر، يرجى المحاولة لاحقًا"
-                        : "Failed to load top groceries. Please try again later."}
-                </p>
-            </div>
-        );
-
+    if (message) {
+        setBannerON(false)
+        return;
+    }
+    if (isLoading || (topGroceries.length === 0 && message === null || error)) return <SkeletonTopGroceries />;
+  
     return (
         <div className="px-4 relative" dir={isArabic ? "rtl" : "ltr"}>
             <h2 className="text-xl font-bold mb-4 pl-4">{isArabic ? "أفضل متاجر البقالة" : "Top Groceries"}</h2>

@@ -3,10 +3,14 @@ import { FaGoogle, FaApple, FaFacebookF, FaPhone, FaEnvelope } from "react-icons
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import useCurrentUser from "@/shared/services/queries/user.query";
+
 
 const LoginSection = () => {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const { data:currentUser } = useCurrentUser();
+
   const isArabic = i18n.language === "ar";
 
   const loginOptions = [
@@ -16,13 +20,15 @@ const LoginSection = () => {
     { icon: <FaPhone />, label: isArabic ? "الهاتف" : "Phone" },
     { icon: <FaEnvelope />, label: isArabic ? "البريد" : "Email" },
   ];
-
+if(currentUser){
+  return 
+}
   return (
     <motion.div
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="p-6 bg-white rounded-xl m-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
+      className="p-6 bg-white rounded-xl m-4 mb-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
     >
       {/* Wrapper */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
