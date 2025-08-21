@@ -6,7 +6,7 @@ import { FaStar } from "react-icons/fa";
 
 import { useTranslation } from "react-i18next";
 import SkeletonFoodVendorHeader from "@/shared/components/skeleton/SkeletonFoodVendorHeader";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const FoodVendorHeader = ({ currentVendor, isLoading }) => {
   const navigate = useNavigate();

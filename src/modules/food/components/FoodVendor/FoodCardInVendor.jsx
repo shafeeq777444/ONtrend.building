@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import LazyImg from '@/shared/components/LazyImg';
+import LazyImg from '@/shared/components/performanceOptimised/LazyImg';
 
 const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
   const { i18n } = useTranslation();

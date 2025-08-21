@@ -7,7 +7,7 @@ import { Autoplay } from "swiper/modules";
 import { useTranslation } from "react-i18next";
 import { useGetAllBanners } from "@/shared/services/queries/promotions.query";
 import SkeletonHomeHighlites from "../components/skeletons/SkeletonHomeHighlites";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const Highlites = () => {
   const { i18n } = useTranslation();

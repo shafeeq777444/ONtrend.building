@@ -7,6 +7,7 @@ import CategoryBar from "../components/foodHome/CategoryBar";
 import FoodDiscountDeals from "@/containers/FoodHome/FoodDiscountDeals";
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 import TopRated from "@/containers/FoodHome/TopRated";
+import LazyRenderOnView from "@/shared/components/performanceOptimised/LazyRenderOnView";
 const NearByFood = lazy(() => import("../../../shared/containers/FoodHome/Category/NearByFoodVendors"));
 const NewVendors = lazy(() => import("../../../shared/containers/FoodHome/Category/NewVendors"));
 const TopPicks = lazy(() => import("@/modules/food/containers/food-home/TopPicks.jsx"));
@@ -16,15 +17,29 @@ const RenderCategorySection = () => {
     console.log(categoryBar);
     switch (categoryBar) {
         case "Nearby":
-            return <NearByFood />;
+            return (
+                <LazyRenderOnView>
+                    <NearByFood />
+                </LazyRenderOnView>
+            );
         case "New OnTrend":
-            return <NewVendors />;
+            return (
+                <LazyRenderOnView>
+                    <NewVendors />
+                </LazyRenderOnView>
+            );
         case "Best Sellers":
-            return <TopPicks />;
+            return (
+                <LazyRenderOnView>
+                    <TopPicks />
+                </LazyRenderOnView>
+            );
         default:
             return (
                 <>
-                    <NearByFood />
+                    <LazyRenderOnView>
+                        <NearByFood />
+                    </LazyRenderOnView>
                 </>
             );
     }
@@ -37,11 +52,16 @@ const Food = () => {
             {/* <FoodHomeHIgliteCarousel/> */}
             <FoodOffers />
             <TopRated />
-            <CategoryBar />
+
+            <LazyRenderOnView>
+                <CategoryBar />
+            </LazyRenderOnView>
             <Suspense fallback={<SkeltonRestuarent heading={false} />}>
                 <RenderCategorySection />
             </Suspense>
-            <FoodDiscountDeals />
+            <LazyRenderOnView>
+                <FoodDiscountDeals />
+            </LazyRenderOnView>
         </div>
     );
 };

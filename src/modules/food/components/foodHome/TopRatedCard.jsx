@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { auth } from "@/lib/firebase/config";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 
 // RatingStars Component

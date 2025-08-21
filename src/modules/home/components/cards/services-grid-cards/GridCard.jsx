@@ -1,4 +1,4 @@
-import LazyImage from "@/shared/components/LazyImageBox";
+import LazyImage from "@/shared/components/performanceOptimised/LazyImageBox";
 import { ArrowUpRight } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next"; 

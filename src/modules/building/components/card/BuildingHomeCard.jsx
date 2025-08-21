@@ -2,7 +2,7 @@ import { FaHeart, FaStar, FaMapMarkerAlt } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import {  useNavigate } from "react-router-dom";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const BuildingHomeCard = ({ building,isLiked }) => {
   const { i18n } = useTranslation();

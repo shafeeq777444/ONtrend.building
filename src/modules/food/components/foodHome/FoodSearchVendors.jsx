@@ -9,7 +9,8 @@ import { TypeAnimation } from "react-type-animation";
 import { useTranslation } from "react-i18next";
 import "swiper/css";
 import FoodSearchCard from "../foodsearch/FoodSearchCard";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
+import LazyRenderOnView from "@/shared/components/performanceOptimised/LazyRenderOnView";
 
 const images = ["/gird/food1.jpg", "/gird/food2.jpg", "/gird/food3.jpg", "/gird/food4.jpg"];
 
@@ -104,7 +105,9 @@ const FoodSearchVendors = () => {
         </div>
       </motion.div>
 
-      <FoodSearchCard isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <LazyRenderOnView>
+        <FoodSearchCard isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      </LazyRenderOnView>
     </>
   );
 };

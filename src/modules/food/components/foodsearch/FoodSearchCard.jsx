@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useGetAllFoodVendors } from "../../services/queries/useGetAllFoodVendors";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const HISTORY_KEY = "vendorSearchHistory";
 const MAX_HISTORY = 8;
@@ -70,6 +70,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={handleClose}
           />
 
           {/* Sidebar Panel */}
@@ -77,7 +78,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: "spring", stiffness: 500, damping: 40 }}
             className="relative ml-auto w-full max-w-md h-full bg-white/30 dark:bg-zinc-900/30 backdrop-blur-md border-l border-white/20 dark:border-zinc-700/40 flex flex-col"
           >
             {/* Header with Search */}
@@ -119,7 +120,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
             )}
 
             {/* Vendor List */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
               {isLoading ? (
                 <p className="text-center text-gray-500 py-8">
                   {isArabic ? "جاري تحميل البائعين..." : "Loading vendors..."}

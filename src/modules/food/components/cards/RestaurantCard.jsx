@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
 import RatingStars from "@/shared/components/common/RatingStar";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const RestaurantCard = ({ restaurant, isLiked }) => {
     const navigate = useNavigate();

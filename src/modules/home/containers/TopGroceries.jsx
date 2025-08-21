@@ -12,7 +12,7 @@ import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTo
 import SkeletonTopGroceries from "@/shared/components/skeleton/SkeletonTopGroceries";
 import RatingStars from "@/shared/components/common/RatingStar";
 import FavoriteButton from "@/shared/components/common/FavouriteButton";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const TopGroceries = ({setBannerON}) => {
     const {

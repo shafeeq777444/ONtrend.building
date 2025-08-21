@@ -1,7 +1,7 @@
 import React from "react";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const DownloadGridCard = () => {
     const { i18n } = useTranslation();

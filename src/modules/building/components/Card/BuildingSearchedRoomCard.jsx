@@ -1,4 +1,4 @@
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 import React from "react";
 
 const fallbackImg = "/extras/imageLost.jpg";

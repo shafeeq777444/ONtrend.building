@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import LazyImage from "@/shared/components/LazyImageBox";
+import LazyImage from "@/shared/components/performanceOptimised/LazyImageBox";
 
 const GroceryGridCard = () => {
     const { i18n } = useTranslation();

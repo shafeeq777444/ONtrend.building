@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase/config";
-import LazyImg from "@/shared/components/LazyImg";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 // Animation configs
 const backdropVariants = {
