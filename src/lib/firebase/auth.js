@@ -26,7 +26,7 @@ export const fetchCurrentUserData = async () => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    return docSnap.data();
+    return {id:currentUser.uid, ...docSnap.data()};
   } else {
     throw new Error("No user data found in Firestore");
   }

@@ -5,6 +5,7 @@ import WishlistInitializer from '../components/common/WhishListInitialiser';
 
 
 export default function MainLayout() {
+  
   return (
     <>
       <TopBar />

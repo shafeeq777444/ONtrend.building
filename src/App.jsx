@@ -56,7 +56,7 @@ export default function App() {
         <div dir={isArabic ? "rtl" : "ltr"}> {/* ✅ RTL/LTR applied */}
             <Suspense fallback={<OntrendLoading />}>
                 <Routes>
-                    <Route path="/" element={<MainLayout />}>
+                    <Route path="/" element={<MainLayout />}> {/* ✅ */}
                         <Route index element={<Home />} /> {/* ✅ */}
 
                         {/* ------------------------- food --------------------------------- */}
@@ -64,10 +64,12 @@ export default function App() {
                         <Route path="food/:vendorId" element={<FoodVender />} />
                         <Route
                             path="food/foodDiscountVendor/:discountValue"
-                            element={<FoodVendorDiscount />}
-                        />
-                        <Route path="wishlist" element={<Whishlist />} />
-                        <Route path="cart" element={<Cart />} />
+                            element={<FoodVendorDiscount />} 
+                        /> {/* ✅ */}
+
+                         {/* ------------------------- cart and whishlist --------------------------------- */}
+                        <Route path="wishlist" element={<Whishlist />} />{/* ✅ */}
+                        <Route path="cart" element={<Cart />} />{/* ✅ */}
 
                         {/* -------------------------------- Building & apartments ---------------------------- */}
                         <Route path="building" element={<BuildingHomePage />} />

@@ -9,7 +9,7 @@ const useCurrentUser = () => {
     queryKey: ["currentUser"],
     queryFn: fetchCurrentUserData,
     enabled: !!auth.currentUser, // Only run if user is logged in
-    staleTime: 1000 * 60 * 5, // Optional: cache for 5 mins
+    // staleTime: 1000 * 60 * 5, // Optional: cache for 5 mins
   });
 };
 
