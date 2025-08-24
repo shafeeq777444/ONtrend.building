@@ -40,7 +40,7 @@ export default defineConfig({
           i18next: ['i18next', 'react-i18next'],
 
           // ❌ Firebase excluded here (lazy-loaded → auto split)
-          // firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
         },
       },
     },
