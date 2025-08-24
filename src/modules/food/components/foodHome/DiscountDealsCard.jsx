@@ -3,6 +3,7 @@ import React from "react";
 import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
 const RatingStars = ({ rating }) => {
   const fullStars = Math.floor(rating);
@@ -65,7 +66,7 @@ const DiscountDealsCard = ({ vendor, favorites, toggleFavorite }) => {
         className={`absolute bottom-4 ${isArabic ? "right-3 gap-4" : "left-3"} flex items-start space-x-3 rtl:space-x-reverse z-20`}
       >
         <div className="rounded-lg w-14 h-14 shadow-md overflow-hidden bg-white">
-          <img
+          <LazyImg
             src={vendor.image}
             alt={`${vendor.restaurantName} Logo`}
             className="w-full h-full object-cover"

@@ -3,42 +3,47 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/autoplay";
 import { Autoplay, FreeMode } from "swiper/modules";
-import { FiImage } from "react-icons/fi"; // Image placeholder icon
+import { FiImage } from "react-icons/fi";
 
 const SkeltonFoodOffer = () => {
-    return (
-        <div className="px-4 py-6 bg-white">
-            <h2 className="text-xl font-bold mb-4">Offers</h2>
-            <Swiper
-                spaceBetween={12}
-                slidesPerView={1.1}
-                breakpoints={{
-                    480: { slidesPerView: 1.6 },
-                    640: { slidesPerView: 2.5 },
-                    768: { slidesPerView: 3.5 },
-                    1024: { slidesPerView: 4.5 },
-                    1280: { slidesPerView: 3.5 },
-                }}
-                autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                }}
-                centeredSlides={true}
-                freeMode={true}
-                loop={true}
-                modules={[Autoplay, FreeMode]}
-            >
-                {[...Array(5)].map((_, index) => (
-                    <SwiperSlide key={index}>
-                        <div className="animate-pulse flex items-center justify-center bg-gray-200 w-full h-[160px] rounded-md shadow">
-                            <FiImage className="text-4xl text-gray-400" />
-                        </div>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
+  return (
+  <div className="px-4 sm:px-6 lg:px-8 py-6 bg-gray-50 dark:bg-zinc-800">
+  {/* Skeleton title block */}
+  <div className="animate-pulse mb-4 w-32 h-6 bg-gray-300 dark:bg-zinc-600 rounded"></div>
+
+  <Swiper
+    spaceBetween={16}
+    slidesPerView={1.2}
+    breakpoints={{
+      480: { slidesPerView: 1.5 },
+      640: { slidesPerView: 2 },
+      768: { slidesPerView: 2.5 },
+      1024: { slidesPerView: 3 },
+      1280: { slidesPerView: 4 },
+    }}
+    autoplay={{
+      delay: 2500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    }}
+    centeredSlides={true}
+    freeMode={true}
+    loop={true}
+    modules={[Autoplay, FreeMode]}
+  >
+    {[...Array(5)].map((_, index) => (
+      <SwiperSlide key={index}>
+        <div className="py-2">
+          <div className="animate-pulse relative w-full h-[260px] rounded-md bg-gray-200 dark:bg-zinc-600 shadow-md flex items-center justify-center">
+            <FiImage className="text-5xl text-gray-400" />
+          </div>
         </div>
-    );
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
+
+  );
 };
 
 export default SkeltonFoodOffer;

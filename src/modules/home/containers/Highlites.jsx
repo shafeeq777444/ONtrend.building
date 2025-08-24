@@ -58,7 +58,7 @@ const Highlites = () => {
                     alt={`highlight-${index}`}
                     className="rounded-md w-full h-[260px] object-cover shadow-md 
                       transition-transform duration-500 ease-in-out
-                      group-hover:scale-[1.03] group-hover:z-10"
+                      hover:scale-[1.03] group-hover:z-10"
                   />
                 </div>
               </div>

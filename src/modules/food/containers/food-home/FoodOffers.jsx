@@ -69,7 +69,7 @@ const FoodOffers = () => {
                     alt={`offer-${index}`}
                     className="rounded-md w-full h-[260px] object-cover shadow-md
                       transition-transform duration-500 ease-in-out
-                      group-hover:scale-[1.03] group-hover:z-10 cursor-pointer"
+                      hover:scale-[1.03] group-hover:z-10 cursor-pointer"
                     loading="lazy"
                   />
                 </div>

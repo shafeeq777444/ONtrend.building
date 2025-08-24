@@ -7,20 +7,11 @@ import FoodCardInVendor from "../../components/FoodVendor/FoodCardInVendor";
 import FoodOrderDetailModal from "../../components/FoodVendor/FoodOrderDetailModal";
 import ModalPortal from "@/shared/components/common/ModalPortal";
 
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
-  useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth <= breakpoint);
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, [breakpoint]);
-  return isMobile;
-}
+
 
 const FoodVendorProducts = React.memo(
   ({ foodItems = [], venderLogo, isLoading, isOnline }) => {
     const [selectedItem, setSelectedItem] = useState(null);
-    const isMobile = useIsMobile();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -58,7 +49,6 @@ const FoodVendorProducts = React.memo(
               onClose={handleClose}
               item={selectedItem}
               venderLogo={venderLogo}
-              isMobile={isMobile}
             />
           </ModalPortal>
         )}

@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
-import { X } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import localforage from "localforage";
 import { useSelector } from "react-redux";
@@ -79,27 +80,29 @@ export default function FoodSearchCard({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 500, damping: 40 }}
-            className="relative ml-auto w-full max-w-md h-full bg-white/30 dark:bg-zinc-900/30 backdrop-blur-md border-l border-white/20 dark:border-zinc-700/40 flex flex-col"
+            className="relative ml-auto w-full max-w-md h-full bg-white dark:bg-zinc-900   flex flex-col"
           >
             {/* Header with Search */}
-            <div className="flex items-center justify-between p-4 border-b border-white/20 dark:border-zinc-700/40">
+            <div className="flex items-center justify-between p-4 gap-2">
+             
               <div className="relative flex-1">
-                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-800 dark:text-white" />
+                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white" />
                 <input
                   type="text"
                   placeholder={isArabic ? "ابحث عن البائع" : "Search vendors"}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/20 dark:bg-zinc-800/30 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800/30 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-0  "
                 />
               </div>
-
-              <button
+               <button
                 onClick={handleClose}
-                className="ml-2 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 transition"
+                className="ml-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700 transition"
               >
-                <X className="w-5 h-5 text-gray-700 dark:text-white" />
+                <ArrowRight className="w-5 h-5 text-gray-600 dark:text-white" />
               </button>
+
+            
             </div>
 
             {/* Search History */}
@@ -111,7 +114,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                     onClick={() => setSearch(item)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="bg-white/20 dark:bg-zinc-700/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm hover:bg-white/40 dark:hover:bg-zinc-600/50 transition"
+                    className="bg-gray-100 dark:bg-zinc-700/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-600/50 transition "
                   >
                     {item}
                   </motion.button>
@@ -136,7 +139,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                       }}
                       whileTap={{ scale: 0.98 }}
                       transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer bg-white/10 dark:bg-zinc-800/20 backdrop-blur-sm border border-white/20 dark:border-zinc-700/40 hover:shadow-md hover:bg-white/30 dark:hover:bg-zinc-800/30 transition"
+                      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer bg-gray-50 dark:bg-zinc-800/20 backdrop-blur-sm  hover:shadow-md hover:bg-gray-100 dark:hover:bg-zinc-800/30 transition"
                     >
                       <LazyImg
                         src={vendor.image || "https://via.placeholder.com/80"}
@@ -144,7 +147,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                         className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-base sm:text-lg dark:text-white truncate">
+                        <h3 className="font-semibold text-base sm:text-lg text-gray-900 dark:text-white truncate">
                           {isArabic ? vendor.restaurantArabicName : vendor.restaurantName}
                         </h3>
                         <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">

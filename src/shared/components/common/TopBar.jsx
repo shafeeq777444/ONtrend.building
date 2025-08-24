@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import localforage from "localforage";
 import { setLocation, setLocationName, setUserID } from "../../slices/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DeliveryLocation from "../Location/DeliveryLocation";
 import { useTranslation } from "react-i18next";
 import UserProfileModal from "@/modules/auth/components/UserProfileModal";
@@ -21,6 +21,7 @@ export default function TopBar({ cartCount = 2 }) {
 
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const currentLocation = useLocation();
     const dispatch = useDispatch();
 
     // ####### states ###################################
@@ -140,67 +141,96 @@ export default function TopBar({ cartCount = 2 }) {
             navigate("/auth"); // replace with your login route
         }
     };
+
+    // Function to format address by removing plus code and postal code
+    const formatLocationName = (address) => {
+  if (!address) return address;
+
+  let formatted = address;
+
+  // Remove plus code pattern (e.g., "RW6F+34M, ")
+  formatted = formatted.replace(/[A-Z0-9]{4}\+[A-Z0-9]{2,3},?\s*/g, '');
+
+  // Remove postal codes (6-digit numbers) anywhere
+  formatted = formatted.replace(/\b\d{6}\b,?\s*/g, '');
+
+  // Remove any other standalone numbers
+  formatted = formatted.replace(/\b\d+\b,?\s*/g, '');
+
+  // Clean up multiple commas or extra spaces
+  formatted = formatted.replace(/,\s*,/g, ',').replace(/^,\s*|,\s*$/g, '').trim();
+
+  return formatted;
+};
     return (
         <>
             <motion.div
-                initial={{ y: -50, opacity: 0 }}
+                initial={{ y: 0, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className={`sticky top-0 left-0 w-full z-50 px-4 py-2 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 transition-all duration-300 ${
+                className={`sticky top-0 left-0 w-full z-50 px-4 lg:px-6 py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 transition-all duration-300 ${
                     scrolled
-                        ? "bg-[rgba(24,24,27,0.95)] backdrop-blur-md shadow-md"
+                        ? "bg-[rgba(24,24,27,0.95)] backdrop-blur-md shadow-lg border-b border-white/10"
                         : "bg-[rgba(24,24,27,0.95)] backdrop-blur-sm"
                 }`}
             >
-                <div className="flex items-center gap-4 flex-shrink-0 w-full md:w-auto justify-between md:justify-start">
-                    <img
+                <div className="flex items-center gap-4 lg:gap-6 flex-shrink-0 w-full md:w-auto justify-between md:justify-start">
+                    <motion.img
                         onClick={() => navigate("/")}
                         src="/ONtrend-logo.png"
                         alt="Company Logo"
-                        className="w-8 h-8 object-contain cursor-pointer"
+                        className="w-10 h-10 lg:w-12 lg:h-12 object-contain cursor-pointer transition-all duration-300 ease-in-out"
+
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     />
 
-                    <div
-                        className="flex items-center space-x-2 text-white cursor-pointer hover:bg-white/10 rounded-md px-2 py-1 transition"
+                    <motion.div
+                        className="flex items-center space-x-2 text-white cursor-pointer hover:bg-white/10 rounded-sm px-3 py-2 transition-all duration-200 group"
                         onClick={() => setShowLocationModal(true)}
                     >
-                        <FiMapPin className="text-red-200" />
-                        <span className="text-xs md:text-sm truncate max-w-[100px] md:max-w-none">
-                            {locationName || t("tap_to_set_location")}
+                        <FiMapPin className="text-red-300 text-lg group-hover:text-red-200 transition-colors" />
+                        <span className="text-sm md:text-base font-medium truncate max-w-[120px] md:max-w-[200px] lg:max-w-none">
+                            {formatLocationName(locationName) || t("tap_to_set_location")}
                         </span>
-                        <FiChevronDown />
-                    </div>
+                        <FiChevronDown className="text-gray-300 group-hover:text-white transition-colors" />
+                    </motion.div>
 
-                    <div className="md:hidden ml-auto text-white text-xl">
+                    <motion.div 
+                        className="md:hidden ml-auto"
+                    >
                         {menuOpen ? (
-                            <FiX
-                                onClick={() => {
-                                    setMenuOpen(false);
-                                }}
-                                className="cursor-pointer"
-                            />
+                            <motion.div
+                                onClick={() => setMenuOpen(false)}
+                                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-all duration-200"
+                                initial={{ rotate: 0 }}
+                                animate={{ rotate: 180 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <FiX className="text-lg" />
+                            </motion.div>
                         ) : (
-                            <FiUser
-                                onClick={() => {
-                                    setMenuOpen(true);
-                                }}
-                                className="cursor-pointer"
-                            />
+                            <motion.div
+                                onClick={() => setMenuOpen(true)}
+                                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-all duration-200"
+                                initial={{ rotate: 180 }}
+                                animate={{ rotate: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <FiUser className="text-lg" />
+                            </motion.div>
                         )}
-                    </div>
+                    </motion.div>
                 </div>
 
-                <div className="w-full md:flex-1 min-w-0 max-w-full md:max-w-3xl">
-                    <div className="relative">
-                        {/* <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /> */}
+                <div className="w-full md:flex-1 min-w-0 max-w-full md:max-w-4xl lg:max-w-5xl">
+                    <div className="relative group">
+                        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-gray-300 transition-colors z-10" />
                         <input
                             disabled={true}
                             type="text"
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            className="w-full h-8 pl-9 pr-3 py-0 text-white text-sm leading-none 
-
-                            rounded-md focus:outline-none"
+                            className="w-full h-9 lg:h-11 pl-12 pr-4 py-0 text-white text-sm lg:text-base bg-white/5 border border-white/10 hover:border-white/20 focus:border-white/30 rounded-md focus:outline-none transition-all duration-200 backdrop-blur-sm"
                             placeholder=""
                             onFocus={() => setIsSearchFocused(true)}
                             onBlur={() => setIsSearchFocused(false)}
@@ -225,88 +255,169 @@ export default function TopBar({ cartCount = 2 }) {
                     </div>
                 </div>
 
-                <div className="hidden md:flex items-center space-x-3 text-white shrink-0">
+                <div className="hidden md:flex items-center space-x-2 lg:space-x-4 flex-shrink-0">
                     <motion.button
-                        whileHover={{ scale: 1.04 }}
                         onClick={() => {
                             const nextLang = i18n.language === "en" ? "ar" : "en";
                             i18n.changeLanguage(nextLang);
-                            document.documentElement.dir = nextLang === "ar" ? "rtl" : "ltr";
+                            localStorage.setItem("language", nextLang);
                             window.location.reload();
                         }}
-                        className="w-10 h-10 text-sm font-semibold flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white"
+                        className="flex items-center space-x-2 px-3 py-2 text-sm font-semibold rounded-sm bg-white/10 hover:bg-white/20 transition-all duration-200 group text-white"
                         title="Toggle Language"
                     >
-                        {i18n.language === "en" ? "AR" : "EN"}
+                        <span className="">
+                            {i18n.language === "en" ? "AR" : "EN"}
+                        </span>
                     </motion.button>
-                    {[
-                        // { Icon: <PiGiftBold />, title: "Rewards" },
-                        { Icon: <FiHeart />, title: "Wishlist" },
-                    ].map(({ Icon, title }, idx) => (
-                        <motion.div
-                            onClick={() => navigate(title.toLowerCase())}
-                            key={idx}
-                            whileHover={{ scale: 1.04 }}
-                            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
-                            title={title}
-                        >
-                            {Icon}
-                        </motion.div>
-                    ))}
+                    
+                    <motion.div
+                        onClick={() => navigate("/wishlist")}
+                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer group ${
+                            currentLocation.pathname === '/wishlist' 
+                                ? 'bg-white/20' 
+                                : 'bg-white/10 hover:bg-white/15'
+                        }`}
+                        title="Wishlist"
+                    >
+                        <FiHeart className={`transition-colors ${
+                            currentLocation.pathname === '/wishlist'
+                                ? 'text-red-400'
+                                : 'text-red-300 group-hover:text-red-200'
+                        }`} />
+                        <span className="text-sm font-medium text-white hidden lg:block">{t("wishlist")}</span>
+                    </motion.div>
+                    
                     <motion.div
                         onClick={() => navigate("/cart")}
-                        whileHover={{ scale: 1.04 }}
-                        className="relative w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
+                        className={`relative flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer group ${
+                            currentLocation.pathname === '/cart' 
+                                ? 'bg-white/20' 
+                                : 'bg-white/10 hover:bg-white/15'
+                        }`}
                         title="Cart"
                     >
-                        <HiOutlineShoppingCart className="text-xl" />
+                        <HiOutlineShoppingCart className={`transition-colors text-lg ${
+                            currentLocation.pathname === '/cart'
+                                ? 'text-green-400'
+                                : 'text-green-300 group-hover:text-green-200'
+                        }`} />
+                        <span className="text-sm font-medium text-white hidden lg:block">{t("cart")}</span>
                         {cartCount > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5">
-                                {/* {cartCount} */}
-                                &nbsp;
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 z-20">
+                                {cartCount}
                             </span>
                         )}
                     </motion.div>
+                    
                     <motion.div
-                        whileHover={{ scale: 1.04 }}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 cursor-pointer"
+                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer group ${
+                            currentLocation.pathname === '/auth' || currentLocation.pathname === '/profile'
+                                ? 'bg-white/20' 
+                                : 'bg-white/10 hover:bg-white/15'
+                        }`}
                         title="Profile"
                         onClick={() => {
                             handleClick();
                         }}
                     >
-                        <FiUser />
+                        <FiUser className={`transition-colors ${
+                            currentLocation.pathname === '/auth' || currentLocation.pathname === '/profile'
+                                ? 'text-blue-400'
+                                : 'text-blue-300 group-hover:text-blue-200'
+                        }`} />
+                        <span className="text-sm font-medium text-white hidden lg:block">{t("profile")}</span>
                     </motion.div>
                 </div>
             </motion.div>
 
             <AnimatePresence>
                 {menuOpen && (
-                    <motion.div
-                        initial={{ x: "100%" }}
-                        animate={{ x: 0 }}
-                        exit={{ x: "100%" }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed top-20 right-0 w-3/4 h-screen bg-white z-40 shadow-lg p-6 flex flex-col space-y-6"
-                    >
-                        {menuItems.map(({ label, icon, onClick }, i) => (
-                            <div
-                                key={i}
-                                className="flex items-center space-x-3 text-gray-800 text-lg cursor-pointer"
+                    <>
+                        {/* Backdrop overlay */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
+                            onClick={() => setMenuOpen(false)}
+                        />
+                        
+                        {/* Modal menu */}
+                        <motion.div
+                            initial={{ y: "-100%", opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: "-100%", opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                            className="fixed top-0 left-0 right-0 bg-white/98 backdrop-blur-xl shadow-2xl rounded-b-2xl z-50 md:hidden"
+                        >
+                        <div className="px-6 py-6 space-y-4">
+                            {/* Header with close button */}
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg font-semibold text-gray-800">Menu</h3>
+                                <motion.div 
+                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer transition-all duration-200"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    <FiX className="text-sm" />
+                                </motion.div>
+                            </div>
+                            <motion.div
+                                className="flex items-center space-x-3 text-gray-700 cursor-pointer hover:bg-gray-100 rounded-xl px-4 py-3 transition-all duration-200 group"
                                 onClick={() => {
-                                    onClick();
+                                    navigate("/wishlist");
                                     setMenuOpen(false);
                                 }}
                             >
-                                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-800">
-                                    {icon}
-                                </div>
-                                <span>{label}</span>
+                                <FiHeart className="text-red-500 group-hover:text-red-600 transition-colors text-lg" />
+                                <span className="font-medium">{t("wishlist")}</span>
+                            </motion.div>
+
+                            <motion.div
+                                className="flex items-center space-x-3 text-gray-700 cursor-pointer hover:bg-gray-100 rounded-xl px-4 py-3 transition-all duration-200 group"
+                                onClick={() => {
+                                    navigate("/cart");
+                                    setMenuOpen(false);
+                                }}
+                            >
+                                <HiOutlineShoppingCart className="text-green-500 group-hover:text-green-600 transition-colors text-lg" />
+                                <span className="font-medium">{t("cart")}</span>
+                            </motion.div>
+
+                            <motion.div
+                                className="flex items-center space-x-3 text-gray-700 cursor-pointer hover:bg-gray-100 rounded-xl px-4 py-3 transition-all duration-200 group"
+                                onClick={() => {
+                                    handleClick();
+                                    setMenuOpen(false);
+                                }}
+                            >
+                                <FiUser className="text-blue-500 group-hover:text-blue-600 transition-colors text-lg" />
+                                <span className="font-medium">{t("profile")}</span>
+                            </motion.div>
+
+                            <div className="border-t border-gray-200 pt-4 mt-6">
+                                <motion.button
+                                    onClick={() => {
+                                        const nextLang = i18n.language === "en" ? "ar" : "en";
+                                        i18n.changeLanguage(nextLang);
+                                        localStorage.setItem("language", nextLang);
+                                        window.location.reload();
+                                    }}
+                                    className="w-full flex items-center justify-center space-x-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-xl px-4 py-3 transition-all duration-200 group font-medium shadow-lg"
+                                    whileHover={{ y: -1 }}
+                                    whileTap={{}}
+                                >
+                                    <span className="text-sm font-semibold">
+                                        {i18n.language === "en" ? "العربية" : "English"}
+                                    </span>
+                                </motion.button>
                             </div>
-                        ))}
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        </div>
+                         </motion.div>
+                     </>
+                 )}
+             </AnimatePresence>
 
             {(!location || !locationName || showLocationModal) && (
                 <DeliveryLocation

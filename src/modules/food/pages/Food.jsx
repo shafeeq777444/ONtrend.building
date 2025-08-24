@@ -48,10 +48,11 @@ const RenderCategorySection = () => {
 const Food = () => {
     return (
         <div className="">
-            <FoodSearchVendors />
+            <FoodSearchVendors />     {/* ✅ */} 
             {/* <FoodHomeHIgliteCarousel/> */}
-            <FoodOffers />
-            <TopRated />
+        
+            <FoodOffers /> {/* ✅ */}
+            <TopRated />    
 
             <LazyRenderOnView>
                 <CategoryBar />

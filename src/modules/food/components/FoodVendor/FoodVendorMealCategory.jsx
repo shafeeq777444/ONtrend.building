@@ -17,6 +17,7 @@ const FoodVendorMealCategory = ({
   setCurrentPageIndex,
   language = "en" // "en" or "ar"
 }) => {
+  console.log(categories,"categories chekc 2")
   const { i18n } = useTranslation();
    const isArabic = i18n.language === "ar";
   const dispatch = useDispatch();
