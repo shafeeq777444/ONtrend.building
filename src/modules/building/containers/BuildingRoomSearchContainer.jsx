@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from "react";
 import { useSearchRoomsInfinite } from "../services/hooks/useSearchRoomsInfinite";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import BuildingSearchedRoomCard from "../components/card/BuildingSearchedRoomCard";
+
 import BuildingRoomSearchBar from "./BuildingRoomSearchBar";
 import BackButton from "../components/Common/BackButton";
+import BuildingSearchedRoomCard from "../components/Card/BuildingSearchedRoomCard";
 
 const BuildingRoomSearchContainer = () => {
 
