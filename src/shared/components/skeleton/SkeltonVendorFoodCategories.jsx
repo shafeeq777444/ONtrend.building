@@ -2,7 +2,7 @@ import React from "react";
 
 const SkeletonCategoryTabs = () => {
   return (
-    <div className="relative p-4 rounded-2xl bg-white">
+    <div className="relative p-4 mt-2 rounded-2xl bg-white">
       {/* Skeleton Heading */}
       <div className="mb-4">
         <div className="h-6 w-24 bg-gray-300 rounded animate-pulse" />

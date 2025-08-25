@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import SkeletonFoodVendorHeader from "@/shared/components/skeleton/SkeletonFoodVendorHeader";
 import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
-const FoodVendorHeader = ({ vendorBanners = [], currentVendor = {}, isLoading }) => {
+const FoodVendorHeader = ({ vendorBanners = [], currentVendor = {}, isLoading, }) => {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
@@ -136,14 +136,22 @@ const FoodVendorHeader = ({ vendorBanners = [], currentVendor = {}, isLoading })
               {/* Distance */}
               <div className="flex-1 text-center border-x border-white/20">
                 <div className="font-medium">
-                  {currentVendor?.distance} {isArabic ? "كم" : "km"}
+                  {currentVendor?.distance === "too far" 
+                    ? (isArabic ? "بعيد جداً" : "Too far") 
+                    : `${currentVendor?.distance} ${isArabic ? "كم" : "km"}`
+                  }
                 </div>
                 <span className="text-xs text-gray-200">{isArabic ? "المسافة" : "Distance"}</span>
               </div>
 
               {/* Delivery Time */}
               <div className="flex-1 text-center">
-                <div className="font-medium">{currentVendor?.estimatedTime}</div>
+                <div className="font-medium">
+                  {currentVendor?.estimatedTime === "no delivery" 
+                    ? (isArabic ? "لا يوجد توصيل" : "No delivery") 
+                    : `${currentVendor?.estimatedTime} ${isArabic ? "دقيقة" : "min"}`
+                  }
+                </div>
                 <span className="text-xs text-gray-200">{isArabic ? "وقت التوصيل" : "Delivery Time"}</span>
               </div>
             </div>

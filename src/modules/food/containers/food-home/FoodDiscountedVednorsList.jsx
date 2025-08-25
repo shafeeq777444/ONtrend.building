@@ -4,24 +4,29 @@ import { useSelector } from "react-redux";
 import FoodDiscountRestaurantCard from "../../components/FoodVendor/FoodDiscountRestaurantCard";
 import { useGetAllFoodVendors } from "../../services/queries/useGetAllFoodVendors";
 import EmptyStateCard from "@/shared/components/messages/EmptyStateCard";
-import Marquee from "react-fast-marquee";
 import MarqueeMessage from "@/shared/components/messages/MarqueMessage";
+import { useTranslation } from "react-i18next";
 
 const FoodDiscountedVednorsList = ({ discountValue }) => {
+    const { i18n } = useTranslation();
+    const isArabic = i18n.language === "ar";
+
     const {
         location: { lat, lng },
     } = useSelector((state) => state.user);
 
     const { data: vendors, isLoading } = useGetAllFoodVendors(lat, lng);
+
+    // Filter vendors with the given discount
     const discountedVendors = vendors?.filter((vendor) => vendor.discountValue == discountValue);
 
-     const offersList = [
-                `${discountValue}% off vendors in Oman ONtrend`,
-                `${discountValue}% off vendors in Oman ONtrend`,
-                `${discountValue}% off vendors in Oman ONtrend`,
-                `${discountValue}% off vendors in Oman ONtrend`,
+    // Bilingual offers list
+    const offersList = Array(4).fill(
+        isArabic
+            ? `خصم ${discountValue}% على المطاعم في عمان ONtrend`
+            : `${discountValue}% off vendors in Oman ONtrend`
+    );
 
-            ];
     if (isLoading) {
         return (
             <div className="mt-16 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4 py-6">
@@ -36,8 +41,12 @@ const FoodDiscountedVednorsList = ({ discountValue }) => {
         return (
             <div className="mt-16 w-full flex justify-center px-4 py-6">
                 <EmptyStateCard
-                    heading="No vendors found with this discount."
-                    description="Try exploring other discounts or check back later for new offers."
+                    heading={isArabic ? "لم يتم العثور على مطاعم بهذا الخصم" : "No vendors found with this discount."}
+                    description={
+                        isArabic
+                            ? "جرّب استكشاف خصومات أخرى أو تحقق لاحقًا من العروض الجديدة."
+                            : "Try exploring other discounts or check back later for new offers."
+                    }
                     lottieSrc="/lotties/errorOrWarnings/Discount.json"
                     notify={false}
                     width="64"
@@ -49,9 +58,8 @@ const FoodDiscountedVednorsList = ({ discountValue }) => {
 
     return (
         <>
-           
             <MarqueeMessage offers={offersList} />
-            <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 py-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 py-6">
                 {discountedVendors.map((vendor) => (
                     <FoodDiscountRestaurantCard key={vendor.id} restaurant={vendor} />
                 ))}

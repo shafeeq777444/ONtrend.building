@@ -10,6 +10,7 @@ import FoodVendorMealCategory from "../components/FoodVendor/FoodVendorMealCateg
 import FoodVendorProducts from "@/modules/food/containers/FoodVendor/FoodVendorProducts";
 import FoodVendorHeader from "../components/FoodVendor/FoodVendorHeader";
 import PaginationButtons from "@/shared/components/common/PaginationButtons";
+import EmptyStateCard from "@/shared/components/messages/EmptyStateCard";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Hooks
@@ -18,6 +19,7 @@ import { useVendorFoodsLivePaginated } from "../services/hooks/useLiveGetAllProd
 import { useLiveGetCategoriesFromVendor } from "../services/hooks/useLiveGetCategoriesFromVendor";
 import useBannersGallery from "../services/hooks/useBannersGallery";
 import { useCurrentVendorLiveData } from "../services/hooks/useCurrentVendorLiveData";
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Utilities
@@ -28,8 +30,12 @@ const getLocalizedField = (item, field, isArabic) => (isArabic ? item?.[`${field
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
-const DESKTOP_PAGE_SIZE = 12;
-const TABLET_PAGE_SIZE = 10;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Distance calculatio
+// ─────────────────────────────────────────────────────────────────────────────
+
 
 /**
  * FoodVendor Page
@@ -42,19 +48,13 @@ const FoodVendor = () => {
     const { i18n } = useTranslation();
     const isArabic = i18n.language === "ar";
 
-    // ── Responsive page size ───────────────────────────────────────────────────
-    const [pageSize, setPageSize] = useState(DESKTOP_PAGE_SIZE);
-    useEffect(() => {
-        const updatePageSize = () => {
-            setPageSize(window.innerWidth < 1524 ? TABLET_PAGE_SIZE : DESKTOP_PAGE_SIZE);
-        };
-        updatePageSize(); // initial
-        window.addEventListener("resize", updatePageSize);
-        return () => window.removeEventListener("resize", updatePageSize);
-    }, []);
+    // ── Fixed page size ────────────────────────────────────────────────────────
+    const pageSize = 12;
 
     // ── Global state (Redux) ───────────────────────────────────────────────────
     const { selectedVendorMealCategory, searchTerm, sortOption } = useSelector((state) => state.food);
+    const  userLocation  = useSelector((state) => state.user.location);
+
 
     // ── Local UI state ─────────────────────────────────────────────────────────
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -70,7 +70,7 @@ const FoodVendor = () => {
     // Hooks Destructuring
     // ─────────────────────────────────────────────────────────────────────────────
     // ── Data: Vendors list & Current vendor ────────────────────────────────────
-    const { data: currentVendor, isLoading: isVendorLoading } = useCurrentVendorLiveData(vendorId);
+    const { data: currentVendor, isLoading: isVendorLoading } = useCurrentVendorLiveData(vendorId, userLocation);
     const {
         pages,
         fetchNextPage,
@@ -153,21 +153,37 @@ const FoodVendor = () => {
     const memoizedLogo = useMemo(() => currentVendor?.image, [currentVendor?.image]);
     const memoizedIsOnline = useMemo(() => currentVendor?.isOnline, [currentVendor?.isOnline]);
 
+
+
+
     // ── Early guard: vendor not found ──────────────────────────────────────────
     if (!isVendorLoading && !currentVendor) {
         return (
-            <div className="min-h-screen flex items-center justify-center p-6">
-                <div className="max-w-lg w-full text-center">
-                    <h2 className="text-2xl font-semibold mb-2">
-                        {isArabic ? "لم يتم العثور على المطعم" : "Vendor not found"}
-                    </h2>
-                    <p className="text-gray-500">
-                        {isArabic ? "تحقق من الرابط أو جرب مرة أخرى لاحقًا." : "Please check the link or try again later."}
-                    </p>
-                </div>
-            </div>
+            <EmptyStateCard 
+                heading={isArabic ? "لم يتم العثور على المطعم" : "Vendor not found"}
+                description={isArabic ? "تحقق من الرابط أو جرب مرة أخرى لاحقًا." : "Please check the link or try again later."}
+                notify={false}
+                showReload={true}
+            />
         );
     }
+    // ── Early guard: vendor is too far ──────────────────────────────────────────
+    if (!isVendorLoading && currentVendor?.distance === "too far") {
+    return (<>
+        <FoodVendorHeader  vendorBanners={vendorBanners} isLoading={isHeaderLoading} currentVendor={currentVendor} />
+      <EmptyStateCard
+        heading={isArabic ? "المطعم بعيد جدًا عنك" : "Vendor is too far from you"}
+        description={
+          isArabic
+            ? "عذرًا، لا يمكننا عرض هذا المطعم لأنه بعيد عن موقعك."
+            : "Sorry, we cannot show this vendor because it is too far from your location."
+        }
+        notify={false}
+        showReload={true}
+      />
+      </>
+    );
+}
 
     // ── Render ─────────────────────────────────────────────────────────────────
     return (
