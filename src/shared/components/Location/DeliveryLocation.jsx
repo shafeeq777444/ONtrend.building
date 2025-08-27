@@ -169,7 +169,7 @@ const DeliveryLocation = ({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
       dir={isArabic ? "rtl" : "ltr"}
     >
-      <div className="bg-zinc-900 rounded-2xl shadow-xl w-full sm:max-w-xl max-w-lg h-[95vh] max-h-screen mx-2 sm:mx-4 overflow-hidden border border-zinc-700 flex flex-col">
+      <div className="bg-zinc-900 rounded-2xl shadow-xl w-full sm:max-w-xl max-w-lg md:h-[95vh] h-[80vh]  max-h-screen mx-2 sm:mx-4 overflow-hidden border border-zinc-700 flex flex-col">
         <div className="flex-shrink-0 relative">
           {location && locationName && (
             <button
