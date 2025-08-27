@@ -15,6 +15,7 @@ import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query"
 import RestaurantCard from "../../components/cards/RestaurantCard";
 import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
+import EmptyStateCard from "@/shared/components/messages/EmptyStateCard";
 
 const TopPicks = () => {
     const currentUserId = auth.currentUser?.uid;
@@ -39,7 +40,22 @@ const TopPicks = () => {
     if (isLoading) {
         return <SkeltonRestuarent heading={false} />;
     }
-console.log("render check")
+    if (!isLoading && topRestaurants.length === 0) {
+        return (
+            <EmptyStateCard
+                heading={isArabic ? "لم يتم العثور على أفضل المبيعات بالقرب منك" : "No best sellers found near you"}
+                description={
+                    isArabic
+                        ? "لا توجد مطاعم ضمن أفضل المبيعات بالقرب منك حالياً. يرجى المحاولة مرة أخرى."
+                        : "No best sellers found near you at the moment. Please try again."
+                }
+                lottieSrc="/lotties/errorOrWarnings/notDelivey.json"
+                notify={false}
+                width="w-36"
+                height="h-36"
+            />
+        );
+    }
     return (
         <div className="px-4 py-6 relative w-full">
             {/* Navigation Buttons */}

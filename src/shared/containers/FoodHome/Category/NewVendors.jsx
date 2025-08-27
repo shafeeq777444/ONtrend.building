@@ -15,14 +15,14 @@ import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
 import { auth } from "@/lib/firebase/config";
 import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import { useGetAllFoodVendors } from "@/modules/food/services/queries/useGetAllFoodVendors";
-
+import EmptyStateCard from "@/shared/components/messages/EmptyStateCard";
 
 const NewVendors = () => {
-      const currentUserId = auth.currentUser?.uid;
+    const currentUserId = auth.currentUser?.uid;
     const { data: wishlist = [] } = useWishlist(currentUserId);
     const wishlistIds = useMemo(() => new Set(wishlist.map((item) => item.id)), [wishlist]);
-  const { i18n } = useTranslation();
-  const isArabic = i18n.language === "ar";
+    const { i18n } = useTranslation();
+    const isArabic = i18n.language === "ar";
     const {
         location: { lat, lng },
     } = useSelector((state) => state.user);
@@ -42,24 +42,42 @@ const NewVendors = () => {
     }, [allFoodvendors]);
     console.log(newVendors, "--new vendors");
     if (isLoading) {
-        return <SkeltonTopRestuarent heading={false}/>;
+        return <SkeltonTopRestuarent heading={false} />;
+    }
+    if (!isLoading && newVendors.length === 0) {
+        return (
+            <EmptyStateCard
+                heading={isArabic ? "لم يتم العثور على مطاعم جديدة بالقرب منك" : "No new vendors found near you"}
+                description={
+                    isArabic
+                        ? "لا توجد مطاعم جديدة بالقرب منك. يرجى المحاولة مرة أخرى."
+                        : "No new vendors found near you. Please try again."
+                }
+                lottieSrc="/lotties/errorOrWarnings/infinteDelivery.lottie"
+                notify={false}
+                width="w-36"
+                height="h-36"
+            />
+        );
     }
 
     return (
         <div className="px-4 py-6 relative w-full">
             {/* Navigation Buttons */}
             <button
-                    className={` hidden md:block swiper-button-prev-restuarent absolute -top-12 ${
-                      isArabic ? "left-10" : "right-16"
-                    } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
-                  >
-                    <FiChevronLeft size={22} />
-                  </button>
-                  <button className={`hidden md:block swiper-button-next-restuarent absolute -top-12 ${
-                       isArabic ? "left-22" : "right-4"
-                    } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}>
-                    <FiChevronRight size={22} />
-                  </button>
+                className={` hidden md:block swiper-button-prev-restuarent absolute -top-12 ${
+                    isArabic ? "left-10" : "right-16"
+                } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+            >
+                <FiChevronLeft size={22} />
+            </button>
+            <button
+                className={`hidden md:block swiper-button-next-restuarent absolute -top-12 ${
+                    isArabic ? "left-22" : "right-4"
+                } z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 transition`}
+            >
+                <FiChevronRight size={22} />
+            </button>
 
             <Swiper
                 spaceBetween={1}

@@ -4,13 +4,18 @@ import TopGroceries from "../containers/TopGroceries";
 import TopPharmacies from "../containers/TopPharmacies";
 import Highlites from "../containers/Highlites";
 import ServiceGrid from "../components/grids/ServiceGrid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LazyRenderOnView from "@/shared/components/performanceOptimised/LazyRenderOnView";
 
 const Home = () => {
     const [topRestuarents,setTopRestaurents]=useState(true)    
     const [topGroceries,setTopGroceries]=useState(true)    
-    const [topPharmacies,setTopPharmacies]=useState(true)    
+    const [topPharmacies,setTopPharmacies]=useState(true)
+    
+    // Smooth scroll to top when home page opens
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);    
     return (
         <div className="">
             {/* <div className=" z-50"> extras not remove */}

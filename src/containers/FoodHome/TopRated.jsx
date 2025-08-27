@@ -20,6 +20,7 @@ import "swiper/css/autoplay";
 import TopRatedCards from "@/modules/food/components/foodHome/TopRatedCard";
 import SkeltonRestuarent from "@/modules/food/components/skeltons/SkeltonRestuarent";
 import { useGetAllTopVendors } from "@/modules/food/services/queries/useGetAllTopVendors";
+import EmptyStateCard from "@/shared/components/messages/EmptyStateCard";
 
 const TopRated = () => {
   const {
@@ -31,7 +32,7 @@ const vendors = useMemo(() => data?.vendors || [], [data?.vendors]);
   const isArabic = i18n.language === "ar";
 
   // ✅ Add local state to manage skeleton visibility
-  const [showSkeleton, setShowSkeleton] = useState(true);
+  const [_, setShowSkeleton] = useState(true);
 
   // ✅ Delay hiding the skeleton for smooth transition
   useEffect(() => {
@@ -53,9 +54,37 @@ const vendors = useMemo(() => data?.vendors || [], [data?.vendors]);
   }, [foodTopVendors]);
 
   // ✅ Show skeleton if still loading or waiting for delayed hide
-  if (showSkeleton || isLoading || !vendors || randomVendors.length === 0) {
+  if ( isLoading  ) {
     return <SkeltonRestuarent rows={1} heading={true} />;
   }
+  if(!isLoading && randomVendors.length === 0) {
+    return (
+      <div className="px-4 py-6 relative bg-white">
+        {/* Heading */}
+        <h2
+          className={`text-xl font-bold mb-4 pl-4 ${
+            isArabic ? "text-right" : "text-left"
+          }`}
+        >
+          {isArabic ? "الأعلى تقييماً" : "Top Rated"}
+        </h2>
+        
+        <EmptyStateCard
+          heading={isArabic ? "لم يتم العثور على مطاعم الأعلى تقييماً أو الرائجة بالقرب منك" : "No top-rated found near you."}
+          description={
+            isArabic
+              ? "لا توجد مطاعم بهذا التقييم حاليًا. يرجى المحاولة مرة أخرى."
+              : "No vendors found with this rating. Please try again."
+          }
+          lottieSrc="/lotties/errorOrWarnings/notDelivey.json"
+          notify={false}
+          width="w-36"
+          height="h-36"
+        />
+      </div>
+    )
+  }
+
 
   return (
     <div className="px-4 py-6 relative w-full">

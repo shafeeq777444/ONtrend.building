@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Heart, ShoppingBag, Loader2 } from "lucide-react";
@@ -10,12 +10,19 @@ import BuildingHomeCard from "@/modules/building/components/card/BuildingHomeCar
 import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 
 const Whishlist = () => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar"; // ✅ Arabic check
+
   const currentUserId = auth.currentUser?.uid;
   const { data: wishlist = [], isLoading, error } = useWishlist(currentUserId);
   const wishlistIds = useSelector((state) => state.user.wishlistIds);
 
   const [activeCategory, setActiveCategory] = useState("Food/Restaurant");
+
+  // Smooth scroll to top when wishlist opens
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   // === Dynamic filtering based on activeCategory ===
   const finalWishlist = wishlist.filter((item) => {
@@ -26,21 +33,32 @@ const Whishlist = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen bg-gray-50"
+      dir={isArabic ? "rtl" : "ltr"} // ✅ RTL support
+    >
       {/* ===== Header Section ===== */}
       <div className="bg-white border-b border-gray-200">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-3 mb-6">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                {t("Wishlist")}
+                {isArabic ? "قائمة الرغبات" : "Wishlist"}
               </h1>
               <p className="text-sm text-gray-600 mt-1">
                 {finalWishlist.length > 0
                   ? `${finalWishlist.length} ${
-                      finalWishlist.length === 1 ? "item" : "items"
-                    } saved`
-                  : t("Save your favorite items here")}
+                      finalWishlist.length === 1
+                        ? isArabic
+                          ? "عنصر"
+                          : "item"
+                        : isArabic
+                        ? "عناصر"
+                        : "items"
+                    } ${isArabic ? "محفوظة" : "saved"}`
+                  : isArabic
+                  ? "احفظ عناصر المفضلة لديك هنا"
+                  : "Save your favorite items here"}
               </p>
             </div>
           </div>
@@ -55,11 +73,11 @@ const Whishlist = () => {
       {/* ===== Content Section ===== */}
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {isLoading ? (
-          <LoadingWishlist t={t} />
+          <LoadingWishlist isArabic={isArabic} />
         ) : error ? (
-          <ErrorWishlist t={t} />
+          <ErrorWishlist isArabic={isArabic} />
         ) : finalWishlist.length === 0 ? (
-          <EmptyWishlist t={t} />
+          <EmptyWishlist isArabic={isArabic} />
         ) : (
           <WishlistGrid
             wishlist={finalWishlist}
@@ -75,16 +93,20 @@ const Whishlist = () => {
 export default Whishlist;
 
 /* ===== Subcomponents ===== */
-const LoadingWishlist = ({ t }) => (
+const LoadingWishlist = ({ isArabic }) => (
   <div className="space-y-8">
     {/* Loader */}
     <div className="flex items-center justify-center py-12">
       <div className="text-center">
         <Loader2 className="h-12 w-12 text-red-600 animate-spin mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">
-          {t("Loading your wishlist")}
+          {isArabic ? "جارٍ تحميل قائمة الرغبات" : "Loading your wishlist"}
         </h3>
-        <p className="text-gray-600">{t("Please wait while we fetch your saved items")}</p>
+        <p className="text-gray-600">
+          {isArabic
+            ? "يرجى الانتظار بينما نقوم بجلب العناصر المحفوظة"
+            : "Please wait while we fetch your saved items"}
+        </p>
       </div>
     </div>
 
@@ -112,44 +134,46 @@ const LoadingWishlist = ({ t }) => (
   </div>
 );
 
-const ErrorWishlist = ({ t }) => (
+const ErrorWishlist = ({ isArabic }) => (
   <div className="text-center py-16">
     <div className="mx-auto w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6">
       <Heart className="h-12 w-12 text-red-600" />
     </div>
     <h3 className="text-xl font-semibold text-gray-900 mb-2">
-      {t("Unable to load wishlist")}
+      {isArabic ? "تعذر تحميل قائمة الرغبات" : "Unable to load wishlist"}
     </h3>
     <p className="text-gray-600 mb-8 max-w-md mx-auto">
-      {t("There was an error loading your wishlist. Please try again.")}
+      {isArabic
+        ? "حدث خطأ أثناء تحميل قائمة الرغبات. يرجى المحاولة مرة أخرى."
+        : "There was an error loading your wishlist. Please try again."}
     </p>
     <button
       onClick={() => window.location.reload()}
       className="inline-flex items-center px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
     >
-      {t("Try Again")}
+      {isArabic ? "أعد المحاولة" : "Try Again"}
     </button>
   </div>
 );
 
-const EmptyWishlist = ({ t }) => (
+const EmptyWishlist = ({ isArabic }) => (
   <div className="text-center py-16">
     <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
       <ShoppingBag className="h-12 w-12 text-gray-400" />
     </div>
     <h3 className="text-xl font-semibold text-gray-900 mb-2">
-      {t("Your wishlist is empty")}
+      {isArabic ? "قائمة الرغبات فارغة" : "Your wishlist is empty"}
     </h3>
     <p className="text-gray-600 mb-8 max-w-md mx-auto">
-      {t(
-        "Start adding items to your wishlist by clicking the heart icon on products you love."
-      )}
+      {isArabic
+        ? "أضف العناصر إلى قائمة الرغبات عن طريق اختيار رمز القلب في أي منتج."
+        : "Add items to your wishlist by selecting the heart icon on any product."}
     </p>
     <button
       onClick={() => window.history.back()}
       className="inline-flex items-center px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
     >
-      {t("Continue Shopping")}
+      {isArabic ? "تابع التسوق" : "Continue Shopping"}
     </button>
   </div>
 );

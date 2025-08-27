@@ -19,6 +19,7 @@ const EmptyStateCard = ({
     notify = true, // new prop to control notify button visibility
     notifyText = "Notify When Available",
     onNotifyClick, // optional callback when user clicks notify button
+    joinMessage = false,
     width = "w-64",
     height = "h-64",
 }) => {
@@ -93,7 +94,7 @@ const EmptyStateCard = ({
                     {/* Additional Info */}
                     {!isOnline && <p className="text-sm text-gray-500 mt-6">Check your connection and try again</p>}
 
-                    {isOnline && notify && (
+                    {isOnline && joinMessage && (
                         <p className="text-sm text-gray-500 mt-6">Join thousands waiting for Ontrend in their area</p>
                     )}
                 </p>

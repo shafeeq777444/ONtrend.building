@@ -1,5 +1,5 @@
 import OntrendLoading from "@/shared/components/common/OntrendLoading";
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { useSelector } from "react-redux";
 import FoodSearchVendors from "../components/foodHome/FoodSearchVendors";
 import FoodOffers from "../containers/food-home/FoodOffers";
@@ -46,6 +46,11 @@ const RenderCategorySection = () => {
 };
 
 const Food = () => {
+    // Smooth scroll to top when food page opens
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
     return (
         <div className="">
             <FoodSearchVendors />     {/* ✅ */} 

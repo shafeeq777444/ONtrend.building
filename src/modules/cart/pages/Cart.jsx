@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Minus, Plus, Trash2 } from "lucide-react";
@@ -24,6 +24,11 @@ const CartPage = () => {
   const { data: cartItems = [] } = useCartItems(userId);
   const { mutateAsync: changeQuantity } = useChangeCartQuantity(userId);
   const { mutateAsync: removeFromCart } = useRemoveFromCart(userId);
+
+  // Smooth scroll to top when cart opens
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   // ✅ Use useMemo for performance
   const subtotal = useMemo(

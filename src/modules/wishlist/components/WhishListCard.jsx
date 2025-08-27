@@ -48,7 +48,7 @@ const WishlistCard = ({ item, isLiked }) => {
       {/* Banner Image */}
       <div className="relative h-48 overflow-hidden">
         {!imageError && background ? (
-          <img
+          <LazyImg
             src={background}
             alt={`${item.restaurantName} banner`}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

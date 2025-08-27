@@ -18,6 +18,7 @@ import { auth } from "@/lib/firebase/config";
 import RestaurantCard from "@/modules/food/components/cards/RestaurantCard";
 import { useWishlist } from "@/modules/wishlist/services/queries/wishlist.query";
 import { useGetAllFoodVendors } from "@/modules/food/services/queries/useGetAllFoodVendors";
+import EmptyStateCard from "@/shared/components/messages/EmptyStateCard";
 
 
 
@@ -45,8 +46,40 @@ const NewVendors = () => {
 
   if (isLoading) return <SkeltonNearRestuarent heading={false}/>;
 
+  if(!isLoading && newVendors.length === 0) {
+    return (
+      <div className="px-4 py-6 relative w-full">
+        {/* Heading */}
+       
+        
+        <EmptyStateCard
+          heading={isArabic ? "لا توجد مطاعم قريبة" : "No nearby vendors available"}
+          description={
+            isArabic
+              ? "لا توجد مطاعم متاحة في منطقتك حاليًا. جرب توسيع نطاق البحث أو تحقق لاحقًا."
+              : "There are no vendors available in your area right now. Try expanding your search radius or check back later."
+          }
+          lottieSrc="/lotties/errorOrWarnings/Delivery on the way.json"
+          notify={false}
+          width="w-26"
+          height="h-26"
+        />
+      </div>
+    )
+  }
+
+
   return (
     <div className="px-4 py-6 relative w-full">
+      {/* Heading */}
+      <h2
+        className={`text-xl font-bold mb-4 pl-4 ${
+          isArabic ? "text-right" : "text-left"
+        }`}
+      >
+        {isArabic ? "المطاعم القريبة" : "Nearby Vendors"}
+      </h2>
+
       {/* Navigation Buttons */}
       <button
         className={`hidden md:block swiper-button-prev-restuarent absolute -top-12 ${
