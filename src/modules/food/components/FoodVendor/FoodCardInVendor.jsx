@@ -42,11 +42,11 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
 
   return (
     <div
-      onClick={isOnline && itemAvailable ? onClick : undefined}
-      className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition-all duration-300 ${
+      onClick={isOnline && itemAvailable ? onClick : (e) => e.preventDefault()}
+      className={`relative rounded-xl overflow-hidden shadow-md bg-white group transition-all duration-300 ${
         !isOnline || !itemAvailable 
-          ? 'pointer-events-none  border-2 border-dashed border-red-300 shadow-sm' 
-          : 'hover:scale-[1.01] hover:shadow-lg'
+          ? 'pointer-events-none border-2 border-dashed border-red-300 shadow-sm cursor-not-allowed' 
+          : 'cursor-pointer hover:scale-[1.01] hover:shadow-lg'
       }`}
     >
       {/* Unavailable Badge */}

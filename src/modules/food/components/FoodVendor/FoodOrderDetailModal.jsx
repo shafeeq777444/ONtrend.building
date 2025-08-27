@@ -106,8 +106,26 @@ const FoodOrderDetailModal = ({ item, onClose ,travelTime}) => {
       setSelectedVariant(Object.keys(item.variants)[0]);
     }
   }, [item?.variants, selectedVariant]);
+
   const [addons, setAddons] = useState([]);
   const [quantity, setQuantity] = useState(1);
+
+  // Ensure required add-ons have one selected by default
+  useEffect(() => {
+    if (item?.addOn) {
+      Object.entries(item.addOn).forEach(([category, addonsArray]) => {
+        if (Array.isArray(addonsArray)) {
+          const requiredAddons = addonsArray.filter(addon => addon.isRequired);
+          if (requiredAddons.length > 0) {
+            const categoryRequiredSelected = requiredAddons.some(addon => addons.includes(addon.name.trim()));
+            if (!categoryRequiredSelected) {
+              setAddons(prev => [...prev, requiredAddons[0].name.trim()]);
+            }
+          }
+        }
+      });
+    }
+  }, [item?.addOn, addons]);
 
   const drawerRef = useRef();
 
@@ -129,11 +147,25 @@ const FoodOrderDetailModal = ({ item, onClose ,travelTime}) => {
   }, []);
 
   // ─── Handlers ─────────────────────────────────────────────
-  const toggleAddon = useCallback((addon) => {
-    setAddons((prev) =>
-      prev.includes(addon) ? prev.filter((a) => a !== addon) : [...prev, addon]
-    );
-  }, []);
+  const toggleAddon = useCallback((addon, isRequired, category) => {
+    setAddons((prev) => {
+      if (isRequired) {
+        // For required add-ons, remove other required add-ons from the same category and add the selected one
+        const filteredAddons = prev.filter(existingAddon => {
+          // Check if this existing addon is a required addon from the same category
+          const categoryAddons = item?.addOn?.[category] || [];
+          const isRequiredFromSameCategory = categoryAddons.some(catAddon => 
+            catAddon.isRequired && catAddon.name.trim() === existingAddon
+          );
+          return !isRequiredFromSameCategory;
+        });
+        return [...filteredAddons, addon];
+      } else {
+        // For optional add-ons, toggle normally
+        return prev.includes(addon) ? prev.filter((a) => a !== addon) : [...prev, addon];
+      }
+    });
+  }, [item?.addOn]);
 
   const pricePerQuantity = useMemo(() => {
     if (!item) return "0.000";
@@ -248,10 +280,7 @@ const FoodOrderDetailModal = ({ item, onClose ,travelTime}) => {
                       </span>
                     </div>
                     
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 rounded-full border border-orange-200">
-                      <ChefHat className="w-4 h-4 text-orange-600" /> 
-                      <span className="text-sm font-medium text-orange-700">Fresh Made</span>
-                    </div>
+
                   </motion.div>
                 </div>
               </div>
@@ -336,58 +365,115 @@ const FoodOrderDetailModal = ({ item, onClose ,travelTime}) => {
 
               {/* Add Ons */}
               {item?.addOn && Object.keys(item.addOn).length > 0 && (
-                <motion.div variants={itemVariants} className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-                    <h3 className="font-semibold text-gray-900 text-lg">Add Ons</h3>
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">Optional</span>
-                  </div>
-                  <div className="space-y-3">
-                    {Object.entries(item.addOn).map(([category, addonsArray]) => (
-                      <div key={category} className="space-y-3">
-                        {category !== 'default' && (
-                          <h4 className="text-sm font-medium text-gray-700 uppercase tracking-wide">{category}</h4>
-                        )}
-                        {Array.isArray(addonsArray) && addonsArray.map((addon, index) => (
-                          <motion.button
-                            key={`${category}-${index}`}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => toggleAddon(addon.name.trim())}
-                            className={`w-full p-4 rounded-2xl border-2 transition-all duration-200 text-left group ${
-                              addons.includes(addon.name.trim())
-                                ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200'
-                                : 'border-gray-200 hover:border-blue-300 hover:bg-blue-25 hover:shadow-sm'
-                            }`}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                          >
-                            <div className="flex justify-between items-center">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-4 h-4 rounded border-2 transition-all ${
-                                  addons.includes(addon.name.trim())
-                                    ? 'border-blue-500 bg-blue-500'
-                                    : 'border-gray-300 group-hover:border-blue-400'
-                                }`}>
-                                  {addons.includes(addon.name.trim()) && (
-                                    <motion.div 
-                                      className="w-2 h-2 bg-white rounded-sm m-0.5"
-                                      initial={{ scale: 0 }}
-                                      animate={{ scale: 1 }}
-                                      transition={{ duration: 0.2 }}
-                                    />
-                                  )}
-                                </div>
-                                <span className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">{addon.name}</span>
-                              </div>
-                              <span className="text-blue-600 font-bold text-lg">+OMR {addon.price}</span>
+                <motion.div variants={itemVariants} className="space-y-6">
+                  {Object.entries(item.addOn).map(([category, addonsArray]) => {
+                    const hasRequiredAddons = Array.isArray(addonsArray) && addonsArray.some(addon => addon.isRequired);
+                    const hasOptionalAddons = Array.isArray(addonsArray) && addonsArray.some(addon => !addon.isRequired);
+                    
+                    return (
+                      <div key={category} className="space-y-4">
+                        {/* Required Add-ons Section */}
+                        {hasRequiredAddons && (
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-1 h-6 bg-red-500 rounded-full"></div>
+                              <h3 className="font-semibold text-gray-900 text-lg">{category}</h3>
+                              <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">Required</span>
                             </div>
-                          </motion.button>
-                        ))}
+                            <div className="space-y-3">
+                              {addonsArray.filter(addon => addon.isRequired).map((addon, index) => (
+                                <motion.button
+                                  key={`${category}-required-${index}`}
+                                  whileHover={{ scale: 1.02 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  onClick={() => toggleAddon(addon.name.trim(), true, category)}
+                                  className={`w-full p-4 rounded-2xl border-2 transition-all duration-200 text-left group ${
+                                    addons.includes(addon.name.trim())
+                                      ? 'border-red-500 bg-red-50 shadow-md ring-2 ring-red-200'
+                                      : 'border-gray-200 hover:border-red-300 hover:bg-red-25 hover:shadow-sm'
+                                  }`}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.1 }}
+                                >
+                                  <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-3">
+                                      <div className={`w-4 h-4 rounded-full border-2 transition-all ${
+                                        addons.includes(addon.name.trim())
+                                          ? 'border-red-500 bg-red-500'
+                                          : 'border-gray-300 group-hover:border-red-400'
+                                      }`}>
+                                        {addons.includes(addon.name.trim()) && (
+                                          <motion.div 
+                                            className="w-2 h-2 bg-white rounded-full m-0.5"
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ duration: 0.2 }}
+                                          />
+                                        )}
+                                      </div>
+                                      <span className="font-medium text-gray-900 group-hover:text-red-700 transition-colors">{addon.name}</span>
+                                    </div>
+                                    <span className="text-red-600 font-bold text-lg">{addon.price > 0 ? `+OMR ${addon.price}` : 'Free'}</span>
+                                  </div>
+                                </motion.button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Optional Add-ons Section */}
+                        {hasOptionalAddons && (
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
+                              <h3 className="font-semibold text-gray-900 text-lg">{hasRequiredAddons ? `${category} - Extras` : category}</h3>
+                              <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">Optional</span>
+                            </div>
+                            <div className="space-y-3">
+                              {addonsArray.filter(addon => !addon.isRequired).map((addon, index) => (
+                                <motion.button
+                                  key={`${category}-optional-${index}`}
+                                  whileHover={{ scale: 1.02 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  onClick={() => toggleAddon(addon.name.trim(), false, category)}
+                                  className={`w-full p-4 rounded-2xl border-2 transition-all duration-200 text-left group ${
+                                    addons.includes(addon.name.trim())
+                                      ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200'
+                                      : 'border-gray-200 hover:border-blue-300 hover:bg-blue-25 hover:shadow-sm'
+                                  }`}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.1 }}
+                                >
+                                  <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-3">
+                                      <div className={`w-4 h-4 rounded border-2 transition-all ${
+                                        addons.includes(addon.name.trim())
+                                          ? 'border-blue-500 bg-blue-500'
+                                          : 'border-gray-300 group-hover:border-blue-400'
+                                      }`}>
+                                        {addons.includes(addon.name.trim()) && (
+                                          <motion.div 
+                                            className="w-2 h-2 bg-white rounded-sm m-0.5"
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ duration: 0.2 }}
+                                          />
+                                        )}
+                                      </div>
+                                      <span className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">{addon.name}</span>
+                                    </div>
+                                    <span className="text-blue-600 font-bold text-lg">{addon.price > 0 ? `+OMR ${addon.price}` : 'Free'}</span>
+                                  </div>
+                                </motion.button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </motion.div>
                )}
              </motion.div>
@@ -449,16 +535,7 @@ const FoodOrderDetailModal = ({ item, onClose ,travelTime}) => {
               </motion.button>
               
               {/* Additional Info */}
-              <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Fresh ingredients</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Made to order</span>
-                </div>
-              </div>
+           
              </motion.div>
            </motion.div>
          </motion.div>
