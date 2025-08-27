@@ -10,7 +10,7 @@ import ModalPortal from "@/shared/components/common/ModalPortal";
 
 
 const FoodVendorProducts = React.memo(
-  ({ foodItems = [], venderLogo, isLoading, isOnline }) => {
+  ({ foodItems = [], venderLogo, isLoading, isOnline, travelTime }) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const dispatch = useDispatch();
 
@@ -49,6 +49,7 @@ const FoodVendorProducts = React.memo(
               onClose={handleClose}
               item={selectedItem}
               venderLogo={venderLogo}
+              travelTime={travelTime}
             />
           </ModalPortal>
         )}
@@ -59,7 +60,8 @@ const FoodVendorProducts = React.memo(
     prev.isLoading === next.isLoading &&
     prev.isOnline === next.isOnline &&
     prev.venderLogo === next.venderLogo &&
-    isEqual(prev.foodItems, next.foodItems)
+    isEqual(prev.foodItems, next.foodItems) &&
+    prev.travelTime === next.travelTime
 );
 
 export default FoodVendorProducts;

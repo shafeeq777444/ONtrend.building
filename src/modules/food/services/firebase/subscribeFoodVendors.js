@@ -39,17 +39,18 @@ export function subscribeFoodVendors(lat, lng, callback, onError) {
 
                         const distance = getDistanceInKm(userLocation.lat, userLocation.lng, loc.lat, loc.lng);
 
-                        if (distance > MAX_DISTANCE_KM) return null;
+                        // if (distance > MAX_DISTANCE_KM) return null;
 
                         const estimatedTimeMin = Math.round((distance / AVERAGE_SPEED_KMPH) * 60);
-                        const totalTimeWithCooking = estimatedTimeMin + 15;
+                        // const totalTimeWithCooking = estimatedTimeMin + 15;
 
-                        const finalTime = totalTimeWithCooking >= 25 ? 25 : Math.round(totalTimeWithCooking);
+                        // const finalTime = totalTimeWithCooking >= 25 ? 25 : Math.round(totalTimeWithCooking);
 
                         return {
                             ...vendor,
-                            distance: Math.max(1, Math.round(distance * 10) / 10),
-                            estimatedTime: `${finalTime}`,
+                            // distance: Math.max(1, Math.round(distance * 10) / 10),
+                            // estimatedTime: `${finalTime}`,
+                            travelTime: estimatedTimeMin
                         };
                     })
                     .filter(Boolean)

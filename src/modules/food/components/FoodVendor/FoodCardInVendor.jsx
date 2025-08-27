@@ -15,6 +15,24 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
     : description;
 
   const hasDiscount = item.discountPercentage > 0;
+  
+  // Check if item is available based on current time
+  const isItemAvailable = () => {
+    if (!item.availableTime) return true;
+    
+    const now = new Date();
+    const omanTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Muscat"}));
+    const currentHour = omanTime.getHours();
+    const currentMinute = omanTime.getMinutes();
+    const currentTimeInMinutes = currentHour * 60 + currentMinute;
+    
+    const fromMinute = item.availableTime.fromMinute || 0;
+    const toMinute = item.availableTime.toMinute || 1439; // 23:59 in minutes
+    
+    return currentTimeInMinutes >= fromMinute && currentTimeInMinutes <= toMinute;
+  };
+  
+  const itemAvailable = isItemAvailable();
 
   const formatPrice = (amount) =>
     new Intl.NumberFormat(isArabic ? 'ar-EG' : 'en-US', {
@@ -24,11 +42,25 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
 
   return (
     <div
-      onClick={isOnline ? onClick : undefined}
-      className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition transform hover:scale-[1.01] ${
-        !isOnline ? 'grayscale pointer-events-none' : ''
+      onClick={isOnline && itemAvailable ? onClick : undefined}
+      className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md bg-white group transition-all duration-300 ${
+        !isOnline || !itemAvailable 
+          ? 'pointer-events-none  border-2 border-dashed border-red-300 shadow-sm' 
+          : 'hover:scale-[1.01] hover:shadow-lg'
       }`}
     >
+      {/* Unavailable Badge */}
+      {(!isOnline || !itemAvailable) && (
+        <div className={`absolute top-2 ${isArabic ? 'right-2' : 'left-2'} z-20`}>
+          <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1">
+            <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+            {!isOnline 
+              ? (isArabic ? "غير متاح" : "Offline")
+              : (isArabic ? "غير متاح في هذا الوقت" : "Not available at this time")
+            }
+          </div>
+        </div>
+      )}
       {/* Image */}
       <div className="relative">
         <LazyImg
@@ -93,9 +125,19 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
 
       {/* Add Button */}
       <div className={`absolute bottom-0 ${isArabic ? 'left-0' : 'right-0'}`}>
-        <button className="bg-onRed text-white px-2 py-1 md:px-5 md:py-2 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 hover:bg-green-600 transition">
-          <MdOutlineShoppingBag className="text-base" />
-          {isArabic ? "أضف" : "Add"}
+        <button 
+          disabled={!isOnline || !itemAvailable}
+          className={`px-2 py-1 md:px-5 md:py-2 text-xs rounded-tl-xl rounded-br-xl flex items-center gap-1 transition-all duration-200 ${
+            !isOnline || !itemAvailable 
+              ? 'bg-red-50 text-red-400 cursor-not-allowed border border-red-200' 
+              : 'bg-onRed text-white hover:bg-green-600 hover:shadow-md transform hover:scale-105'
+          }`}
+        >
+          <MdOutlineShoppingBag className={`text-base ${!isOnline || !itemAvailable ? 'opacity-50' : ''}`} />
+          {!isOnline || !itemAvailable 
+            ? (isArabic ? "غير متاح" : "Unavailable")
+            : (isArabic ? "أضف" : "Add")
+          }
         </button>
       </div>
     </div>

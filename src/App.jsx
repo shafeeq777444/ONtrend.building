@@ -61,7 +61,7 @@ export default function App() {
 
                         {/* ------------------------- food --------------------------------- */}
                         <Route path="food" element={<Food />} /> {/* ✅ */}
-                        <Route path="food/:vendorId" element={<FoodVender />} />
+                        <Route path="food/:vendorId" element={<FoodVender />} />{/* ✅ */}
                         <Route
                             path="food/foodDiscountVendor/:discountValue"
                             element={<FoodVendorDiscount />} 

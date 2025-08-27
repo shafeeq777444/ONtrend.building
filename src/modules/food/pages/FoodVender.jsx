@@ -168,22 +168,22 @@ const FoodVendor = () => {
         );
     }
     // ── Early guard: vendor is too far ──────────────────────────────────────────
-    if (!isVendorLoading && currentVendor?.distance === "too far") {
-    return (<>
-        <FoodVendorHeader  vendorBanners={vendorBanners} isLoading={isHeaderLoading} currentVendor={currentVendor} />
-      <EmptyStateCard
-        heading={isArabic ? "المطعم بعيد جدًا عنك" : "Vendor is too far from you"}
-        description={
-          isArabic
-            ? "عذرًا، لا يمكننا عرض هذا المطعم لأنه بعيد عن موقعك."
-            : "Sorry, we cannot show this vendor because it is too far from your location."
-        }
-        notify={false}
-        showReload={true}
-      />
-      </>
-    );
-}
+//     if (!isVendorLoading && currentVendor?.distance === "too far") {
+//     return (<>
+//         <FoodVendorHeader  vendorBanners={vendorBanners} isLoading={isHeaderLoading} currentVendor={currentVendor} />
+//       <EmptyStateCard
+//         heading={isArabic ? "المطعم بعيد جدًا عنك" : "Vendor is too far from you"}
+//         description={
+//           isArabic
+//             ? "عذرًا، لا يمكننا عرض هذا المطعم لأنه بعيد عن موقعك."
+//             : "Sorry, we cannot show this vendor because it is too far from your location."
+//         }
+//         notify={false}
+//         showReload={true}
+//       />
+//       </>
+//     );
+// }
 
     // ── Render ─────────────────────────────────────────────────────────────────
     return (
@@ -210,6 +210,7 @@ const FoodVendor = () => {
                         foodItems={visibleFoods}
                         isArabic={isArabic}
                         venderLogo={memoizedLogo}
+                        travelTime={currentVendor?.travelTime}
                     />
 
                     {/* Pagination */}

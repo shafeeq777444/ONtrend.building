@@ -91,7 +91,7 @@ console.log(categories,"categories arabicc check")
             onClick={() => handleCategoryClick(category)}
             className={`snap-start flex-shrink-0 px-6 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-all duration-200
             ${isSelected ? "text-white bg-black shadow-lg" : "text-gray-700 bg-gray-100 hover:bg-gray-200"}
-            ${!isOnline ? "opacity-60 grayscale" : ""}
+            ${!isOnline ? "" : ""}
           `}
           >
             {category}

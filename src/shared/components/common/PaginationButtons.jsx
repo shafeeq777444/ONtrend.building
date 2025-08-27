@@ -9,7 +9,7 @@ const getButtonClasses = (isDisabled, isOnline) => `
   flex items-center justify-center overflow-hidden
   hover:shadow-lg hover:shadow-red-500/30 hover:scale-105
   ${isDisabled ? 'opacity-40 cursor-not-allowed hover:scale-100 hover:shadow-none' : ''}
-  ${!isOnline ? 'grayscale' : ''}
+  ${!isOnline ? '' : ''}
 `;
 
 const PaginationButtons = ({
