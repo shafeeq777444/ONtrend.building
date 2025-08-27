@@ -464,7 +464,11 @@ export default function TopBar() {
                     closeModal={() => setShowLocationModal(false)}
                 />
             )}
-            {showUserModal && <UserProfileModal setShowUserMOdal={setShowUserMOdal} />}
+            {showUserModal && (
+                <AnimatePresence>
+                    <UserProfileModal setShowUserMOdal={setShowUserMOdal} />
+                </AnimatePresence>
+            )}
             {showUserReminderModal && (
                 <SlideInLoginModal isOpen={showUserReminderModal} onClose={() => setShowUserReminderModal(false)} />
             )}

@@ -8,11 +8,28 @@ import localforage from "localforage";
 import { db } from "../../../lib/firebase/config";
 
 //************************ utils ***********************************************************************
-const generateCartItemId = (productId, variant, addons, pricePerQunatity) => {
-    const sortedAddons = [...addons].sort().join(",");
-    return `${productId}_${variant}_${sortedAddons}_${pricePerQunatity}`;
+const generateCartItemId = (id, selectedVariant, selectedAddons, price) => {
+  let addonsKey = "no-addons";
+  
+  if (Array.isArray(selectedAddons)) {
+    addonsKey = selectedAddons.map(a => a.id).sort().join("-");
+  } else if (selectedAddons && typeof selectedAddons === 'object') {
+    // Handle object structure like {"Extras": ["Special Dip"], "Spciy/Non-Spicy": "Spicy"}
+    const addonValues = Object.entries(selectedAddons)
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          return value.join(',');
+        }
+        return String(value);
+      })
+      .sort()
+      .join('-');
+    addonsKey = addonValues || "no-addons";
+  }
+  
+  const variantKey = selectedVariant?.id || selectedVariant || "no-variant";
+  return `${id}_${variantKey}_${addonsKey}_${price}`;
 };
-
 //************************ Hooks ***********************************************************************
 // ################################# whishlist  #######################################
 export async function toggleToWishlist(userId, product) {
@@ -148,17 +165,18 @@ const cartStore = localforage.createInstance({
 
 // // ----------- indesDb:create/update cart product ---------------------------
 export const addToCart = async (userId, product) => {
+  console.log(product,"csrt produc")
   const {
     id,
     selectedVariant,
     selectedAddons = [],
+    addOn = {},
     pricePerQuantity = "0",
     quantity = 1,
     reference,
     restaurantName,
     ...rest
   } = product;
-
   const price = parseFloat(pricePerQuantity);
   const cartItemId = generateCartItemId(id, selectedVariant, selectedAddons, price);
 
@@ -181,6 +199,7 @@ export const addToCart = async (userId, product) => {
       ...existingItem,
       quantity: newQuantity,
       totalPrice: parseFloat((price * newQuantity).toFixed(3)),
+      pricePerQuantity: pricePerQuantity,
       updatedAt: new Date().toISOString(),
     };
   } else {
@@ -188,6 +207,8 @@ export const addToCart = async (userId, product) => {
       ...rest,
       selectedVariant,
       selectedAddons,
+      addOn,
+      pricePerQuantity: pricePerQuantity,
       quantity,
       totalPrice: parseFloat((price * quantity).toFixed(3)),
       restaurantName,

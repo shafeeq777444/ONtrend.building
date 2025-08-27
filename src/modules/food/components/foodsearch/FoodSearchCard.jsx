@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
 import { ArrowRight } from "lucide-react";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import localforage from "localforage";
 import { useSelector } from "react-redux";
@@ -18,6 +17,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
   const {
     location: { lat, lng },
   } = useSelector((state) => state.user);
+
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 
@@ -25,6 +25,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
   const [searchHistory, setSearchHistory] = useState([]);
   const navigate = useNavigate();
 
+  // Load saved search history when modal opens
   useEffect(() => {
     if (isOpen) {
       localforage.getItem(HISTORY_KEY).then((saved = []) => {
@@ -33,6 +34,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
+  // Save new search term to history
   const saveSearchToHistory = async (term) => {
     const trimmed = term.trim();
     if (!trimmed) return;
@@ -40,34 +42,39 @@ export default function FoodSearchCard({ isOpen, onClose }) {
     const existing = (await localforage.getItem(HISTORY_KEY)) || [];
     const filtered = existing.filter((item) => item !== trimmed);
     const updated = [trimmed, ...filtered].slice(0, MAX_HISTORY);
+
     await localforage.setItem(HISTORY_KEY, updated);
     setSearchHistory(updated);
   };
 
   const handleClose = async () => {
-    await saveSearchToHistory(search);
+    if (search.trim()) {
+      await saveSearchToHistory(search);
+    }
     onClose();
   };
 
   const { data: vendors, isLoading } = useGetAllFoodVendors(lat, lng);
 
-  const filteredVendors = useMemo(() => {
+  // Optimized filtering
+  const showVendors = useMemo(() => {
     if (!vendors) return [];
-    return vendors.filter((vendor) => {
-      const name = isArabic ? vendor.restaurantArabicName || "" : vendor.restaurantName || "";
+    const filtered = vendors.filter((vendor) => {
+      const name = isArabic
+        ? vendor.restaurantArabicName || ""
+        : vendor.restaurantName || "";
       return name.toLowerCase().includes(search.toLowerCase());
     });
+    return filtered.slice(0, 9);
   }, [vendors, search, isArabic]);
-
-  const showVendors = filteredVendors.slice(0, 9);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <Dialog open={isOpen} onClose={handleClose} className="fixed inset-0 z-50 flex">
-          {/* Overlay */}
+          {/* Overlay (lighter gradient instead of heavy blur for Brave perf) */}
           <motion.div
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0 bg-gradient-to-b from-black/40 to-black/20"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -79,12 +86,11 @@ export default function FoodSearchCard({ isOpen, onClose }) {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 500, damping: 40 }}
-            className="relative ml-auto w-full max-w-md h-full bg-white dark:bg-zinc-900   flex flex-col"
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="relative ml-auto w-full max-w-md h-full bg-white dark:bg-zinc-900 flex flex-col shadow-xl"
           >
             {/* Header with Search */}
             <div className="flex items-center justify-between p-4 gap-2">
-             
               <div className="relative flex-1">
                 <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-white" />
                 <input
@@ -92,17 +98,15 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                   placeholder={isArabic ? "ابحث عن البائع" : "Search vendors"}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800/30 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-0  "
+                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-0"
                 />
               </div>
-               <button
+              <button
                 onClick={handleClose}
                 className="ml-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-700 transition"
               >
                 <ArrowRight className="w-5 h-5 text-gray-600 dark:text-white" />
               </button>
-
-            
             </div>
 
             {/* Search History */}
@@ -113,8 +117,8 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                     key={index}
                     onClick={() => setSearch(item)}
                     whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-gray-100 dark:bg-zinc-700/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-600/50 transition "
+                    whileTap={{ scale: 0.97 }}
+                    className="bg-gray-100 dark:bg-zinc-700 px-3 py-1 rounded-full text-sm text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-600 transition"
                   >
                     {item}
                   </motion.button>
@@ -129,7 +133,7 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                   {isArabic ? "جاري تحميل البائعين..." : "Loading vendors..."}
                 </p>
               ) : (
-                <div className="flex flex-col gap-3 scrollbar-hide">
+                <div className="flex flex-col gap-3">
                   {showVendors.map((vendor) => (
                     <motion.div
                       key={vendor.id}
@@ -138,8 +142,8 @@ export default function FoodSearchCard({ isOpen, onClose }) {
                         handleClose();
                       }}
                       whileTap={{ scale: 0.98 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer bg-gray-50 dark:bg-zinc-800/20 backdrop-blur-sm  hover:shadow-md hover:bg-gray-100 dark:hover:bg-zinc-800/30 transition"
+                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      className="flex items-center gap-3 p-3 rounded-lg cursor-pointer bg-gray-50 dark:bg-zinc-800 hover:shadow-md hover:bg-gray-100 dark:hover:bg-zinc-700 transition"
                     >
                       <LazyImg
                         src={vendor.image || "https://via.placeholder.com/80"}
