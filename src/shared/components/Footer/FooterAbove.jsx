@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { motion } from "framer-motion";
+import { HiDownload } from "react-icons/hi";
 
 const FooterAbove = () => {
     return (
@@ -28,7 +29,7 @@ const FooterAbove = () => {
               transition duration-200 ease-in-out 
               hover:bg-[#6a6550] hover:shadow-sm"
                     >
-                        ⬇ DOWNLOAD NOW
+                        <HiDownload className="inline mr-2" /> DOWNLOAD NOW
                     </a>
                     <p className="mt-4 text-xs sm:text-sm text-gray-400">
                         Available on iOS & Android <br />
