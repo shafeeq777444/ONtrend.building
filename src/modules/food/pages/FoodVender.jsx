@@ -66,6 +66,11 @@ const FoodVendor = () => {
         setCurrentPageIndex(0);
     }, [selectedVendorMealCategory, searchTerm, sortOption, pageSize]);
 
+    // Smooth scroll to top when component mounts
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
     // ─────────────────────────────────────────────────────────────────────────────
     // Hooks Destructuring
     // ─────────────────────────────────────────────────────────────────────────────
