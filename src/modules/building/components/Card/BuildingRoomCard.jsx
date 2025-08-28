@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaBed, FaUserFriends, FaChild, FaRulerCombined } from "react-icons/fa";
 import { MdLayers, MdCurrencyRupee } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 const BuildingRoomCard = ({ room }) => {
   const navigate=useNavigate()
+  const [isHovered, setIsHovered] = useState(false)
   console.log(room,'-rrom')
   
   // Fallback values
@@ -21,17 +22,45 @@ const BuildingRoomCard = ({ room }) => {
   };
 
   return (
-    <div onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)} className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px]  duration-300 ease-in-out transition-all cursor-pointer">
+    <div 
+      onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px] duration-300 ease-in-out transition-all cursor-pointer relative group"
+    >
        {/* Image */}
-       <div className="px-4 pb-3">
-        <img
-          src={
-            room?.images?.[0] ||
-            "https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?fm=jpg&q=60&w=3000"
-          }
-          alt={room?.name || "Room"}
-          className="w-full h-[140px] object-cover rounded-lg"
-        />
+       <div className="px-4 pb-3 ">
+        <div className="relative">
+          <img
+            src={
+              room?.images?.[0] ||
+              "https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?fm=jpg&q=60&w=3000"
+            }
+            alt={room?.name || "Room"}
+            className="w-full h-[140px] object-cover rounded-lg"
+          />
+        
+        {/* Quick View Button */}
+        <div className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all duration-500 ease-in-out ${
+          isHovered 
+            ? 'bg-black/40 opacity-100 visible' 
+            : 'bg-black/0 opacity-0 invisible'
+        }`}>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/building/${room?.building_id}/room/${room?.id}`);
+            }}
+            className={`bg-white text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-all duration-300 shadow-lg transform cursor-pointer ${
+              isHovered 
+                ? 'scale-100 translate-y-0 opacity-100' 
+                : 'scale-75 translate-y-2 opacity-0'
+            }`}
+          >
+            Quick View
+          </button>
+        </div>
+        </div>
       </div>
       {/* Header with Room Info */}
       <div className="p-4 pb-2">

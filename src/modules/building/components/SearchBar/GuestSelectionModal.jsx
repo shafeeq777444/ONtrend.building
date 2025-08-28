@@ -15,6 +15,7 @@ const GuestSelectionModal = ({
   useEffect(() => {
     function handleClickOutside(event) {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
+        console.log('click outside')
         setShowGuestSearch(false);
       }
     }
@@ -35,10 +36,12 @@ const GuestSelectionModal = ({
   }, [showGuestSearch, setShowGuestSearch]);
 
   return (
+
     <AnimatePresence>
       {showGuestSearch && (
         <motion.div
           ref={modalRef}
+
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
@@ -111,6 +114,7 @@ const GuestSelectionModal = ({
         </motion.div>
       )}
     </AnimatePresence>
+
   );
 };
 

@@ -88,6 +88,14 @@ const RoomDetails = () => {
         };
     }, [roomData, buildingData]); // Re-run when data loads
 
+    // 🔝 Smooth scroll to top on component mount
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }, []); // Run only once on mount
+
     const handleTabClick = (tab) => {
         const refMap = {
             Overview: overviewRef,

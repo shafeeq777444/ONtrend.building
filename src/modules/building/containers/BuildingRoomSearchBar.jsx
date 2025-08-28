@@ -1,198 +1,244 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import WhereSection from "../components/SearchBar/WhereSection";
 import WhoSection from "../components/SearchBar/WhoSection";
 import SearchButton from "../components/SearchBar/SearchButton";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
 import DateRangePickerSection from "../components/SearchBar/DateSections";
 import { useDispatch, useSelector } from "react-redux";
-import { setWhereSlice,setCheckInSlice,setCheckOutSlice,setAdultCountSlice,setChildrenCountSlice } from "../slices/buildingSlice";
+import {
+  setWhereSlice,
+  setCheckInSlice,
+  setCheckOutSlice,
+  setAdultCountSlice,
+  setChildrenCountSlice,
+} from "../slices/buildingSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const BuildingRoomSearchBar = () => {
-    // --------------------------------   states------------------------------------
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { where, checkIn, checkOut, adultCount, childrenCount } = useSelector(state => state.building);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { where, checkIn, checkOut, adultCount, childrenCount } = useSelector(
+    (state) => state.building
+  );
 
-    const [showGuestSearch, setShowGuestSearch] = useState(false);
-    const [hasUserChangedGuests, setHasUserChangedGuests] = useState(false);
-    
-    // Get URL parameters
-    const urlParams = new URLSearchParams(location.search);
-    const urlCheckIn = urlParams.get('checkIn');
-    const urlCheckOut = urlParams.get('checkOut');
-    const urlAdults = urlParams.get('adults');
-    const urlChildren = urlParams.get('children');
-    const urlLocation = urlParams.get('location');
-    
-    // Initialize state from URL params first, then Redux, then defaults
-    const [locationInputValue, setLocationInputValue] = useState(urlLocation || where || "");
-    
-    // Initialize dateRange from URL params first, then Redux state, then default values
-    const [dateRange, setDateRange] = useState([
-        {
-            startDate: urlCheckIn ? new Date(urlCheckIn) : (checkIn ? new Date(checkIn) : null),
-            endDate: urlCheckOut ? new Date(urlCheckOut) : (checkOut ? new Date(checkOut) : null),
-            key: "selection",
-        },
-    ]);
-    
-    // Initialize Redux state from URL params if they exist
-    useEffect(() => {
-        if (urlLocation) dispatch(setWhereSlice(urlLocation));
-        if (urlCheckIn) dispatch(setCheckInSlice(new Date(urlCheckIn).getTime()));
-        if (urlCheckOut) dispatch(setCheckOutSlice(new Date(urlCheckOut).getTime()));
-        if (urlAdults) dispatch(setAdultCountSlice(parseInt(urlAdults)));
-        if (urlChildren) dispatch(setChildrenCountSlice(parseInt(urlChildren)));
-    }, [dispatch, urlLocation, urlCheckIn, urlCheckOut, urlAdults, urlChildren]);
+  // ---------------- States ----------------
+  const [showGuestSearch, setShowGuestSearch] = useState(false);
+  const [hasUserChangedGuests, setHasUserChangedGuests] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
 
-    const [isVisible, setIsVisible] = useState(true);
-    const lastScrollY = useRef(0);
+  // ---------------- URL Params ----------------
+  const urlParams = new URLSearchParams(location.search);
+  const urlCheckIn = urlParams.get("checkIn");
+  const urlCheckOut = urlParams.get("checkOut");
+  const urlAdults = urlParams.get("adults");
+  const urlChildren = urlParams.get("children");
+  const urlLocation = urlParams.get("location");
 
-    // functions
-    const handleGuestChange = (type, operation) => {
-        setHasUserChangedGuests(true);
-        const currentAdultCount = hasUserChangedGuests ? adultCount : (urlAdults ? parseInt(urlAdults) : adultCount);
-        const currentChildrenCount = hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount);
-        
-        if (type === "adults") {
-            if (operation === "increase" && currentAdultCount < 16) {
-                dispatch(setAdultCountSlice(currentAdultCount + 1));
-            } else if (operation === "decrease" && currentAdultCount > 1) {
-                dispatch(setAdultCountSlice(currentAdultCount - 1));
-            }
-        } else if (type === "children") {
-            if (operation === "increase" && currentChildrenCount < 10) {
-                dispatch(setChildrenCountSlice(currentChildrenCount + 1));
-            } else if (operation === "decrease" && currentChildrenCount > 0) {
-                dispatch(setChildrenCountSlice(currentChildrenCount - 1));
-            }
-        }
+  // ---------------- Inputs ----------------
+  const [locationInputValue, setLocationInputValue] = useState(
+    urlLocation || where || ""
+  );
+
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: urlCheckIn
+        ? new Date(urlCheckIn)
+        : checkIn
+        ? new Date(checkIn)
+        : null,
+      endDate: urlCheckOut
+        ? new Date(urlCheckOut)
+        : checkOut
+        ? new Date(checkOut)
+        : null,
+      key: "selection",
+    },
+  ]);
+
+  // ---------------- Init Redux from URL ----------------
+  useEffect(() => {
+    if (urlLocation) dispatch(setWhereSlice(urlLocation));
+    if (urlCheckIn) dispatch(setCheckInSlice(new Date(urlCheckIn).getTime()));
+    if (urlCheckOut) dispatch(setCheckOutSlice(new Date(urlCheckOut).getTime()));
+    if (urlAdults) dispatch(setAdultCountSlice(+urlAdults));
+    if (urlChildren) dispatch(setChildrenCountSlice(+urlChildren));
+  }, [urlLocation, urlCheckIn, urlCheckOut, urlAdults, urlChildren, dispatch]);
+
+  // ---------------- Handlers ----------------
+  const handleGuestChange = (type, operation) => {
+    setHasUserChangedGuests(true);
+
+    const currentAdults = hasUserChangedGuests
+      ? adultCount
+      : urlAdults
+      ? +urlAdults
+      : adultCount;
+
+    const currentChildren = hasUserChangedGuests
+      ? childrenCount
+      : urlChildren
+      ? +urlChildren
+      : childrenCount;
+
+    if (type === "adults") {
+      if (operation === "increase" && currentAdults < 16) {
+        dispatch(setAdultCountSlice(currentAdults + 1));
+      } else if (operation === "decrease" && currentAdults > 1) {
+        dispatch(setAdultCountSlice(currentAdults - 1));
+      }
+    }
+
+    if (type === "children") {
+      if (operation === "increase" && currentChildren < 10) {
+        dispatch(setChildrenCountSlice(currentChildren + 1));
+      } else if (operation === "decrease" && currentChildren > 0) {
+        dispatch(setChildrenCountSlice(currentChildren - 1));
+      }
+    }
+  };
+
+  const handleDateRangeChange = (newRange) => {
+    setDateRange(newRange);
+    dispatch(setCheckInSlice(newRange[0].startDate?.getTime() || ""));
+    dispatch(setCheckOutSlice(newRange[0].endDate?.getTime() || ""));
+  };
+
+  const handleLocationChange = (value) => {
+    setLocationInputValue(value);
+    dispatch(setWhereSlice(value));
+  };
+
+  const onClickSearch = () => {
+    const params = {};
+    if (locationInputValue) params.location = locationInputValue;
+    if (dateRange[0]?.startDate)
+      params.checkIn = dateRange[0].startDate.toISOString();
+    if (dateRange[0]?.endDate)
+      params.checkOut = dateRange[0].endDate.toISOString();
+    if (adultCount) params.adults = adultCount;
+    if (childrenCount) params.children = childrenCount;
+
+    navigate(`/building/search${new URLSearchParams(params)}`);
+    toast.success("Search Completed");
+  };
+
+  // ---------------- Resize Listener ----------------
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      const newIsMobile = window.innerWidth < 640;
+      if (newIsMobile !== isMobile) setShowGuestSearch(false);
+      setIsMobile(newIsMobile);
     };
 
-    // Update Redux state when dateRange changes
-    const handleDateRangeChange = (newDateRange) => {
-        setDateRange(newDateRange);
-        dispatch(setCheckInSlice(newDateRange[0].startDate?.getTime() || ""));
-        dispatch(setCheckOutSlice(newDateRange[0].endDate?.getTime() || ""));
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobile]);
+
+  // ---------------- Scroll Listener ----------------
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setIsVisible(!(currentY > lastScrollY.current && currentY > 100));
+      lastScrollY.current = currentY;
     };
 
-    // Update Redux state when location changes
-    const handleLocationChange = (value) => {
-        setLocationInputValue(value);
-        dispatch(setWhereSlice(value));
-    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    const onClickSearch = () => {
-        dispatch(setWhereSlice(locationInputValue));
-        dispatch(setCheckInSlice(dateRange[0].startDate?.getTime() || ""));
-        dispatch(setCheckOutSlice(dateRange[0].endDate?.getTime() || ""));
-        dispatch(setAdultCountSlice(adultCount || 0));
-        dispatch(setChildrenCountSlice(childrenCount || 0));
-        console.log("dateRange:", dateRange, "adultCount:", adultCount, "childrenCount:", childrenCount, "LocationinputValue:", locationInputValue, "search");
-        const params = {};
-        if (locationInputValue) params.location = locationInputValue;
-        if (dateRange[0]?.startDate) params.checkIn = dateRange[0].startDate.toISOString();
-        if (dateRange[0]?.endDate) params.checkOut = dateRange[0].endDate.toISOString();
-        if (adultCount) params.adults = adultCount;
-        if (childrenCount) params.children = childrenCount;
+  // ---------------- UI ----------------
+  return (
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.3 }}
+      className="sticky top-16 z-20"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="bg-white border border-gray-200 rounded-3xl shadow-lg p-2 max-w-4xl mx-auto"
+      >
+        {/* Desktop */}
+        {!isMobile && (
+          <div className="hidden lg:flex items-center justify-between">
+            <WhereSection
+              inputValue={locationInputValue}
+              setInputValue={handleLocationChange}
+            />
+            <DateRangePickerSection
+              dateRange={dateRange}
+              setDateRange={handleDateRangeChange}
+              isSearchBar
+            />
+            <WhoSection
+              showGuestSearch={showGuestSearch}
+              setShowGuestSearch={setShowGuestSearch}
+              handleGuestChange={handleGuestChange}
+              adultCount={
+                hasUserChangedGuests
+                  ? adultCount
+                  : urlAdults
+                  ? +urlAdults
+                  : adultCount
+              }
+              childrenCount={
+                hasUserChangedGuests
+                  ? childrenCount
+                  : urlChildren
+                  ? +urlChildren
+                  : childrenCount
+              }
+            />
+            <SearchButton onClick={onClickSearch} />
+          </div>
+        )}
 
-        const queryParams = new URLSearchParams(params).toString();
-        navigate(`/building/search${queryParams ? `?${queryParams}` : ''}`);
-        toast.success("search Completed");
-    };
-    // ------------------ Scroll Handler ------------------
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-                // Scrolling down
-                setIsVisible(false);
-            } else {
-                // Scrolling up
-                setIsVisible(true);
-            }
-
-            lastScrollY.current = currentScrollY;
-        };
-
-        window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
-    // --------------------------------  UI return------------------------------------
-    return (
-        <motion.div
-            initial={{ y: 0, opacity: 1 }}
-            animate={{ y: isVisible ? 0 : 0, opacity: isVisible ? 1 : 0 }}
-            transition={{ duration: 0.4 }}
-            className="sticky top-16 z-20"
-        >
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                className="bg-white border border-gray-200 rounded-3xl shadow-lg p-2 max-w-4xl mx-auto"
-            >
-                {/* Desktop Layout */}
-                <div className="hidden lg:flex items-center justify-between">
-                    {/* location section */}
-                    <WhereSection inputValue={locationInputValue} setInputValue={handleLocationChange} />
-                    {/* Date section */}
-                    <DateRangePickerSection dateRange={dateRange} setDateRange={handleDateRangeChange} isSearchBar={true} />
-                    {/* guest amount section */}
-                    <WhoSection
-                        showGuestSearch={showGuestSearch}
-                        setShowGuestSearch={setShowGuestSearch}
-                        handleGuestChange={handleGuestChange}
-                        adultCount={hasUserChangedGuests ? adultCount : (urlAdults ? parseInt(urlAdults) : adultCount)}
-                        childrenCount={hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount)}
-                    />
-                    <SearchButton onClick={onClickSearch} />
-                </div>
-
-                {/* Mobile Layout */}
-                <div className="lg:hidden space-y-3">
-                    {/* Location section - full width */}
-                    <div className="w-full">
-                        <WhereSection inputValue={locationInputValue} setInputValue={handleLocationChange} />
-                    </div>
-                    
-                    {/* Date and Guest sections - stacked */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <div className="flex-1">
-                            <DateRangePickerSection dateRange={dateRange} setDateRange={handleDateRangeChange} isSearchBar={true} />
-                        </div>
-                        <div className="flex-1">
-                            <WhoSection
-                                showGuestSearch={showGuestSearch}
-                                // setShowGuestSearch={()=>{setShowGuestSearch(!showGuestSearch)}}
-                                handleGuestChange={handleGuestChange}
-                                adultCount={hasUserChangedGuests ? adultCount : (urlAdults ? parseInt(urlAdults) : adultCount)}
-                                childrenCount={hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount)}
-                            />
-                        </div>
-                    </div>
-                    
-                    {/* Search button - full width */}
-                    <div className="w-full">
-                        <SearchButton onClick={onClickSearch} />
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* guest selection modal */}
-        </motion.div>
-    );
+        {/* Mobile */}
+        {isMobile && (
+          <div className="lg:hidden space-y-3">
+            <WhereSection
+              inputValue={locationInputValue}
+              setInputValue={handleLocationChange}
+            />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <DateRangePickerSection
+                dateRange={dateRange}
+                setDateRange={handleDateRangeChange}
+                isSearchBar
+              />
+              <WhoSection
+                showGuestSearch={showGuestSearch}
+                setShowGuestSearch={setShowGuestSearch}
+                handleGuestChange={handleGuestChange}
+                adultCount={
+                  hasUserChangedGuests
+                    ? adultCount
+                    : urlAdults
+                    ? +urlAdults
+                    : adultCount
+                }
+                childrenCount={
+                  hasUserChangedGuests
+                    ? childrenCount
+                    : urlChildren
+                    ? +urlChildren
+                    : childrenCount
+                }
+              />
+            </div>
+            <SearchButton onClick={onClickSearch} />
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
 };
 
 export default BuildingRoomSearchBar;
