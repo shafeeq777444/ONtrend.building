@@ -21,7 +21,7 @@ const BuildingRoomCard = ({ room }) => {
   };
 
   return (
-    <div onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)} className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px] hover:scale-[1.02] duration-300 ease-in-out transition-all cursor-pointer">
+    <div onClick={()=>navigate(`/building/${room?.building_id}/room/${room?.id}`)} className="w-full bg-white rounded-xl shadow-md overflow-hidden h-[280px]  duration-300 ease-in-out transition-all cursor-pointer">
        {/* Image */}
        <div className="px-4 pb-3">
         <img
@@ -78,14 +78,7 @@ const BuildingRoomCard = ({ room }) => {
       </div>
 
       {/* Buttons */}
-      <div className="px-4 pb-4 flex gap-2">
-        <button className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-          View Details
-        </button>
-        <button className="flex-1 bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
-          Book Now
-        </button>
-      </div>
+      
     </div>
   );
 };

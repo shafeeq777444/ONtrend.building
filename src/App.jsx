@@ -5,9 +5,6 @@ import MainLayout from "./shared/layouts/MainLayout";
 
 // extras-----------------------------------------------------
 import OntrendLoading from "./shared/components/common/OntrendLoading";
-
-import RoomDetails from "./modules/building/pages/RoomDetailsPage";
-import BuildingRoomSearchedPage from "./modules/building/pages/BuildingRoomSearchedPage";
 import useOnlineStatus from "./shared/hooks/useOnlineStatus";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // ✅ import i18n
@@ -15,6 +12,8 @@ import { useTranslation } from "react-i18next"; // ✅ import i18n
 // Rooms-------------------------------------------------------------
 const BuildingHomePage = lazy(() => import("@/modules/building/pages/BuildingHomePage.jsx"));
 const BuildingDetailPage = lazy(() => import("@/modules/building/pages/BuildingDetailPage.jsx"));
+const BuildingRoomSearchedPage = lazy(() => import("./modules/building/pages/BuildingRoomSearchedPage"));
+const RoomDetails = lazy(() => import("./modules/building/pages/RoomDetailsPage"));
 
 // food-----------------------------------------------------
 const Food = lazy(() => import("./modules/food/pages/Food"));

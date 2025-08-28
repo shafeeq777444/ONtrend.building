@@ -30,9 +30,6 @@ const BuildingSearchedRoomCard = ({ room, handleViewDetails }) => {
         </div>
         
         {/* Description */}
-        <p className="text-sm text-gray-700 mb-3 leading-relaxed line-clamp-2">
-          {room.description}
-        </p>
         
         {/* Room Type & Area */}
         <div className="flex justify-between items-center mb-3">
@@ -46,15 +43,15 @@ const BuildingSearchedRoomCard = ({ room, handleViewDetails }) => {
         
         {/* Capacity Info */}
         <div className="flex flex-wrap gap-3 mb-3 text-sm text-gray-600">
-          <span>👥 {room.max_adults} Adults</span>
-          <span>👶 {room.max_children} Children</span>
-          <span>🛏️ {room.bed_count} Beds</span>
-          <span>🏢 Floor {room.floor}</span>
+          <span>{room.max_adults} Adults</span>
+          <span>{room.max_children} Children</span>
+          <span>{room.bed_count} Beds</span>
+          <span>Floor {room.floor}</span>
         </div>
         
         {/* Building Info */}
         <div className="text-xs text-gray-500 mb-3">
-          📍 {room.building_id?.city}, {room.building_id?.state}, {room.building_id?.country}
+          {room.building_id?.city}, {room.building_id?.state}, {room.building_id?.country}
         </div>
         
         {/* Extra Charges */}

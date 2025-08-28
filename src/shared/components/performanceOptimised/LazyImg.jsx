@@ -4,7 +4,7 @@ const LazyImg = ({
   src,
   alt = "image",
   className = "",
-  placeholder = "/extras/imageicon.png",
+  placeholder = "",
   onClick,
   onLoad,
   onError,
