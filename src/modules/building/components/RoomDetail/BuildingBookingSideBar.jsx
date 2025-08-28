@@ -43,7 +43,7 @@ const BuildingBookingSideBar = ({room,setActiveTab,onTabClick}) => {
         if(childrenCount>room?.max_children){
             totalPrice+=(childrenCount-room?.max_children)*room?.extra_person_charge
         }
-        return totalPrice
+        return totalPrice?.toFixed(3)
     }
 
     const handleGuestChange = (type, operation) => {

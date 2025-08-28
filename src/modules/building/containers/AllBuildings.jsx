@@ -35,7 +35,7 @@ const AllBuildings = () => {
     }
 
     return (
-        <div className="px-4 py-6 relative w-full">
+        <div className="px-4 py-6 relative w-full ">
             {/* Swiper navigation buttons */}
             <NavigationArrows
                 nextClass={"swiper-button-next-building"}

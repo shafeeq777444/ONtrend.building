@@ -110,26 +110,26 @@ export default function BuildingRoomReviews() {
     ];
 
     return (
-        <div className="flex h-screen overflow-hidden mt-18">
-            {/* Left Sticky Panel */}
-            <div className="w-1/3 p-6 bg-white sticky h-fit self-start">
+        <div className="flex flex-col lg:flex-row h-auto lg:h-screen overflow-hidden mt-18">
+            {/* Left Panel - Mobile: Full width, Desktop: 1/3 width */}
+            <div className="w-full lg:w-1/3 p-4 lg:p-6 bg-white lg:sticky lg:h-fit lg:self-start">
                 <RatingIcon />
-                <p className="text-gray-600 font-medium mb-4 mt-10">Guest favourite</p>
-                <div className="space-y-3 text-sm">
+                <p className="text-gray-600 font-medium mb-4 mt-6 lg:mt-10">Guest favourite</p>
+                <div className="space-y-2 lg:space-y-3 text-sm">
                     {ratings.map((r, i) => (
                         <RoomRatingIndividual key={i} label={r.label} value={r.value} icon={r.icon} />
                     ))}
                 </div>
             </div>
 
-            {/* Right Scrollable Panel */}
-            <div className="w-2/3 overflow-y-auto p-6 space-y-6 scrollbar-hide">
-                <h2 className="text-2xl font-semibold mb-4">Guest Reviews</h2>
+            {/* Right Panel - Mobile: Full width, Desktop: 2/3 width */}
+            <div className="w-full lg:w-2/3 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6 scrollbar-hide">
+                <h2 className="text-xl lg:text-2xl font-semibold mb-4">Guest Reviews</h2>
                 {reviews.map((r, i) => (
                     <RoomReviewCustomerCard r={r} i={i} />
                 ))}
                 <div className="flex justify-center pt-4">
-                    <button className="px-5 py-2 text-sm font-medium cursor-pointer text-white bg-black rounded-full hover:bg-gray-800 transition">
+                    <button className="px-4 lg:px-5 py-2 text-sm font-medium cursor-pointer text-white bg-black rounded-full hover:bg-gray-800 transition">
                         See more reviews
                     </button>
                 </div>

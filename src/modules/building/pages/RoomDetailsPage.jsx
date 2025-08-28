@@ -167,7 +167,17 @@ const RoomDetails = () => {
         <div className="px-4 sm:px-6 lg:px-8 py-4 ">
             <BackButton handleBack={handleBack} indicateText="Building" />
             {/* -------------------------- TOP TITLE IMAGES --------------------------------------------------------*/}
-            <div className="mb-6 h-100">
+            <div className="md:mb-6 ">
+                <div className="lg:hidden">
+                    <RoomTitle
+                                name_ar={roomData?.name || fallbackData.name_ar}
+                                name_en={roomData?.name || fallbackData.name_en}
+                                bedCount={roomData?.bed_count || fallbackData.bed_count}
+                                bedType={roomData?.bed_type?.type || fallbackData.bed_type.type}
+                                max_adults={roomData?.max_adults || fallbackData.max_adults}
+                                max_children={roomData?.max_children || fallbackData.max_children}
+                            />
+                </div>
                 <RoomHighliteImageGallery
                     handleExplore={handleExplore}
                     images={
@@ -177,6 +187,7 @@ const RoomDetails = () => {
                     }
                 />
             </div>
+            
 
             {/* -------------------------- Room MAIN DETAILS --------------------------------------------------------*/}
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
@@ -185,14 +196,16 @@ const RoomDetails = () => {
                     <div className="space-y-6">
                         {/* Overview Section */}
                         <div ref={overviewRef} />
-                        <RoomTitle
-                            name_ar={roomData?.name || fallbackData.name_ar}
-                            name_en={roomData?.name || fallbackData.name_en}
-                            bedCount={roomData?.bed_count || fallbackData.bed_count}
-                            bedType={roomData?.bed_type?.type || fallbackData.bed_type.type}
-                            max_adults={roomData?.max_adults || fallbackData.max_adults}
-                            max_children={roomData?.max_children || fallbackData.max_children}
-                        />
+                        <div className="hidden lg:block">
+                            <RoomTitle
+                                name_ar={roomData?.name || fallbackData.name_ar}
+                                name_en={roomData?.name || fallbackData.name_en}
+                                bedCount={roomData?.bed_count || fallbackData.bed_count}
+                                bedType={roomData?.bed_type?.type || fallbackData.bed_type.type}
+                                max_adults={roomData?.max_adults || fallbackData.max_adults}
+                                max_children={roomData?.max_children || fallbackData.max_children}
+                            />
+                        </div>
                         <RoomGuestFavouriteBadge />
                         <RoomDetailSwitchingTab
                             activeTab={activeTab}
@@ -230,12 +243,12 @@ const RoomDetails = () => {
                             />
                         </div>
                         <div ref={reviewsRef} />
-                        <BuildingOverallReview />
+                        {/* <BuildingOverallReview /> */}
                     </div>
                 </div>
 
                 {/*--------------------------  right side -------------------------- */}
-                <div className="order-1 lg:order-2 lg:w-80 xl:w-96 mt-24">
+                <div className="order-1 lg:order-2 lg:w-80 xl:w-96 md:mt-24">
                     <div className="sticky top-40">
                         <BuildingBookingSideBar room={roomData} setActiveTab={setActiveTab} onTabClick={handleTabClick}/>
                     </div>

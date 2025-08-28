@@ -143,6 +143,7 @@ const BuildingRoomSearchBar = () => {
                 transition={{ duration: 0.4, delay: 0.1 }}
                 className="bg-white border border-gray-200 rounded-3xl shadow-lg p-2 max-w-4xl mx-auto"
             >
+                {/* Desktop Layout */}
                 <div className="hidden lg:flex items-center justify-between">
                     {/* location section */}
                     <WhereSection inputValue={locationInputValue} setInputValue={handleLocationChange} />
@@ -157,6 +158,35 @@ const BuildingRoomSearchBar = () => {
                         childrenCount={hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount)}
                     />
                     <SearchButton onClick={onClickSearch} />
+                </div>
+
+                {/* Mobile Layout */}
+                <div className="lg:hidden space-y-3">
+                    {/* Location section - full width */}
+                    <div className="w-full">
+                        <WhereSection inputValue={locationInputValue} setInputValue={handleLocationChange} />
+                    </div>
+                    
+                    {/* Date and Guest sections - stacked */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex-1">
+                            <DateRangePickerSection dateRange={dateRange} setDateRange={handleDateRangeChange} isSearchBar={true} />
+                        </div>
+                        <div className="flex-1">
+                            <WhoSection
+                                showGuestSearch={showGuestSearch}
+                                // setShowGuestSearch={()=>{setShowGuestSearch(!showGuestSearch)}}
+                                handleGuestChange={handleGuestChange}
+                                adultCount={hasUserChangedGuests ? adultCount : (urlAdults ? parseInt(urlAdults) : adultCount)}
+                                childrenCount={hasUserChangedGuests ? childrenCount : (urlChildren ? parseInt(urlChildren) : childrenCount)}
+                            />
+                        </div>
+                    </div>
+                    
+                    {/* Search button - full width */}
+                    <div className="w-full">
+                        <SearchButton onClick={onClickSearch} />
+                    </div>
                 </div>
             </motion.div>
 

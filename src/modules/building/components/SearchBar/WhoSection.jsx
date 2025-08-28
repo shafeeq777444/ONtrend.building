@@ -15,23 +15,23 @@ const WhoSection = ({
         <>
             {!showGuestSearch && !showCalendar && (
                 <div
-                    className="select-none flex-1 px-6 py-4 hover:bg-gray-50 rounded-full cursor-pointer transition-colors"
+                    className="select-none flex-1 px-3 sm:px-6 py-3 sm:py-4 hover:bg-gray-50 rounded-full cursor-pointer transition-colors"
                     onClick={(e) => {
                         e.preventDefault();
                         setShowGuestSearch(true);
                     }}
                 >
                     <div className="text-xs font-semibold text-gray-900 mb-1">Who</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-xs sm:text-sm text-gray-600">
                         {adultCount} adult{adultCount !== 1 ? "s" : ""}, {childrenCount} child{childrenCount !== 1 ? "ren" : ""}
                     </div>
                 </div>
             )}
 
             {showGuestSearch && (
-                <div className="flex-1 px-6 py-4 bg-gray-50 rounded-full">
+                <div className="flex-1 px-3 sm:px-6 py-3 sm:py-4 bg-gray-50 rounded-full">
                     <div className="text-xs font-semibold text-gray-900 mb-1">Who</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-xs sm:text-sm text-gray-600">
                         {adultCount} adult{adultCount !== 1 ? "s" : ""}, {childrenCount} child{childrenCount !== 1 ? "ren" : ""}
                     </div>
                 </div>

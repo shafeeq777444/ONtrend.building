@@ -45,28 +45,28 @@ const GuestSelectionModal = ({
           transition={{ duration: 0.25 }}
           className={`${
             isSearchBar
-              ? 'top-full left-162 right-84 mt-2 absolute'
+              ? 'top-full left-0 right-0 sm:left-162 sm:right-84 mt-2 absolute'
               : 'left-0 right-0'
-          } bg-white border border-gray-200 rounded-3xl shadow-lg px-5 py-4 z-50`}
+          } bg-white border border-gray-200 rounded-3xl shadow-lg px-3 sm:px-5 py-3 sm:py-4 z-50`}
         >
-          <div className="space-y-6   select-none">
+          <div className="space-y-4 sm:space-y-6 select-none">
             {/* Adults */}
-            <div className="flex bg-gray-50 p-4 rounded-full items-center justify-between">
+            <div className="flex bg-gray-50 p-3 sm:p-4 rounded-full items-center justify-between">
               <div>
                 <div className="font-semibold text-gray-900">Adults</div>
-                <div className="text-sm text-gray-600">Ages 13 or above</div>
+                <div className="text-xs sm:text-sm text-gray-600">Ages 13 or above</div>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
                   onClick={() => handleGuestChange('adults', 'decrease')}
                   disabled={adultCount <= 1}
-                  className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                   </svg>
                 </button>
-                <span className="w-8 text-center font-semibold">{adultCount}</span>
+                <span className="w-6 sm:w-8 text-center font-semibold text-sm sm:text-base">{adultCount}</span>
                 <button
                   onClick={() => handleGuestChange('adults', 'increase')}
                   disabled={adultCount >= 16}
@@ -80,31 +80,31 @@ const GuestSelectionModal = ({
             </div>
 
             {/* Children */}
-            <div className="flex bg-gray-50 p-4 rounded-full items-center justify-between">
+            <div className="flex bg-gray-50 p-3 sm:p-4 rounded-full items-center justify-between">
               <div>
                 <div className="font-semibold text-gray-900">Children</div>
-                <div className="text-sm text-gray-600">Ages 0 to 12</div>
+                <div className="text-xs sm:text-sm text-gray-600">Ages 0 to 12</div>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
-                  onClick={() => handleGuestChange('children', 'decrease')}
-                  disabled={childrenCount <= 0}
-                  className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                  </svg>
-                </button>
-                <span className="w-8 text-center font-semibold">{childrenCount}</span>
+                   onClick={() => handleGuestChange('children', 'decrease')}
+                   disabled={childrenCount <= 0}
+                   className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                 >
+                   <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                   </svg>
+                 </button>
+                <span className="w-6 sm:w-8 text-center font-semibold text-sm sm:text-base">{childrenCount}</span>
                 <button
-                  onClick={() => handleGuestChange('children', 'increase')}
-                  disabled={childrenCount >= 10}
-                  className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
+                   onClick={() => handleGuestChange('children', 'increase')}
+                   disabled={childrenCount >= 10}
+                   className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+                 >
+                   <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                   </svg>
+                 </button>
               </div>
             </div>
           </div>

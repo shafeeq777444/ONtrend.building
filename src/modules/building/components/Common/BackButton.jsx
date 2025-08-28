@@ -22,7 +22,7 @@ const BackButton = ({handleBack,indicateText}) => {
 
        <button 
                     onClick={handleBack || fallBackhandleBack}
-                    className="flex items-center justify-center px-4 py-2 h-8 min-w-20 rounded-lg bg-white shadow-md hover:bg-gray-100 text-gray-700 transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 z-50"
+                    className="hidden md:flex items-center justify-center px-4 py-2 h-8 min-w-20 rounded-lg bg-white shadow-md hover:bg-gray-100 text-gray-700 transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 z-50"
                     aria-label="Go back"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
