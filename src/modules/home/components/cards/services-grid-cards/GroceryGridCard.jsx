@@ -13,7 +13,7 @@ const GroceryGridCard = () => {
             <LazyImage src="/gird/grocery2.jpg" alt="Grocery" containerClass="w-full h-full" />
 
             {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-opacity-50 transition duration-300" />
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-opacity-50 transition duration-300" />
 
             {/* Text Content */}
             <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4 space-y-4">

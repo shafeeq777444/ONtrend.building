@@ -1,302 +1,409 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { X, Minus, Plus, ShoppingCart, Timer } from "lucide-react";
-import { motion, AnimatePresence, LazyMotion, domAnimation } from "framer-motion";
+import React, { useEffect, useRef, useState, useMemo, useCallback, useLayoutEffect } from "react";
+import { X, Minus, Plus, ShoppingCart, Timer, Check } from "lucide-react";
 import { useAddToCart } from "@/modules/cart/services/queries/cart.query";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/firebase/config";
 import LazyImg from "@/shared/components/performanceOptimised/LazyImg";
 
-// ─── Responsive Media Query Hook ───────────────────────────────
-function useMediaQuery(query) {
-  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) setMatches(media.matches);
-    const listener = () => setMatches(media.matches);
-    media.addEventListener("change", listener);
-    return () => media.removeEventListener("change", listener);
-  }, [matches, query]);
-  return matches;
-}
+const VariantsSection = React.memo(function VariantsSection({ item, selectedVariant, setSelectedVariant }) {
+    const variants = item?.variants ?? {};
+    const entries = Object.entries(variants);
+    if (!entries.length) return null;
 
-// ─── Animation Variants ───────────────────────────────
-const backdropVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.2 } },
-  exit: { opacity: 0 },
-};
-
-const mobileDrawerVariants = {
-  hidden: { y: "100%", opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { type: "spring", damping: 30, stiffness: 300 } },
-  exit: { y: "100%", opacity: 0, transition: { duration: 0.2 } },
-};
-
-const desktopDrawerVariants = {
-  hidden: { x: "100%", opacity: 0 },
-  visible: { x: 0, opacity: 1, transition: { type: "spring", damping: 30, stiffness: 300 } },
-  exit: { x: "100%", opacity: 0, transition: { duration: 0.2 } },
-};
-
-// ─── Subcomponent: Variants Section ───────────────────────────────
-const VariantsSection = React.memo(({ item, selectedVariant, setSelectedVariant }) => {
-  if (!item?.variants || Object.keys(item.variants).length === 0) return null;
-  return (
-    <div className="space-y-4">
-      <h3 className="font-semibold text-gray-900 text-lg">Choose Size</h3>
-      <div className="grid grid-cols-1 gap-3">
-        {Object.entries(item.variants).map(([variantName, variantData]) => (
-          <button
-            key={variantName}
-            onClick={() => setSelectedVariant(variantName)}
-            className={`p-4 rounded-xl border-2 transition-all text-left ${
-              selectedVariant === variantName
-                ? "border-emerald-500 bg-emerald-50 shadow"
-                : "border-gray-200 hover:border-emerald-300"
-            }`}
-          >
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-gray-900">{variantName}</span>
-              <span className="text-emerald-600 font-bold">OMR {variantData.price}</span>
+    return (
+        <div className="space-y-2">
+            <h3 className="text-sm font-medium text-gray-900">Size</h3>
+            <div className="grid grid-cols-1 gap-2">
+                {entries.map(([variantName, variantData]) => {
+                    const active = selectedVariant === variantName;
+                    return (
+                        <button
+                            key={variantName}
+                            onClick={() => setSelectedVariant(variantName)}
+                            className={[
+                                "flex items-center justify-between rounded-lg border px-3 py-2 text-left transition",
+                                active ? "border-red-600 bg-red-50" : "border-gray-200 hover:bg-gray-50",
+                            ].join(" ")}
+                        >
+                            <span className="text-sm font-medium text-gray-900">{variantName}</span>
+                            <span className="text-sm font-semibold text-red-700">OMR {variantData?.price ?? 0}</span>
+                        </button>
+                    );
+                })}
             </div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-});
-
-// ─── Subcomponent: Add-ons Section ───────────────────────────────
-const AddOnsSection = React.memo(({ item, addons, toggleAddon }) => {
-  if (!item?.addOn || Object.keys(item.addOn).length === 0) return null;
-  return (
-    <div className="space-y-6">
-      {Object.entries(item.addOn).map(([category, addonsArray]) => (
-        <div key={category} className="space-y-3">
-          <h3 className="font-semibold text-gray-900 text-lg">{category}</h3>
-          <div className="space-y-3">
-            {addonsArray.map((addon, idx) => {
-              const isSelected = addon.isRequired
-                ? addons[category] === addon.name.trim()
-                : addons[category]?.includes(addon.name.trim());
-              return (
-                <button
-                  key={`${category}-${idx}`}
-                  onClick={() => toggleAddon(addon.name.trim(), addon.isRequired, category)}
-                  className={`w-full p-3 rounded-xl border-2 flex justify-between ${
-                    isSelected
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-blue-300"
-                  }`}
-                >
-                  <span className="font-medium">{addon.name}</span>
-                  <span className="text-blue-600 font-bold">
-                    {addon.price > 0 ? `+OMR ${addon.price}` : "Free"}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
         </div>
-      ))}
-    </div>
-  );
+    );
 });
 
-// ─── Main Modal Component ───────────────────────────────
+const AddOnsSection = React.memo(function AddOnsSection({ item, addons, toggleAddon }) {
+    const addOn = item?.addOn ?? {};
+    const categories = Object.entries(addOn);
+    if (!categories.length) return null;
+
+    return (
+        <div className="space-y-4">
+            <h3 className="text-sm font-medium text-gray-900">Add-ons</h3>
+            {categories.map(([category, arr]) => {
+                const hasRequired = arr.some((a) => a.isRequired);
+                return (
+                    <div key={category} className="rounded-lg border border-gray-200 p-3">
+                        <div className="mb-2 flex items-center justify-between">
+                            <span className="text-sm font-semibold text-gray-900">{category}</span>
+                            {hasRequired && (
+                                <span className="text-[11px] rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700">
+                                    Required
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="space-y-2">
+                            {arr.map((addon, idx) => {
+                                const name = String(addon.name ?? "").trim();
+                                const isReq = !!addon.isRequired;
+                                const selected = isReq
+                                    ? addons[category] === name
+                                    : Array.isArray(addons[category]) && addons[category].includes(name);
+
+                                return (
+                                    <button
+                                        key={`${category}-${idx}`}
+                                        onClick={() => toggleAddon(name, isReq, category)}
+                                        className={[
+                                            "w-full rounded-md border px-3 py-2 text-left text-sm transition",
+                                            selected ? "border-red-600 bg-red-50" : "border-gray-200 hover:bg-gray-50",
+                                        ].join(" ")}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                {selected ? (
+                                                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-600">
+                                                        <Check className="h-3.5 w-3.5 text-white" />
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-block h-5 w-5 rounded-full border border-gray-300" />
+                                                )}
+                                                <span className="font-medium text-gray-900">{name || "Option"}</span>
+                                            </div>
+                                            <span
+                                                className={[
+                                                    "font-semibold",
+                                                    addon.price > 0 ? "text-red-700" : "text-green-700",
+                                                ].join(" ")}
+                                            >
+                                                {addon.price > 0 ? `+OMR ${addon.price}` : "Free"}
+                                            </span>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+});
+
 const FoodOrderDetailModal = ({ item, onClose, travelTime }) => {
-  const navigate = useNavigate();
-  const { userId } = useSelector((state) => state.user);
-  const { mutate: addToCart } = useAddToCart(userId);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+    const navigate = useNavigate();
+    const { userId } = useSelector((s) => s.user);
+    const { mutate: addToCart } = useAddToCart(userId);
 
-  const [selectedVariant, setSelectedVariant] = useState(() =>
-    item?.variants ? Object.keys(item.variants)[0] : null
-  );
+    const hasVariants = !!item?.variants && Object.keys(item.variants).length > 0;
+    const hasAddOns = !!item?.addOn && Object.keys(item.addOn).length > 0;
 
-  // Initialize addons state with required defaults
-  const [addons, setAddons] = useState(() => {
-    const initial = {};
-    Object.entries(item.addOn || {}).forEach(([category, arr]) => {
-      const requiredOptions = arr.filter((opt) => opt.isRequired);
-      if (requiredOptions.length > 0) {
-        initial[category] = requiredOptions[0].name.trim(); // auto select first required
-      } else {
-        initial[category] = [];
-      }
+    const [selectedVariant, setSelectedVariant] = useState(() => (hasVariants ? Object.keys(item.variants)[0] : null));
+
+    const [addons, setAddons] = useState(() => {
+        const initial = {};
+        Object.entries(item?.addOn ?? {}).forEach(([category, arr]) => {
+            const required = arr.filter((x) => x.isRequired);
+            initial[category] = required.length ? String(required[0].name ?? "").trim() : [];
+        });
+        return initial;
     });
-    return initial;
-  });
 
-  const [quantity, setQuantity] = useState(1);
-  const drawerRef = useRef();
+    const [quantity, setQuantity] = useState(1);
+    const cardRef = useRef(null);
 
-  // Close on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (drawerRef.current && !drawerRef.current.contains(e.target)) {
+    // Close on overlay click / Esc
+    useEffect(() => {
+        const onMouseDown = (e) => {
+            // Only close when clicking outside the card
+            if (cardRef.current && !cardRef.current.contains(e.target)) onClose();
+        };
+        const onKey = (e) => e.key === "Escape" && onClose();
+        document.addEventListener("mousedown", onMouseDown);
+        document.addEventListener("keydown", onKey);
+        return () => {
+            document.removeEventListener("mousedown", onMouseDown);
+            document.removeEventListener("keydown", onKey);
+        };
+    }, [onClose]);
+
+    // Lock scroll
+    useLayoutEffect(() => {
+        const sw = window.innerWidth - document.documentElement.clientWidth;
+        const prevOverflow = document.body.style.overflow;
+        const prevPaddingRight = document.body.style.paddingRight;
+        document.body.style.overflow = "hidden";
+        document.body.style.paddingRight = `${sw}px`;
+        return () => {
+            document.body.style.overflow = prevOverflow;
+            document.body.style.paddingRight = prevPaddingRight;
+        };
+    }, []);
+
+    const toggleAddon = useCallback((addonName, isRequired, category) => {
+        setAddons((prev) => {
+            const next = { ...prev };
+            if (isRequired) {
+                next[category] = addonName;
+            } else {
+                const list = Array.isArray(next[category]) ? [...next[category]] : [];
+                next[category] = list.includes(addonName) ? list.filter((n) => n !== addonName) : [...list, addonName];
+            }
+            return next;
+        });
+    }, []);
+
+    const pricePerQuantity = useMemo(() => {
+        if (!item) return "0.000";
+        const base = parseFloat(item?.variants?.[selectedVariant]?.price ?? item?.itemPrice ?? 0) || 0;
+        const addOnTotal = Object.entries(item?.addOn ?? {})
+            .flatMap(([category, arr]) =>
+                arr.filter((a) =>
+                    a.isRequired
+                        ? addons[category] === String(a.name ?? "").trim()
+                        : Array.isArray(addons[category]) && addons[category].includes(String(a.name ?? "").trim())
+                )
+            )
+            .reduce((sum, a) => sum + (parseFloat(a.price ?? 0) || 0), 0);
+        return (base + addOnTotal).toFixed(3);
+    }, [item, selectedVariant, addons]);
+
+    const handleAddToCart = useCallback(() => {
+        if (!auth.currentUser) {
+            navigate("/auth");
+            return;
+        }
+        addToCart({
+            ...item,
+            selectedVariant,
+            selectedAddons: addons,
+            pricePerQuantity,
+            quantity,
+        });
         onClose();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+    }, [addToCart, addons, item, onClose, pricePerQuantity, quantity, selectedVariant, navigate]);
 
-  // Lock scroll
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
+    if (!item) return null;
 
-  // Toggle Add-ons
-  const toggleAddon = useCallback((addonName, isRequired, category) => {
-    setAddons((prev) => {
-      const updated = { ...prev };
-      if (isRequired) {
-        updated[category] = addonName; // only one allowed
-      } else {
-        const current = updated[category] || [];
-        if (current.includes(addonName)) {
-          updated[category] = current.filter((a) => a !== addonName);
-        } else {
-          updated[category] = [...current, addonName];
-        }
-      }
-      return updated;
-    });
-  }, []);
+    const eta = (() => {
+        const total = (item?.preparationTime ?? 10) + (travelTime ?? 10);
+        return total > 25 ? "25–30 min" : `${total} min`;
+    })();
 
-  // Price calculation
-  const pricePerQuantity = useMemo(() => {
-    if (!item) return "0.000";
-    const variantPrice = parseFloat(item.variants?.[selectedVariant]?.price || item.itemPrice || 0);
+    // dynamic desktop grid with fixed column widths
+    const gridCols =
+        hasVariants && hasAddOns ? "lg:grid-cols-3" : hasVariants || hasAddOns ? "lg:grid-cols-2" : "lg:grid-cols-1";
+    
+    // Modal width based on content
+    const modalWidth = hasVariants && hasAddOns ? "lg:max-w-5xl" : hasVariants || hasAddOns ? "lg:max-w-3xl" : "lg:max-w-2xl";
 
-    const addonsTotal = Object.entries(item.addOn || {}).flatMap(([category, arr]) => {
-      return arr.filter((addon) => {
-        if (addon.isRequired) {
-          return addons[category] === addon.name.trim();
-        }
-        return addons[category]?.includes(addon.name.trim());
-      });
-    }).reduce((sum, addon) => sum + parseFloat(addon.price || 0), 0);
+    const isLandscapeCard = !hasVariants && !hasAddOns;
 
-    return (variantPrice + addonsTotal).toFixed(3);
-  }, [item, selectedVariant, addons]);
+    return (
+        <div className="fixed inset-0 z-50 bg-black/50">
+            {/* Container differs by breakpoint:
+          - mobile: bottom sheet (stick to bottom)
+          - desktop: centered large modal */}
+            <div className="flex h-full w-full items-end lg:items-center justify-center p-0 lg:p-4">
+                <div
+                    ref={cardRef}
+                    role="dialog"
+                    aria-modal="true"
+                    className={[
+                        "bg-white shadow-sm ring-1 ring-gray-100",
+                        // mobile bottom sheet (with animation)
+                        "fixed inset-x-0 bottom-0 max-h-[90vh] rounded-t-2xl p-0",
+                        "motion-safe:animate-slide-up",
+                        // desktop modal (no animation)
+                        `lg:static lg:inset-auto ${modalWidth} lg:w-full lg:rounded-2xl lg:p-0 lg:animate-none lg:motion-safe:animate-none`,
+                    ].join(" ")}
+                >
+                    {/* Drag handle (mobile only) */}
+                    <div className="block lg:hidden pt-2">
+                        <div className="mx-auto mb-1 h-1.5 w-10 rounded-full bg-gray-300" />
+                    </div>
 
-  // Add to Cart
-  const handleAddToCart = useCallback(() => {
-    if (!auth.currentUser) {
-      navigate("/auth");
-      return;
-    }
-    addToCart({
-      ...item,
-      selectedVariant,
-      selectedAddons: addons,
-      pricePerQuantity,
-      quantity,
-    });
-    onClose();
-  }, [auth.currentUser, addToCart, addons, item, onClose, pricePerQuantity, quantity, selectedVariant, navigate]);
+                    {/* Header */}
+                    <div className="flex items-center justify-between border-b px-4 py-3">
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-base font-semibold text-gray-900">{item.name}</h2>
+                        </div>
 
-  if (!item) return null;
+                        <button
+                            onClick={onClose}
+                            aria-label="Close"
+                            className="mr-1 inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
+                    </div>
 
-  return (
-    <AnimatePresence>
-      <LazyMotion features={domAnimation}>
-        <motion.div
-          className={`fixed inset-0 z-50 bg-black/60 flex ${isMobile ? "items-end" : "items-center justify-end"}`}
-          variants={backdropVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          onClick={onClose}
-        >
-          <motion.div
-            ref={drawerRef}
-            className={`bg-white shadow-lg flex flex-col ${
-              isMobile ? "rounded-t-2xl max-h-[85vh] w-full" : "rounded-l-2xl h-full w-full max-w-md"
-            }`}
-            variants={isMobile ? mobileDrawerVariants : desktopDrawerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-100 relative">
-              <button
-                onClick={onClose}
-                className="absolute top-3 right-3 p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-              >
-                <X className="w-5 h-5 text-gray-600" />
-              </button>
-              <div className="flex gap-4 items-center">
-                <LazyImg src={item.imageUrl} alt={item.name} className="w-20 h-20 rounded-xl object-cover" />
-                <div>
-                  <h2 className="font-bold text-gray-900 text-lg">{item.name}</h2>
-                  <div className="flex items-center gap-2 text-sm text-emerald-600 mt-1">
-                    <Timer className="w-4 h-4" />
-                    {(() => {
-                      const totalTime = (item.preparationTime || 10) + (travelTime || 10);
-                      return totalTime > 25 ? "25-30 min" : `${totalTime} min`;
-                    })()}
-                  </div>
+                    {/* Body: scrollable content (mobile & desktop) */}
+                    <div className={`p-4 overflow-y-auto ${isLandscapeCard ? '' : `grid grid-cols-1 gap-6 ${gridCols}`}`} style={!isLandscapeCard ? {gridTemplateColumns: hasVariants && hasAddOns ? 'minmax(300px, 1fr) minmax(250px, 1fr) minmax(300px, 1fr)' : hasVariants || hasAddOns ? 'minmax(300px, 1fr) minmax(250px, 1fr)' : 'minmax(300px, 300px)'} : {}}>
+                        {isLandscapeCard ? (
+                             <div className="flex gap-6">
+                                {/* Left Side - Image */}
+                                <div className="flex-shrink-0">
+                                    <LazyImg 
+                                        src={item.imageUrl} 
+                                        alt={item.name} 
+                                        className="h-32 w-48 rounded-xl object-cover shadow-lg" 
+                                    />
+                                </div>
+
+                                {/* Right Side - Content */}
+                                <div className="flex-1 space-y-4">
+                                    {/* Description */}
+                                    <p className="text-sm text-gray-600">
+                                        {item.description || "Freshly prepared and served hot."}
+                                    </p>
+
+                                    {/* Time and Price */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                                            <Timer className="h-4 w-4" />
+                                            <span>Ready in {eta}</span>
+                                        </div>
+                                        <div className="text-lg font-bold text-red-600">
+                                            OMR {pricePerQuantity}
+                                        </div>
+                                    </div>
+
+                                    {/* Quantity and Add to Cart */}
+                                    <div className="flex items-center justify-between gap-4">
+                                        {/* Quantity Controls */}
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                                                disabled={quantity <= 1}
+                                                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                            >
+                                                <Minus className="h-3 w-3" />
+                                            </button>
+                                            <span className="min-w-[2ch] text-center font-semibold">{quantity}</span>
+                                            <button
+                                                onClick={() => setQuantity((q) => q + 1)}
+                                                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50"
+                                            >
+                                                <Plus className="h-3 w-3" />
+                                            </button>
+                                        </div>
+
+                                        {/* Add to Cart Button */}
+                                        <button
+                                            onClick={handleAddToCart}
+                                            className="flex-1 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 active:bg-red-800"
+                                        >
+                                            <span className="inline-flex items-center justify-center gap-2">
+                                                <ShoppingCart className="h-4 w-4" />
+                                                Add • OMR {(Number(pricePerQuantity) * quantity).toFixed(3)}
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                             <div className="space-y-4">
+                                {/* Large Image */}
+                                <div className="flex justify-center">
+                                    <LazyImg 
+                                        src={item.imageUrl} 
+                                        alt={item.name} 
+                                        className="h-48 w-48 lg:h-56 lg:w-56 rounded-xl object-cover shadow-lg" 
+                                    />
+                                </div>
+
+                                {/* Description */}
+                                <p className="text-sm text-gray-600 text-center">
+                                    {item.description || "Freshly prepared and served hot."}
+                                </p>
+
+                                {/* Time */}
+                                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg py-2">
+                                    <Timer className="h-4 w-4" />
+                                    <span>Ready in {eta}</span>
+                                </div>
+
+                                {/* Quantity */}
+                                <div className="flex items-center justify-between rounded-lg border border-gray-200 p-3">
+                                    <span className="text-sm text-gray-700">Quantity</span>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                                            disabled={quantity <= 1}
+                                            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                        >
+                                            <Minus className="h-4 w-4" />
+                                        </button>
+                                        <span className="min-w-[2ch] text-center font-semibold">{quantity}</span>
+                                        <button
+                                            onClick={() => setQuantity((q) => q + 1)}
+                                            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-700 hover:bg-gray-50"
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Add to Cart Button */}
+                                <button
+                                    onClick={handleAddToCart}
+                                    className="w-full rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white hover:bg-red-700 active:bg-red-800"
+                                >
+                                    <span className="inline-flex items-center gap-2">
+                                        <ShoppingCart className="h-4 w-4" />
+                                        Add to Cart • OMR {(Number(pricePerQuantity) * quantity).toFixed(3)}
+                                    </span>
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Second Column: Variants (only when variants exist) */}
+                        {!isLandscapeCard && hasVariants && (
+                            <div className="space-y-4">
+                                <VariantsSection
+                                    item={item}
+                                    selectedVariant={selectedVariant}
+                                    setSelectedVariant={setSelectedVariant}
+                                />
+                            </div>
+                        )}
+
+                        {/* Third Column: Add-ons (only when add-ons exist) */}
+                        {!isLandscapeCard && hasAddOns && (
+                            <div className="space-y-4 lg:max-h-[60vh] lg:overflow-y-auto">
+                                <AddOnsSection item={item} addons={addons} toggleAddon={toggleAddon} />
+                            </div>
+                        )}
+                    </div>
                 </div>
-              </div>
             </div>
-
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
-              <p className="text-gray-600 text-sm">{item.description || "Delicious food item prepared fresh."}</p>
-              <div className="text-center p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                <p className="text-sm text-emerald-600">Price</p>
-                <p className="text-2xl font-bold text-emerald-700">OMR {pricePerQuantity}</p>
-              </div>
-
-              <VariantsSection item={item} selectedVariant={selectedVariant} setSelectedVariant={setSelectedVariant} />
-              <AddOnsSection item={item} addons={addons} toggleAddon={toggleAddon} />
-            </div>
-
-            {/* Footer */}
-            <div className="p-6 border-t border-gray-100 space-y-4">
-              {/* Quantity */}
-              <div className="flex items-center justify-between">
-                <span className="text-gray-700">Quantity</span>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    disabled={quantity <= 1}
-                    className="w-8 h-8 flex items-center justify-center rounded bg-gray-100"
-                  >
-                    <Minus className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <span className="font-bold">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-8 h-8 flex items-center justify-center rounded bg-gray-100"
-                  >
-                    <Plus className="w-4 h-4 text-gray-600" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Add to Cart */}
-              <button
-                onClick={handleAddToCart}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart • OMR {(pricePerQuantity * quantity).toFixed(3)}
-              </button>
-            </div>
-          </motion.div>
-        </motion.div>
-      </LazyMotion>
-    </AnimatePresence>
-  );
+        </div>
+    );
 };
 
 export default React.memo(FoodOrderDetailModal);
+
+/* ── Add once (globals.css or a CSS file that’s loaded) ─────────
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0.96; }
+  to   { transform: translateY(0%);   opacity: 1; }
+}
+.animate-slide-up { animation: slide-up 260ms ease-out; }
+*/

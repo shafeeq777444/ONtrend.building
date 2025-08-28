@@ -35,7 +35,7 @@ const FoodGridCard = () => {
                     {images.map((img, i) => (
                         <SwiperSlide key={i}>
                             <LazyImage src={img} alt={`food-${i}`} containerClass="w-full h-full" />
-                            <div className="absolute inset-0 bg-black/20" />
+                            <div className="absolute inset-0 bg-black/10" />
                         </SwiperSlide>
                     ))}
                 </Swiper>

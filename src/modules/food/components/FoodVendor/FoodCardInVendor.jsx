@@ -42,18 +42,18 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
 
   return (
     <div
-      onClick={isOnline && itemAvailable ? onClick : (e) => e.preventDefault()}
+       onClick={isOnline && itemAvailable ? onClick : (e) => e.preventDefault()}
       className={`relative rounded-xl overflow-hidden shadow-sm bg-white group transition-shadow duration-200 ${
         !isOnline || !itemAvailable 
-          ? 'pointer-events-none border-2 border-dashed border-red-300 opacity-75 cursor-not-allowed' 
-          : 'cursor-pointer hover:shadow-md border border-gray-100'
+          ? 'pointer-events-none border-2 border-dashed border-orange-300 opacity-75 cursor-not-allowed' 
+          : 'hover:shadow-md border border-gray-100'
       }`}
     >
       {/* Unavailable Badge */}
       {(!isOnline || !itemAvailable) && (
         <div className={`absolute top-2 ${isArabic ? 'right-2' : 'left-2'} z-20`}>
-          <div className="bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1">
-            <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
+          <div className="bg-orange-50 border border-orange-200 text-orange-600 text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1">
+            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
             {!isOnline 
               ? (isArabic ? "غير متاح" : "Offline")
               : (isArabic ? "غير متاح في هذا الوقت" : "Not available at this time")
@@ -124,13 +124,14 @@ const FoodCardInVendor = ({ item, venderLogo, onClick, isOnline }) => {
       </div>
 
       {/* Add Button */}
-      <div className={`absolute bottom-0 ${isArabic ? 'left-0' : 'right-0'}`}>
+      <div className={`absolute bottom-0 cursor-pointer ${isArabic ? 'left-0' : 'right-0'}`}>
         <button 
+       
           disabled={!isOnline || !itemAvailable}
           className={`px-3 py-2 md:px-4 md:py-2.5 text-xs font-medium rounded-tl-xl ${!isOnline || !itemAvailable ? 'opacity-0 md:opacity-100' : ''} rounded-br-xl flex items-center gap-1.5 transition-colors duration-200 ${
             !isOnline || !itemAvailable 
-              ? 'bg-red-50 text-red-400 cursor-not-allowed border border-red-200' 
-              : 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800'
+              ? 'bg-orange-50 text-orange-400 cursor-not-allowed border border-orange-200' 
+              : 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800'
           }`}
         >
           <MdOutlineShoppingBag className={`text-sm ${!isOnline || !itemAvailable ? 'opacity-50 display-none' : ''}`} />

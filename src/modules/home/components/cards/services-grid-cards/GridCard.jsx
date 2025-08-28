@@ -15,7 +15,7 @@ const GridCard = ({ title, description, image, route="" }) => {
                 <LazyImage src={image} alt={title} containerClass={' w-full h-full'}/>
 
             {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/20 bg-opacity-30 group-hover:bg-opacity-50 transition duration-300" />
+            <div className="absolute inset-0 bg-black/10  group-hover:bg-opacity-50 transition duration-300" />
 
             <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
                 {/* Title fades out on hover */}
