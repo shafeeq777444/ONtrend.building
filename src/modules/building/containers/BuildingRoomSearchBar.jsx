@@ -113,20 +113,25 @@ const BuildingRoomSearchBar = () => {
     dispatch(setWhereSlice(value));
   };
 
-  const onClickSearch = () => {
-    const params = {};
-    if (locationInputValue) params.location = locationInputValue;
-    if (dateRange[0]?.startDate)
-      params.checkIn = dateRange[0].startDate.toISOString();
-    if (dateRange[0]?.endDate)
-      params.checkOut = dateRange[0].endDate.toISOString();
-    if (adultCount) params.adults = adultCount;
-    if (childrenCount) params.children = childrenCount;
 
-    navigate(`/building/search${new URLSearchParams(params)}`);
-    toast.success("Search Completed");
-  };
+const onClickSearch = () => {
+        dispatch(setWhereSlice(locationInputValue));
+        dispatch(setCheckInSlice(dateRange[0].startDate?.getTime() || ""));
+        dispatch(setCheckOutSlice(dateRange[0].endDate?.getTime() || ""));
+        dispatch(setAdultCountSlice(adultCount || 0));
+        dispatch(setChildrenCountSlice(childrenCount || 0));
+        console.log("dateRange:", dateRange, "adultCount:", adultCount, "childrenCount:", childrenCount, "LocationinputValue:", locationInputValue, "search");
+        const params = {};
+        if (locationInputValue) params.location = locationInputValue;
+        if (dateRange[0]?.startDate) params.checkIn = dateRange[0].startDate.toISOString();
+        if (dateRange[0]?.endDate) params.checkOut = dateRange[0].endDate.toISOString();
+        if (adultCount) params.adults = adultCount;
+        if (childrenCount) params.children = childrenCount;
 
+        const queryParams = new URLSearchParams(params).toString();
+        navigate(`/building/search${queryParams ? `?${queryParams}` : ''}`);
+        toast.success("search Completed");
+    };
   // ---------------- Resize Listener ----------------
   useLayoutEffect(() => {
     const handleResize = () => {
