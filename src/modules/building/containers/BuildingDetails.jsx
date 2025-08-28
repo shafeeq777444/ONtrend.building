@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {  useRoomsBasedOnBuildingId } from "@/shared/services/queries/building.query";
+import { useRoomsBasedOnBuildingId } from "@/shared/services/queries/building.query";
 
 import BuildingCarouseImageCard from "@/modules/building/components/card/BuildingCarouseImageCard";
 import BuildingDetailsCard from "../components/card/BuildingDetailsCard";
@@ -10,6 +10,8 @@ import BuildingDetailsSkeleton from "../components/skeltons/SkeletonBuildingDeta
 import BuildingRoomTypeCardMobile from "../components/Card/BuildingRoomTypeCardMobile";
 import BackButton from "../components/Common/BackButton";
 import { useBuildingDetail } from "../services/hooks/useBuildingDetail";
+import AllBuildingMobile from "../components/BuildingDetail/AllBuildingButtonMobile";
+import AllBuildingDesktopButton from "../components/BuildingDetail/AllBuildingDesktopButton";
 
 const BuildingDetails = () => {
     // -----------------states-----------------------------
@@ -21,7 +23,7 @@ const BuildingDetails = () => {
     const { data: buildingDetail, isLoading: isBuildingLoading } = useBuildingDetail(buildingId);
     const { data: roomsData, isLoading: isRoomsLoading } = useRoomsBasedOnBuildingId(buildingId);
 
-    console.log(buildingDetail,"buildingDetail");
+    console.log(buildingDetail, "buildingDetail");
 
     // -----------------functions----------------------------
     const rooms = roomsData?.rooms || [];
@@ -66,12 +68,19 @@ const BuildingDetails = () => {
                             {/* toomtype- categories in mobile */}
                             <div className="w-full overflow-y-auto pr-1 scrollbar-hide order-2 lg:order-2 p-4">
                                 <div className="flex items-center gap-4 ">
-                                    <button
-                                        className="bg-gray-600 px-26 py-2 rounded-md text-white transition-all duration-200 hover:bg-gray-800 focus:bg-gray-800 focus:scale-105 "
+                                    <div
+                                        className="flex flex-col items-center transition-transform duration-200 cursor-pointer hover:scale-110"
                                         onClick={() => setBuildingRoomType("AllRooms")}
                                     >
-                                        Explore All Rooms
-                                    </button>
+                                        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent">
+                                            <img
+                                                src="https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bGl2aW5nJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D"
+                                                alt="All Rooms"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <span className="mt-2 text-sm text-center">All Rooms</span>
+                                    </div>
                                     {roomTypes.map((roomType) => (
                                         <div key={roomType.id} onClick={() => setBuildingRoomType(roomType.id)}>
                                             <BuildingRoomTypeCardMobile
@@ -110,12 +119,9 @@ const BuildingDetails = () => {
                         {/* 2. Room Type Cards - laptop,computer,tablet */}
                         <div className="w-full h-[300px] sm:h-[400px] lg:h-[44vh]  2xl:h-[50vh] overflow-y-auto pr-1 scrollbar-hide order-2 lg:order-2 p-4">
                             <div className="flex flex-col items-center gap-4 ">
-                                <button
-                                    className="bg-gray-600 px-26 py-2 rounded-md text-white transition-all duration-200 hover:bg-gray-800 focus:bg-gray-800 focus:scale-105 "
-                                    onClick={() => setBuildingRoomType("AllRooms")}
-                                >
-                                    Explore All Rooms
-                                </button>
+                                <AllBuildingMobile setBuildingRoomType={setBuildingRoomType} />
+                                <AllBuildingDesktopButton setBuildingRoomType={setBuildingRoomType} />
+
                                 {roomTypes.map((roomType) => (
                                     <div key={roomType.id} onClick={() => setBuildingRoomType(roomType.id)}>
                                         <BuildingRoomTypeCard
